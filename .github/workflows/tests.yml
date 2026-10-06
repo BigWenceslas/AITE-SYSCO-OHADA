@@ -78,6 +78,16 @@ jobs:
           PYTHON: python
         run: scripts/run_tests.sh aite_ci aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
 
+      - name: Test de volume (base neuve, étiquette dédiée)
+        working-directory: aite
+        env:
+          ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
+          PYTHON: python
+          PGPASSWORD: odoo
+        run: |
+          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_volume
+          scripts/run_tests.sh aite_ci_volume aite_syscohada_community aite_syscohada_volume
+
       - name: Journaux
         if: always()
         uses: actions/upload-artifact@v4

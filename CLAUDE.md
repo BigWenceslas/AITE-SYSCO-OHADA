@@ -26,7 +26,7 @@ python addons/aite_syscohada_base/tools/gen_rubriques.py
 ../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http < addons/aite_syscohada_reports/tools/generate_enterprise_xml.py
 ```
 
-Résultat de référence : 62 tests, 0 échec (un test ignoré si `aite_syscohada_reports` est absent).
+Résultat de référence : 104 tests (62 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`.
 
 ## Architecture
 
@@ -71,6 +71,9 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 - Le TFT de MIS et d'Enterprise ne neutralise pas les virements internes entre comptes d'immobilisations (le moteur, si) : écart connu et documenté.
 - Le classeur DSF 2021 de la DGI contient 18 formules fausses et un taux d'IS obsolète : ne jamais s'en servir comme référence de calcul (skill `dsf-classeur`).
 - `aite_syscohada_reports` ne s'installe que sur Enterprise ; sans lui, le test « XML livré à jour » est ignoré, c'est normal.
+- Le lanceur d'Odoo 18 ignore `@unittest.expectedFailure` : les tests avancés redéfinissent `_callTestMethod` (voir `test_adv_declaration_sequence.py`). Un échec attendu qui réussit fait échouer le test : retirer alors le décorateur.
+- Port 8069 occupé par un autre Odoo : `http_enable = False` ne suffit pas pendant les tests ; passer par `ODOO_CONF` une copie d'`odoo.conf` avec un autre `http_port` et `gevent_port`.
+- Le test de volume, lancé après les autres dans le même processus, peut dépasser 10 minutes (statistiques PostgreSQL faussées) : il a son étiquette `aite_syscohada_volume`.
 
 ## Façon de travailler
 

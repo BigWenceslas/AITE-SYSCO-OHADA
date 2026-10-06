@@ -48,6 +48,10 @@ Ordre conseillé : recette 1 et 2 → lot 3 (notes exigées) → lot 4 → lot 6
 - [ ] Activer les taxes de retenue une fois leurs taux validés
 - [ ] Calculer L24 (TVA retenue par les clients) depuis un compte dédié au lieu d'une saisie
 - [ ] Option : écriture de paiement groupée (débit des comptes de l'État, crédit de la banque)
+- [x] Tests avancés : exercice d'un bar-hôtel, séquence de déclarations, retenues mixtes, multi-sociétés, cycle de vie de la liquidation, volume (450 factures)
+- [ ] Défaut : L17 non recalculé si la déclaration du mois suivant existe avant la validation du mois précédent (`test_order_of_entry_vat_credit`)
+- [ ] Défaut : extourne d'une facture avec retenue non déduite des lignes L40 à L43 (et L45 à L48) (`test_may_l43_excludes_reversed_invoice`)
+- [ ] Défaut : liquidation refusée quand la société courante n'est pas celle de la déclaration (`_closing_balances`, `test_closing_entry_of_b_from_company_a_context`)
 - [ ] Option : export au format attendu par le portail de télédéclaration, si la DGI en publie un
 
 ## Lot 3 — Notes annexes et tableaux fiscaux

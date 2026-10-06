@@ -166,7 +166,13 @@ HAND = {
 }
 
 
-@tagged("post_install", "-at_install", "aite_syscohada", "aite_syscohada_advanced")
+@tagged("post_install", "-at_install", "aite_syscohada_volume")
+# Étiquette dédiée « aite_syscohada_volume », hors de la suite générale : exécuté après les autres tests
+# avancés dans le même processus, ce test peut dépasser 10 minutes. Les insertions annulées des tests
+# précédents déclenchent l'autovacuum, qui fausse les statistiques pendant la transaction ; le
+# planificateur choisit alors un plan très lent pour la requête de lettrage du paiement groupé.
+# Seul, sur une base neuve, il dure moins d'une minute. Lancement :
+#   scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume
 class TestAdvVolume(VatDeclarationCommon):
     """Mois d'août 2026 à fort volume : 450 factures, 3 550 lignes de produits et charges, déclaration et liquidation."""
 
@@ -192,7 +198,7 @@ class TestAdvVolume(VatDeclarationCommon):
         services = Move.create([self.invoice_vals("out_invoice", day(i, 20), [service_price(i)] * SERVICE_LINES,
                                                    self.t_services, acc_7061) for i in range(SERVICES)])
         (sales | purchases | services).action_post()
-        paid = services.browse([services.ids[i] for i in range(SERVICES) if service_paid(i)])
+        paid =services.browse([services.ids[i] for i in range(SERVICES) if service_paid(i)])
         self.env["account.payment.register"].with_context(active_model="account.move", active_ids=paid.ids).create(
             {"payment_date": PAYMENT_DATE, "journal_id": self.journal_bank.id, "group_payment": True})._create_payments()
         return sales, purchases, services, paid

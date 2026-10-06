@@ -70,7 +70,7 @@ Paramétrage ajouté au socle (version 18.0.1.1.0) : 22 comptes de retenues et d
 scripts/run_tests.sh <base> aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
 ```
 
-Résultat sur Odoo 18 Community (commit 7f553b66 du 3 octobre 2026), base vierge : 62 tests, 0 échec (le test du XML Enterprise est ignoré si `aite_syscohada_reports` est absent).
+Résultat sur Odoo 18 Community, base vierge, 6 octobre 2026 : 104 tests (62 de base et 42 avancés), 0 échec, dont 3 échecs attendus qui documentent des défauts connus listés dans `ROADMAP.md`. Le test de volume se lance à part : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume` (1 test, 38 s). L'intégration continue `.github/workflows/tests.yml` exécute les deux à chaque push.
 
 ## Autres besoins couverts en Community par des modules OCA (branche 18.0)
 
