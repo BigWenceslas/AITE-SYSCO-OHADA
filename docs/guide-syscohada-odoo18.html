@@ -1,0 +1,3417 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide SYSCOHADA Odoo 18</title>
+<meta name="description" content="Guide complet des modules AITE SYSCOHADA révisé pour Odoo 18 : installation, paramétrage, saisie, états financiers, déclaration I/TVA-IR, clôture, tests, développement.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root {
+  --paper:#F3F4F8; --surface:#FFFFFF; --ink:#221A35; --ink-soft:#5B5470; --line:#DCD9E6;
+  --violet:#5B2C8F; --violet-soft:#EEE7F8; --on-violet:#FFFFFF;
+  --teal:#087880; --teal-soft:#DFF1F2; --orange:#B8520F; --orange-soft:#FBEADB; --odoo:#714B67;
+  --code-bg:#F1EEF7;
+  --font-text:"Source Serif 4","Source Serif Pro",Georgia,"Times New Roman",serif;
+  --font-ui:"Poppins","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#141119; --surface:#1C1824; --ink:#EFEBF7; --ink-soft:#ADA5C2; --line:#383049;
+    --violet:#BB95F4; --violet-soft:#2C2143; --on-violet:#17121F;
+    --teal:#5CCBD2; --teal-soft:#12302F; --orange:#F2A35C; --orange-soft:#33230F; --odoo:#C99BBE;
+    --code-bg:#251F31; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#141119; --surface:#1C1824; --ink:#EFEBF7; --ink-soft:#ADA5C2; --line:#383049;
+  --violet:#BB95F4; --violet-soft:#2C2143; --on-violet:#17121F;
+  --teal:#5CCBD2; --teal-soft:#12302F; --orange:#F2A35C; --orange-soft:#33230F; --odoo:#C99BBE;
+  --code-bg:#251F31; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-text); font-size:17px; line-height:1.6; }
+a { color:var(--violet); text-underline-offset:2px; }
+.topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:12px; padding:10px 20px;
+  background:var(--surface); border-bottom:1px solid var(--line); font-family:var(--font-ui); font-size:14px; }
+.topbar .brand { font-weight:600; color:var(--ink); text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.topbar .brand span { color:var(--violet); }
+.topbar .spacer { flex:1; }
+.btn { font:inherit; font-size:13px; padding:6px 12px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; }
+.btn:hover { border-color:var(--violet); color:var(--violet); }
+#toc-toggle { display:none; }
+.layout { display:grid; grid-template-columns:300px minmax(0,1fr); max-width:1320px; margin:0 auto; }
+nav.toc { position:sticky; top:53px; align-self:start; height:calc(100vh - 53px); overflow:auto; padding:20px 12px 40px 20px;
+  font-family:var(--font-ui); font-size:13.5px; border-right:1px solid var(--line); }
+nav.toc input { width:100%; font:inherit; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); margin-bottom:12px; }
+nav.toc ul { list-style:none; margin:0; padding:0; }
+nav.toc .toc-ch > a { display:block; font-weight:600; padding:6px 8px; border-radius:6px; color:var(--ink); text-decoration:none; }
+nav.toc .toc-sub a { display:block; padding:3px 8px 3px 18px; color:var(--ink-soft); text-decoration:none; border-radius:6px; }
+nav.toc a:hover { background:var(--violet-soft); color:var(--violet); }
+nav.toc a.active { background:var(--violet-soft); color:var(--violet); }
+nav.toc .toc-sub { display:none; margin-bottom:6px; }
+nav.toc .toc-ch.open .toc-sub, nav.toc.filtering .toc-sub { display:block; }
+nav.toc .hidden { display:none !important; }
+main { padding:0 40px 80px; min-width:0; }
+.hero { margin:32px 0 8px; padding:28px 32px; border-radius:14px; background:var(--violet); color:var(--on-violet); }
+.hero h1 { font-family:var(--font-ui); font-size:30px; line-height:1.25; margin:0 0 10px; font-weight:700; }
+.hero p { margin:0; font-family:var(--font-ui); font-size:14px; opacity:.92; }
+.hero .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.hero .meta span { font-family:var(--font-ui); font-size:12.5px; padding:4px 10px; border-radius:99px; background:rgba(255,255,255,.16); }
+section.chapter { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:8px 32px 24px; margin-top:24px; }
+h2 { font-family:var(--font-ui); font-size:24px; margin:24px 0 12px; color:var(--violet); font-weight:600; }
+h3 { font-family:var(--font-ui); font-size:18px; margin:28px 0 8px; font-weight:600; }
+h2 .anchor, h3 .anchor { margin-left:8px; font-size:.75em; color:var(--line); text-decoration:none; opacity:0; }
+h2:hover .anchor, h3:hover .anchor { opacity:1; color:var(--ink-soft); }
+p, li { max-width:78ch; }
+ul, ol { padding-left:1.4em; }
+li { margin:4px 0; }
+strong { font-weight:600; }
+code { font-family:var(--font-mono); font-size:.86em; background:var(--code-bg); padding:.1em .35em; border-radius:4px; word-break:break-word; }
+pre { background:var(--code-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; font-size:14px; line-height:1.5; }
+pre code { background:none; padding:0; font-size:inherit; word-break:normal; }
+blockquote { margin:16px 0; padding:10px 16px; border-left:4px solid var(--teal); background:var(--teal-soft); border-radius:6px; }
+.table-wrap { overflow-x:auto; margin:14px 0 18px; border:1px solid var(--line); border-radius:10px; }
+table { border-collapse:collapse; width:100%; font-family:var(--font-ui); font-size:13.5px; line-height:1.45; }
+th, td { text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line); }
+th { background:var(--violet-soft); color:var(--ink); font-weight:600; white-space:nowrap; }
+tr:last-child td { border-bottom:none; }
+tbody tr:nth-child(even) td { background:color-mix(in srgb, var(--paper) 55%, var(--surface)); }
+td code { font-size:.92em; word-break:normal; overflow-wrap:normal; }
+footer { margin:40px 0 0; font-family:var(--font-ui); font-size:12.5px; color:var(--ink-soft); }
+#to-top { font-family:var(--font-ui); position:fixed; right:18px; bottom:18px; z-index:30; display:none; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns:minmax(0,1fr); }
+  #toc-toggle { display:inline-block; }
+  nav.toc { position:fixed; top:53px; left:0; width:min(320px, 88vw); z-index:25; background:var(--surface);
+    transform:translateX(-105%); transition:transform .2s ease; box-shadow:0 8px 24px rgba(0,0,0,.18); }
+  nav.toc.open { transform:none; }
+  main { padding:0 16px 60px; }
+  section.chapter { padding:4px 16px 18px; }
+  .hero { padding:22px 18px; }
+  .hero h1 { font-size:23px; }
+  body { font-size:16px; }
+  #print-btn { display:none; }
+}
+@media print {
+  .topbar, nav.toc, #to-top, .anchor { display:none !important; }
+  .layout { display:block; }
+  body { background:#fff; color:#000; font-size:11pt; }
+  section.chapter { border:none; padding:0; break-before:page; }
+  .hero { background:#fff; color:#000; border:2px solid #000; }
+  .table-wrap { overflow:visible; }
+  th { background:#eee; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="btn" id="toc-toggle" aria-controls="toc" aria-expanded="false">Sommaire</button>
+  <a class="brand" href="#top"><span>AITE</span> · Guide SYSCOHADA révisé pour Odoo 18</a>
+  <div class="spacer"></div>
+  <button class="btn" id="theme-toggle" type="button" aria-label="Changer de thème">Thème</button>
+  <button class="btn" id="print-btn" type="button" onclick="window.print()">Imprimer</button>
+</header>
+<div class="layout" id="top">
+  <nav class="toc" id="toc" aria-label="Sommaire">
+    <input type="search" id="toc-filter" placeholder="Filtrer le sommaire…" aria-label="Filtrer le sommaire">
+    <ul>
+<li class="toc-ch"><a href="#1-presentation">1. Présentation</a></li>
+<li class="toc-ch"><a href="#2-installation">2. Installation</a><ul class="toc-sub"><li><a href="#community-chemin-recommande">Community (chemin recommandé)</a></li><li><a href="#sur-une-instance-odoo-18-existante">Sur une instance Odoo 18 existante</a></li><li><a href="#enterprise">Enterprise</a></li><li><a href="#mise-a-jour-d-une-version-a-l-autre">Mise à jour d&#x27;une version à l&#x27;autre</a></li></ul></li>
+<li class="toc-ch"><a href="#3-parametrage-initial">3. Paramétrage initial</a><ul class="toc-sub"><li><a href="#creation-de-la-societe-camerounaise">Création de la société camerounaise</a></li><li><a href="#ce-que-fait-le-parametrage">Ce que fait le paramétrage</a></li><li><a href="#relancer-le-parametrage">Relancer le paramétrage</a></li><li><a href="#journaux">Journaux</a></li><li><a href="#droits-des-utilisateurs">Droits des utilisateurs</a></li><li><a href="#idempotence-et-mise-a-jour">Idempotence et mise à jour</a></li></ul></li>
+<li class="toc-ch"><a href="#4-saisie-quotidienne">4. Saisie quotidienne</a><ul class="toc-sub"><li><a href="#reperes-communs-a-tous-les-flux">Repères communs à tous les flux</a></li><li><a href="#ventes-de-marchandises">Ventes de marchandises</a></li><li><a href="#prestations-de-services">Prestations de services</a></li><li><a href="#acomptes-clients">Acomptes clients</a></li><li><a href="#achats-de-marchandises">Achats de marchandises</a></li><li><a href="#services-achetes">Services achetés</a></li><li><a href="#immobilisations">Immobilisations</a></li><li><a href="#fournisseur-etranger">Fournisseur étranger</a></li><li><a href="#retenues-a-la-source-subies-et-operees">Retenues à la source subies et opérées</a></li><li><a href="#precompte-sur-achats">Précompte sur achats</a></li><li><a href="#taxe-de-sejour">Taxe de séjour</a></li><li><a href="#point-de-vente-et-caisse">Point de vente et caisse</a></li><li><a href="#stocks">Stocks</a></li><li><a href="#paie-en-ecriture-manuelle">Paie en écriture manuelle</a></li><li><a href="#immobilisations-et-amortissements">Immobilisations et amortissements</a></li><li><a href="#emprunts">Emprunts</a></li><li><a href="#affectation-du-resultat">Affectation du résultat</a></li><li><a href="#dividendes">Dividendes</a></li><li><a href="#ce-qu-il-ne-faut-pas-faire">Ce qu&#x27;il ne faut pas faire</a></li></ul></li>
+<li class="toc-ch"><a href="#5-etats-financiers">5. États financiers</a><ul class="toc-sub"><li><a href="#ou-trouver-les-etats">Où trouver les états</a></li><li><a href="#l-assistant-etats-syscohada-et-controles">L&#x27;assistant « États SYSCOHADA et contrôles »</a></li><li><a href="#les-9-controles">Les 9 contrôles</a></li><li><a href="#les-etats-mis-builder-en-community">Les états MIS Builder en Community</a></li><li><a href="#les-rapports-enterprise">Les rapports Enterprise</a></li><li><a href="#lire-les-rubriques">Lire les rubriques</a></li></ul></li>
+<li class="toc-ch"><a href="#6-declaration-mensuelle-i-tva-ir">6. Déclaration mensuelle I/TVA-IR</a><ul class="toc-sub"><li><a href="#creer-la-declaration">Créer la déclaration</a></li><li><a href="#onglet-saisies-du-declarant">Onglet « Saisies du déclarant »</a></li><li><a href="#bouton-calculer">Bouton « Calculer »</a></li><li><a href="#onglet-declaration-i-tva-ir-lignes-l10-a-l35">Onglet « Déclaration I/TVA-IR » : lignes L10 à L35</a></li><li><a href="#onglet-retenues-acomptes-ircm-salaires">Onglet « Retenues, acomptes, IRCM, salaires »</a></li><li><a href="#bouton-passer-l-ecriture-de-liquidation">Bouton « Passer l&#x27;écriture de liquidation »</a></li><li><a href="#valider-remettre-en-brouillon-et-impression">« Valider », « Remettre en brouillon » et impression</a></li><li><a href="#defauts-connus-mis-en-evidence-par-les-tests-avances">Défauts connus, mis en évidence par les tests avancés</a></li><li><a href="#exemple-chiffre-mars-2026-formulaire-complet">Exemple chiffré : mars 2026, formulaire complet</a></li><li><a href="#exemple-de-credit-de-tva-reporte-mars-puis-avril-2026">Exemple de crédit de TVA reporté : mars puis avril 2026</a></li></ul></li>
+<li class="toc-ch"><a href="#7-cloture-d-exercice-et-preparation-de-la-dsf">7. Clôture d&#x27;exercice et préparation de la DSF</a><ul class="toc-sub"><li><a href="#ordre-des-travaux-de-cloture">Ordre des travaux de clôture</a></li><li><a href="#dates-de-verrouillage">Dates de verrouillage</a></li><li><a href="#lien-avec-la-dsf">Lien avec la DSF</a></li><li><a href="#echeances-de-depot">Échéances de dépôt</a></li></ul></li>
+<li class="toc-ch"><a href="#8-tests">8. Tests</a><ul class="toc-sub"><li><a href="#les-tests-avances-ajoutes">Les tests avancés ajoutés</a></li><li><a href="#defauts-mis-en-evidence">Défauts mis en évidence</a></li><li><a href="#lancer-les-tests">Lancer les tests</a></li></ul></li>
+<li class="toc-ch"><a href="#9-developpement">9. Développement</a><ul class="toc-sub"><li><a href="#architecture-et-flux-de-donnees">Architecture et flux de données</a></li><li><a href="#syntaxe-des-formules">Syntaxe des formules</a></li><li><a href="#ajouter-ou-corriger-une-rubrique">Ajouter ou corriger une rubrique</a></li><li><a href="#regles-du-projet">Règles du projet</a></li><li><a href="#tests">Tests</a></li><li><a href="#portage-vers-odoo-19">Portage vers Odoo 19</a></li></ul></li>
+<li class="toc-ch"><a href="#10-depannage-et-questions-frequentes">10. Dépannage et questions fréquentes</a><ul class="toc-sub"><li><a href="#acces-et-installation">Accès et installation</a></li><li><a href="#declaration-mensuelle">Déclaration mensuelle</a></li><li><a href="#etats-et-controles">États et contrôles</a></li><li><a href="#tests-2">Tests</a></li></ul></li>
+<li class="toc-ch"><a href="#11-annexes">11. Annexes</a><ul class="toc-sub"><li><a href="#a-sous-comptes-crees-par-le-parametrage">A. Sous-comptes créés par le paramétrage</a></li><li><a href="#b-taxes-creees-par-le-parametrage">B. Taxes créées par le paramétrage</a></li><li><a href="#c-lignes-du-formulaire-i-tva-ir-hors-tva">C. Lignes du formulaire I/TVA-IR hors TVA</a></li><li><a href="#d-libelles-de-comptes-corriges-extrait">D. Libellés de comptes corrigés (extrait)</a></li><li><a href="#e-sources">E. Sources</a></li></ul></li>
+    </ul>
+  </nav>
+  <main>
+    <div class="hero">
+      <h1>Guide complet — SYSCOHADA révisé pour Odoo 18 (AITE)</h1>
+      <p>Installation, paramétrage, saisie, états financiers, déclaration mensuelle I/TVA-IR, clôture, tests et développement des modules AITE pour Odoo 18 Community.</p>
+      <div class="meta">
+        <span>6 octobre 2026</span><span>AITE Consulting, Douala</span><span>Odoo 18.0 Community</span><span>Dépôt BigWenceslas/AITE-SYSCO-OHADA</span><span>13 695 mots</span>
+      </div>
+    </div>
+<section class="chapter"><h2 id="1-presentation">1. Présentation<a class="anchor" href="#1-presentation" aria-label="Lien vers cette section">#</a></h2>
+<p>La suite AITE rend Odoo 18 Community conforme au SYSCOHADA révisé et à la fiscalité camerounaise : états financiers du Système normal, déclaration mensuelle I/TVA-IR et écritures de liquidation, avec un socle de paramétrage du plan « cm » livré par Odoo. Le code est sur GitHub, dépôt <code>BigWenceslas/AITE-SYSCO-OHADA</code>, branche <code>claude/keen-bohr-76nuin</code> (commit initial du 6 octobre 2026).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Ce qu'il apporte</th>
+<th>Édition</th>
+<th>Dépend de</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>base</code></td>
+<td>Référentiel des 124 rubriques (bilan, compte de résultat, TFT), moteur de calcul, paramétrage du plan et des taxes, 9 contrôles, assistant « États et contrôles (AITE) »</td>
+<td>Community et Enterprise</td>
+<td><code>account</code>, <code>l10n_<wbr>cm</code></td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>mis</code></td>
+<td>Les quatre états en modèles MIS Builder, générés depuis le référentiel</td>
+<td>Community</td>
+<td>base, <code>mis_<wbr>builder</code> (OCA)</td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>community</code></td>
+<td>Menus Syscohada en un clic (exercices N et N-1, PDF et Excel), déclaration mensuelle I/TVA-IR complète (lignes L0 à L80), écriture de liquidation, impression</td>
+<td>Community</td>
+<td>mis, <code>l10n_<wbr>cm</code></td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>reports</code></td>
+<td>Les quatre états dans le moteur de rapports d'Odoo Enterprise, XML généré depuis le référentiel</td>
+<td>Enterprise seulement, installation automatique</td>
+<td>base, <code>account_<wbr>reports</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Installer <code>aite_syscohada_community</code> suffit : les deux modules dont il dépend suivent. Sur Enterprise, <code>aite_syscohada_reports</code> s'installe de lui-même dès que <code>account_reports</code> est présent.</p>
+<p><strong>Ce que la suite ne fait pas encore</strong> (feuille de route, lots 3 à 7) : notes annexes, remplissage du classeur DSF, paie camerounaise, dépôt par API, facture électronique. Les taux de retenue à la source sont livrés en taxes inactives « (taux à valider) » tant que l'expert-comptable ne les a pas confirmés.</p>
+<p><strong>Prérequis</strong> : Odoo 18.0 Community (Python 3.10 à 3.12, PostgreSQL 13 ou plus), modules OCA branche 18.0 <code>mis_builder</code>, <code>date_range</code>, <code>report_xlsx</code>, paquet Python <code>openupgradelib</code>. Devise XAF sans décimale, exercice comptable égal à l'année civile.</p>
+</section><section class="chapter"><h2 id="2-installation">2. Installation<a class="anchor" href="#2-installation" aria-label="Lien vers cette section">#</a></h2>
+<p>L'installation complète sur une machine vierge prend une dizaine de minutes ; elle a été refaite intégralement dans cette session (Ubuntu 24.04, Python 3.12, PostgreSQL 16) et la base de développement s'est créée en 47 secondes.</p>
+<h3 id="community-chemin-recommande">Community (chemin recommandé)<a class="anchor" href="#community-chemin-recommande" aria-label="Lien vers cette section">#</a></h3>
+<ol>
+<li>Prérequis système : <code>git</code>, <code>python3.12</code> avec <code>venv</code> et <code>python3-dev</code>, <code>build-essential</code>, PostgreSQL 13 ou plus avec un rôle superutilisateur au nom de l'utilisateur courant (<code>su postgres -c "psql -c 'CREATE ROLE &lt;utilisateur&gt; SUPERUSER LOGIN;'"</code>). Les bibliothèques <code>libldap2-dev</code> et <code>libsasl2-dev</code> ne sont nécessaires que pour <code>python-ldap</code>, inutile ici.</li>
+<li>Cloner le dépôt puis lancer <code>scripts/setup_dev.sh</code> depuis sa racine. Le script clone Odoo 18.0, les dépôts OCA <code>mis-builder</code>, <code>server-ux</code> et <code>reporting-engine</code> (branche 18.0), crée les liens <code>oca_addons/</code>, le <code>venv</code> et écrit <code>odoo.conf</code>. Deux adaptations utiles, vérifiées dans cette session : forcer <code>python3.12 -m venv</code> si le Python par défaut est 3.13, et remplacer <code>psycopg2</code> par <code>psycopg2-binary</code> si <code>pg_config</code> ou <code>libpq-dev</code> manque.</li>
+<li>Créer la base : <code>../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d aite_dev -i aite_syscohada_community --stop-after-init</code>. Les modules <code>l10n_syscohada</code>, <code>l10n_cm</code>, <code>mis_builder</code>, <code>date_range</code>, <code>report_xlsx</code>, <code>aite_syscohada_base</code> et <code>aite_syscohada_mis</code> s'installent par dépendance.</li>
+<li>Lancer <code>../venv/bin/python ../odoo18/odoo-bin -c odoo.conf</code> et ouvrir <code>http://localhost:8069</code>.</li>
+<li>Vérifier l'installation par la suite de tests : <code>scripts/run_tests.sh aite_dev aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community</code> (résultat attendu : 0 échec, un test ignoré sans Enterprise).</li>
+</ol>
+<p><code>odoo.conf</code> produit par le script :</p>
+<pre><code class="language-ini">[options]
+addons_path = &lt;travail&gt;/odoo18/odoo/addons,&lt;travail&gt;/odoo18/addons,&lt;travail&gt;/oca_addons,&lt;dépôt&gt;/addons
+admin_passwd = admin
+without_demo = all
+log_level = warn
+data_dir = &lt;travail&gt;/odoo-data
+</code></pre>
+<h3 id="sur-une-instance-odoo-18-existante">Sur une instance Odoo 18 existante<a class="anchor" href="#sur-une-instance-odoo-18-existante" aria-label="Lien vers cette section">#</a></h3>
+<ol>
+<li>Copier <code>addons/aite_syscohada_base</code>, <code>aite_syscohada_mis</code> et <code>aite_syscohada_community</code> dans un chemin d'addons, ainsi que <code>mis_builder</code>, <code>date_range</code> et <code>report_xlsx</code> (OCA 18.0).</li>
+<li><code>pip install openupgradelib</code> dans l'environnement d'Odoo (dépendance Python de <code>mis_builder</code>).</li>
+<li>Redémarrer Odoo, mettre à jour la liste des applications, installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) ».</li>
+<li>Si la société avait déjà le plan « cm » avant l'installation, le <code>post_init_hook</code> applique le paramétrage SYSCOHADA à toutes les sociétés concernées ; sinon il s'applique au chargement du plan.</li>
+</ol>
+<h3 id="enterprise">Enterprise<a class="anchor" href="#enterprise" aria-label="Lien vers cette section">#</a></h3>
+<p>Mêmes étapes ; <code>aite_syscohada_reports</code> (<code>auto_install</code>) s'installe seul dès que <code>account_reports</code> est présent et ajoute les quatre états dans le moteur de rapports. Ses tests portent l'étiquette <code>aite_syscohada_enterprise</code> et ne tournent que sur une base Enterprise :</p>
+<pre><code class="language-bash">odoo-bin -d &lt;base&gt; -i aite_syscohada_reports --test-enable --test-tags aite_syscohada_enterprise --stop-after-init
+</code></pre>
+<h3 id="mise-a-jour-d-une-version-a-l-autre">Mise à jour d'une version à l'autre<a class="anchor" href="#mise-a-jour-d-une-version-a-l-autre" aria-label="Lien vers cette section">#</a></h3>
+<p>Une mise à jour du socle (<code>-u aite_syscohada_base</code>) rejoue le script <code>migrations/&lt;version&gt;/post-migrate.py</code>, qui relance le paramétrage : les comptes et taxes ajoutés par la nouvelle version apparaissent sans action manuelle. Les objets déjà utilisés par des écritures ne sont jamais modifiés (un avertissement est écrit dans le journal).</p>
+</section><section class="chapter"><h2 id="3-parametrage-initial">3. Paramétrage initial<a class="anchor" href="#3-parametrage-initial" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="creation-de-la-societe-camerounaise">Création de la société camerounaise<a class="anchor" href="#creation-de-la-societe-camerounaise" aria-label="Lien vers cette section">#</a></h3>
+<p>Une société dont le pays est le Cameroun reçoit la devise XAF et le plan comptable « cm » sans réglage supplémentaire. Le paramétrage AITE s'enchaîne aussitôt si le module <code>aite_syscohada_base</code> est déjà installé.</p>
+<ol>
+<li>Installer les modules sur la base : <code>../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d &lt;base&gt; -i aite_syscohada_community --stop-after-init</code>. Les modules <code>aite_syscohada_mis</code> et <code>aite_syscohada_base</code> suivent par dépendance, ainsi que <code>l10n_cm</code>.</li>
+<li>Ouvrir Paramètres &gt; Utilisateurs &amp; Sociétés &gt; Sociétés et créer la société.</li>
+<li>Renseigner le champ Pays avec Cameroun. Le champ Devise passe de lui-même à XAF.</li>
+<li>Enregistrer. Odoo active la devise XAF, puis charge le plan « cm » en fin de transaction.</li>
+<li>Vérifier dans Facturation &gt; Configuration &gt; Paramètres, section Localisation fiscale, que le champ Pack affiche « SYSCOHADA pour Sociétés ». Si le champ est vide, le choisir et enregistrer : l'enregistrement charge le plan.</li>
+</ol>
+<p>Le plan « cm » hérite du plan <code>syscohada</code> avec des codes à six chiffres : 4111 devient 411100, 6011 devient 601100. Le chargement fixe aussi le pays d'imposition Cameroun. La taxe de vente par défaut est « 19.25% », la taxe d'achat par défaut « 19.25% G ». Le compte client est 411100 et le compte fournisseur 401100. Les préfixes sont 521 pour les banques, 571 pour les caisses et 585 pour les virements internes.</p>
+<p>Le module <code>aite_syscohada_base</code> surcharge <code>account.chart.template._load()</code>. Dès que le plan est chargé sur une société SYSCOHADA, <code>_aite_syscohada_setup()</code> s'exécute. Le <code>post_init_hook</code> traite les sociétés existant avant l'installation du module : il applique le paramétrage à toutes les sociétés dont le plan est <code>cm</code>, <code>syscohada</code> ou un plan dérivé de <code>syscohada</code>.</p>
+<h3 id="ce-que-fait-le-parametrage">Ce que fait le paramétrage<a class="anchor" href="#ce-que-fait-le-parametrage" aria-label="Lien vers cette section">#</a></h3>
+<p>Le paramétrage <code>res.company._aite_syscohada_setup()</code> se déroule en cinq étapes, toujours dans le même ordre, puis horodate le champ « Paramétrage SYSCOHADA AITE appliqué le ». Il ne fait rien pour une société dont le plan n'est pas SYSCOHADA. Le code est dans <code>addons/aite_syscohada_base/models/res_company.py</code>.</p>
+<p>Les comptes sont lus par <code>_aite_account(code)</code> : le code est complété à six chiffres par des zéros, puis cherché tel quel. <code>_aite_account("4432")</code> renvoie 443200. Les comptes d'un préfixe sont lus par <code>_aite_accounts_prefix("445")</code>.</p>
+<ol>
+<li><strong>Libellés corrigés.</strong> Les 45 libellés de la table <code>ACCOUNT_LABELS</code> sont réécrits en anglais et dans chaque langue installée dont le code commence par « fr ». Le compte 129 n'existe pas dans le plan « cm » : son libellé est ignoré. Si le français est installé après le paramétrage, relancez celui-ci. Le tableau complet figure en annexe.</li>
+<li><strong>Types de comptes.</strong> Les comptes de TVA récupérable 4451 à 4456 et les créances sur l'État 4492 à 4496 passent en « Actifs circulants ». Les comptes 4811 et 4812 deviennent des comptes « Fournisseur » lettrables. Tout compte 16 ou 17 de type « Dettes à court terme » devient « Passif immobilisé », sauf les intérêts courus 166 et 176.</li>
+<li><strong>Sous-comptes.</strong> Les 32 comptes de la table <code>SUB_ACCOUNTS</code> sont créés s'ils manquent. Dix viennent du lot 0 : sept comptes d'amortissements et de dépréciations, le compte d'attente 443800, puis 552100 et 552200. Les 22 autres viennent du lot 2 : 441100, seize comptes 447110 à 447260 et cinq comptes 449210 à 449250.</li>
+<li><strong>Écarts de caisse.</strong> La perte va à 658800 « Autres charges diverses », le gain à 758800 « Autres produits divers ». Les champs de société « Différence de caisse charges » et « Différence de caisse revenus » reçoivent ces comptes. Sur chaque journal de banque et d'espèces, un « Compte des pertes » renseigné est remplacé s'il ne commence pas par 6, un « Compte de profit » s'il ne commence pas par 7. Les comptes techniques d'Odoo 999001 et 999002 passent en « Obsolète » s'ils ne portent aucune écriture comptabilisée.</li>
+<li><strong>Taxes</strong>, seulement si le plan est exactement « cm ». La case « Comptabilité de trésorerie » est cochée. Un groupe de taxes « Retenues, précomptes et autres taxes » est créé, séquence 90. Treize taxes sont créées, chacune seulement si ses comptes existent : elles sont détaillées en annexe. Enfin, la taxe « 19.25% S » de <code>l10n_cm</code> passe du compte 445200 au compte 445400. Si des écritures comptabilisées l'utilisent déjà, le compte ne change pas et Odoo journalise « AITE SYSCOHADA : taxe 19.25% S déjà utilisée, compte 4452 conservé ».</li>
+</ol>
+<p>Chaque taxe créée est enregistrée sous l'identifiant externe <code>aite_syscohada_base.&lt;id société&gt;_&lt;clé&gt;</code>, en <code>noupdate</code>. <code>_aite_tax_ref(clé)</code> la retrouve ; une taxe déjà enregistrée n'est jamais recréée.</p>
+<p>La taxe « 19,25 % S (encaissement) » a l'exigibilité « Basé sur le paiement ». À la facture, la TVA va en 443800. Au paiement, le journal « TVA sur encaissements » la transfère en 443200, au prorata du montant encaissé. Les douze autres taxes sont exigibles à la facture. Onze taxes sont créées inactives : leur taux est écrit dans le code mais n'est pas validé. Ne les activez qu'après confirmation du taux par l'expert-comptable.</p>
+<h3 id="relancer-le-parametrage">Relancer le paramétrage<a class="anchor" href="#relancer-le-parametrage" aria-label="Lien vers cette section">#</a></h3>
+<p>Le menu Facturation &gt; Configuration &gt; SYSCOHADA &gt; Appliquer le paramétrage relance le paramétrage sur la société courante.</p>
+<ol>
+<li>Sélectionner la société à paramétrer dans le sélecteur de sociétés : l'action ne traite que cette société.</li>
+<li>Cliquer sur Appliquer le paramétrage.</li>
+<li>Lire la notification « SYSCOHADA », message « Paramétrage appliqué. ». Elle s'affiche aussi pour une société non SYSCOHADA, pour laquelle rien n'est modifié.</li>
+</ol>
+<p>Le menu SYSCOHADA n'est visible que par le groupe <code>account.group_account_manager</code>. Il contient aussi « Rubriques des états », la liste des 124 rubriques du référentiel. Relancez le paramétrage après l'installation du français, ou après la création manuelle d'un compte attendu par le paramétrage. Le bouton « Recharger » des paramètres de comptabilité relance aussi le paramétrage ; Odoo ne l'affiche que si la société a déjà des écritures.</p>
+<h3 id="journaux">Journaux<a class="anchor" href="#journaux" aria-label="Lien vers cette section">#</a></h3>
+<p>Le chargement du plan crée sept journaux. Seuls les journaux de trésorerie réels restent à créer ou à adapter, dans Facturation &gt; Configuration &gt; Comptabilité &gt; Journaux.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Journal créé par Odoo</th>
+<th>Nom affiché en français</th>
+<th>Type</th>
+<th>Compte par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Invoices (INV)</td>
+<td>Factures clients</td>
+<td>Ventes</td>
+<td>701100</td>
+</tr>
+<tr>
+<td>Vendor Bills (BILL)</td>
+<td>Factures fournisseurs</td>
+<td>Achats</td>
+<td>601100</td>
+</tr>
+<tr>
+<td>Miscellaneous Operations (MISC)</td>
+<td>Opérations diverses</td>
+<td>Divers</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Exchange Difference (EXCH)</td>
+<td>Différence de change</td>
+<td>Divers</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Cash Basis Taxes (CABA)</td>
+<td>TVA sur encaissements</td>
+<td>Divers</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Bank (BNK1)</td>
+<td>Banque</td>
+<td>Banque</td>
+<td>compte 521 créé par Odoo</td>
+</tr>
+<tr>
+<td>Cash (CSH1)</td>
+<td>Espèces</td>
+<td>Espèces</td>
+<td>compte 571 créé par Odoo</td>
+</tr>
+</tbody>
+</table></div>
+<ol>
+<li><strong>Banque</strong> : un journal de type Banque par compte bancaire. Renseigner le « Numéro de compte » et vérifier que le champ « Compte bancaire » pointe sur un compte 521.</li>
+<li><strong>Caisse</strong> : un journal de type Espèces par caisse physique, champ « Compte d'espèces » sur un compte 571. Le contrôle « Aucune caisse créditrice » signale en erreur tout compte 57 à solde créditeur.</li>
+<li><strong>Monnaie électronique</strong> : un journal par opérateur, champ « Compte bancaire » sur le compte dédié.</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Opérateur</th>
+<th>Compte créé par le paramétrage</th>
+<th>Libellé du compte</th>
+<th>Type de journal conseillé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Orange Money</td>
+<td>552100</td>
+<td>Monnaie électronique, Orange Money</td>
+<td>Banque</td>
+</tr>
+<tr>
+<td>MTN Mobile Money</td>
+<td>552200</td>
+<td>Monnaie électronique, MTN Mobile Money</td>
+<td>Banque</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le type Banque est conseillé pour la monnaie électronique : le contrôle « Paiements fournisseurs en espèces &gt; 100 000 FCFA » ne compte que les journaux de type Espèces. Pour un troisième opérateur, créer d'abord un compte 5523xx de type « Banque et espèces » dans le plan comptable. Les rubriques BS (55 débiteur) et DR (55 créditeur) le captent sans autre réglage ; un code à sept chiffres comme 5521001 est aussi capté, ce que vérifie un test avancé.</p>
+<p>Les journaux de banque et d'espèces créés ensuite reçoivent 758800 en « Compte de profit » et 658800 en « Compte des pertes ». Le contrôle « Comptes d'attente et de virements internes soldés » attend un solde nul sur 471, 585 et 588, sur le compte d'attente bancaire de la société et sur son compte de virements internes.</p>
+<h3 id="droits-des-utilisateurs">Droits des utilisateurs<a class="anchor" href="#droits-des-utilisateurs" aria-label="Lien vers cette section">#</a></h3>
+<p>Les menus Syscohada demandent le groupe technique <code>account.group_account_readonly</code>. Le profil « Administrateur » de la comptabilité ne le donne pas en Community : il faut l'ajouter en mode développeur.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Chemin</th>
+<th>Groupe requis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>États et contrôles (AITE)</td>
+<td>Facturation &gt; Analyse &gt; Syscohada</td>
+<td><code>account.<wbr>group_<wbr>account_<wbr>readonly</code></td>
+</tr>
+<tr>
+<td>Bilan actif, Bilan passif, Compte de résultat, Tableau des flux de trésorerie</td>
+<td>Facturation &gt; Analyse &gt; Syscohada</td>
+<td><code>account.<wbr>group_<wbr>account_<wbr>readonly</code></td>
+</tr>
+<tr>
+<td>Déclarations de TVA (Cameroun)</td>
+<td>Facturation &gt; Analyse &gt; Syscohada</td>
+<td><code>account.<wbr>group_<wbr>account_<wbr>readonly</code></td>
+</tr>
+<tr>
+<td>SYSCOHADA, Rubriques des états, Appliquer le paramétrage</td>
+<td>Facturation &gt; Configuration &gt; SYSCOHADA</td>
+<td><code>account.<wbr>group_<wbr>account_<wbr>manager</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol>
+<li>Activer le mode développeur.</li>
+<li>Ouvrir Paramètres &gt; Utilisateurs &amp; Sociétés &gt; Utilisateurs, puis l'utilisateur.</li>
+<li>Onglet Droits d'accès, champ Comptabilité : « Administrateur » pour un comptable qui crée et valide les déclarations, « Facturation » pour un utilisateur qui consulte seulement les états et les déclarations.</li>
+<li>Section Technique : cocher « Montrer les fonctions de comptabilité complètes ». Le menu Syscohada, les pièces comptables et le plan comptable deviennent visibles.</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Modèle</th>
+<th><code>account.group_account_readonly</code></th>
+<th><code>account.group_account_manager</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rubriques des états (<code>aite.<wbr>syscohada.<wbr>rubrique</code>)</td>
+<td>lecture</td>
+<td>tous droits</td>
+</tr>
+<tr>
+<td>Assistant États et contrôles, lignes d'états et de contrôles</td>
+<td>tous droits</td>
+<td>aucun droit propre</td>
+</tr>
+<tr>
+<td>Déclaration de TVA (<code>aite.<wbr>cm.<wbr>vat.<wbr>declaration</code>) et ses lignes</td>
+<td>lecture</td>
+<td>tous droits</td>
+</tr>
+<tr>
+<td>Lignes du formulaire I/TVA-IR (<code>aite.<wbr>cm.<wbr>itvair.<wbr>line</code>)</td>
+<td>lecture</td>
+<td>tous droits</td>
+</tr>
+</tbody>
+</table></div>
+<p>Un utilisateur qui n'a que le groupe lecture seule peut lancer les états et ouvrir les déclarations. Il ne peut ni les créer, ni les recalculer, ni les valider.</p>
+<h3 id="idempotence-et-mise-a-jour">Idempotence et mise à jour<a class="anchor" href="#idempotence-et-mise-a-jour" aria-label="Lien vers cette section">#</a></h3>
+<p>Relancer le paramétrage ne crée jamais de doublon ; le test <code>test_setup_is_idempotent</code> le vérifie.</p>
+<ul>
+<li><strong>Libellés et types</strong> : réimposés à chaque passage. Un compte de la table <code>ACCOUNT_LABELS</code> renommé à la main retrouve le libellé du code.</li>
+<li><strong>Sous-comptes</strong> : créés seulement s'ils manquent. Un sous-compte renommé garde son nouveau libellé.</li>
+<li><strong>Taxes</strong> : créées seulement si l'identifiant externe est absent. Le champ Actif n'est jamais touché : une retenue activée par le comptable reste active.</li>
+<li><strong>Objets déjà utilisés</strong> : comptes 999001 et 999002, compte de la taxe <code>precompte_achats</code> et compte de la taxe « 19.25% S » ne changent que s'ils n'ont aucune écriture comptabilisée.</li>
+<li><strong>Erreurs</strong> : chaque changement de type, de journal ou de compte de taxe passe par un point de sauvegarde. En cas d'erreur, Odoo journalise « AITE SYSCOHADA : \<modèle> \<objet> non modifié (\<erreur>) » et le paramétrage continue.</li>
+</ul>
+<p>Pour mettre à jour une base existante :</p>
+<ol>
+<li>Remplacer les modules dans <code>addons/</code>.</li>
+<li>Lancer <code>../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d &lt;base&gt; -u aite_syscohada_base --stop-after-init</code>. La mise à jour du socle entraîne celle des modules qui en dépendent, et le script <code>migrations/&lt;version&gt;/post-migrate.py</code> relance le paramétrage.</li>
+<li>Lire le journal d'Odoo : les lignes « AITE SYSCOHADA » signalent les objets non modifiés.</li>
+</ol>
+</section><section class="chapter"><h2 id="4-saisie-quotidienne">4. Saisie quotidienne<a class="anchor" href="#4-saisie-quotidienne" aria-label="Lien vers cette section">#</a></h2>
+<p>La taxe posée sur chaque ligne de facture décide du compte de TVA, de la ligne de la déclaration et du moment d'exigibilité. Le comptable ne saisit donc jamais la TVA à la main : il choisit la bonne taxe, le bon compte de charge ou de produit et le bon journal. Les états et la déclaration se déduisent de ces trois choix.</p>
+<h3 id="reperes-communs-a-tous-les-flux">Repères communs à tous les flux<a class="anchor" href="#reperes-communs-a-tous-les-flux" aria-label="Lien vers cette section">#</a></h3>
+<p>Les taxes « 19.25% », « 19.25% G », « 19.25% S », « 0% EX » et « 0% » viennent du plan « cm » d'Odoo ; les autres sont créées par le paramétrage AITE. Les sept premières du tableau sont actives. Les autres sont créées inactives : leur taux ou leur barème reste à valider.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Flux</th>
+<th>Taxe dans Odoo</th>
+<th>Compte de TVA</th>
+<th>Ligne I/TVA-IR</th>
+<th>État à l'installation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vente de marchandises</td>
+<td>« 19.25% »</td>
+<td>443100</td>
+<td>L10</td>
+<td>Active, taxe de vente par défaut</td>
+</tr>
+<tr>
+<td>Prestation de services vendue</td>
+<td>« 19,25 % S (encaissement) »</td>
+<td>443800, puis 443200 au paiement</td>
+<td>L10, au paiement seulement</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>Exportation</td>
+<td>« 0% EX » (vente)</td>
+<td>aucun</td>
+<td>L13</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>Vente exonérée</td>
+<td>« 0% » (vente)</td>
+<td>aucun</td>
+<td>L14</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>Achat de marchandises</td>
+<td>« 19.25% G »</td>
+<td>445200</td>
+<td>L18</td>
+<td>Active, taxe d'achat par défaut</td>
+</tr>
+<tr>
+<td>Service acheté</td>
+<td>« 19.25% S »</td>
+<td>445400</td>
+<td>L19</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>Immobilisation</td>
+<td>« 19,25 % I »</td>
+<td>445100</td>
+<td>L18</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>Service d'un prestataire étranger</td>
+<td>« TVA 19,25 % autoliquidée, services étrangers (à valider) »</td>
+<td>445400 et 447161</td>
+<td>L21 et L38</td>
+<td>Inactive</td>
+</tr>
+<tr>
+<td>Précompte sur achats</td>
+<td>« Précompte sur achats (taux à valider) »</td>
+<td>449210</td>
+<td>L46</td>
+<td>Inactive</td>
+</tr>
+<tr>
+<td>Retenues opérées et subies</td>
+<td>huit taxes suffixées « (taux à valider) »</td>
+<td>447120 à 447170, 449220 à 449240</td>
+<td>L0, L37, L40, L42, L43, L45, L47, L48</td>
+<td>Inactives</td>
+</tr>
+<tr>
+<td>Taxe de séjour</td>
+<td>« Taxe de séjour (à paramétrer) »</td>
+<td>442200</td>
+<td>aucune</td>
+<td>Inactive</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le chargement du plan crée les journaux « Factures clients », « Factures fournisseurs », « Banque », « Espèces », « Opérations diverses » et « TVA sur encaissements ». Le module Point de Vente ajoute le journal « Point de Vente ». Les codes du plan ont six chiffres : 4431 s'écrit 443100. Le compte du journal « Banque » est 521001, celui du journal « Espèces » 571001. Les exemples viennent de <code>docs/flux-comptables-syscohada.html</code> et des tests du dépôt.</p>
+<p>En Community, le bouton « Payer » ne mouvemente pas directement 521001 : il passe par un compte 521 de paiements en suspens, soldé au rapprochement du relevé. Les exemples montrent l'écriture une fois le relevé rapproché.</p>
+<h3 id="ventes-de-marchandises">Ventes de marchandises<a class="anchor" href="#ventes-de-marchandises" aria-label="Lien vers cette section">#</a></h3>
+<p>Une vente se facture avec la taxe « 19.25% » dans le journal « Factures clients », sur le compte 701100. La TVA va en 443100 dès la validation.</p>
+<p>Exemple : 1 000 000 hors taxes, payés par virement trente jours plus tard.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>411100 Clients</td>
+<td>1 192 500</td>
+<td></td>
+</tr>
+<tr>
+<td>701100 Vente de marchandises dans la région</td>
+<td></td>
+<td>1 000 000</td>
+</tr>
+<tr>
+<td>443100 État, TVA facturée sur ventes</td>
+<td></td>
+<td>192 500</td>
+</tr>
+</tbody>
+</table></div>
+<p>Au paiement, bouton « Payer », journal « Banque » : débit 521001, crédit 411100 pour 1 192 500. Dans les états : TA puis XB ; BI si la facture reste impayée au 31 décembre ; DK pour la TVA non reversée. Dans la déclaration : L10 base 1 000 000 et taxe 192 500, puis L15, base de l'acompte L50. Un avoir avec la même taxe vient en négatif sur L10.</p>
+<h3 id="prestations-de-services">Prestations de services<a class="anchor" href="#prestations-de-services" aria-label="Lien vers cette section">#</a></h3>
+<p>Une prestation se facture avec la taxe « 19,25 % S (encaissement) » et le compte 706100. Son exigibilité est « Basé sur le paiement » et son compte d'attente 443800 : la TVA n'entre dans la déclaration qu'une fois encaissée.</p>
+<ol>
+<li>Sur la ligne de facture, renseigner 706100 dans la colonne « Compte », ou dans le « Compte des revenus » de l'article.</li>
+<li>Choisir la taxe « 19,25 % S (encaissement) ». La facture crédite 443800, pas 443200.</li>
+<li>Encaisser avec le bouton « Payer ». Le lettrage crée une écriture dans le journal « TVA sur encaissements » : débit 443800, crédit 443200.</li>
+</ol>
+<p>Exemple : 100 000 hors taxes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>411100 Clients</td>
+<td>119 250</td>
+<td></td>
+</tr>
+<tr>
+<td>706100 Services vendus dans la région</td>
+<td></td>
+<td>100 000</td>
+</tr>
+<tr>
+<td>443800 État, TVA facturée sur prestations non encore exigible</td>
+<td></td>
+<td>19 250</td>
+</tr>
+</tbody>
+</table></div>
+<p>Au paiement, journal « TVA sur encaissements » : débit 443800, crédit 443200 pour 19 250. Un paiement partiel transfère la TVA au prorata : 59 625 encaissés sur 119 250 déplacent 9 625 en 443200 et en laissent 9 625 en 443800.</p>
+<p>Dans les états : TC puis XB ; DK pour 443200 et 443800. Dans la déclaration, la base et la taxe entrent en L10 au mois du paiement seulement. La liquidation ne touche jamais 443800.</p>
+<h3 id="acomptes-clients">Acomptes clients<a class="anchor" href="#acomptes-clients" aria-label="Lien vers cette section">#</a></h3>
+<p>Un acompte reçu avant la facture se crédite en 419100 « Clients, avances et acomptes reçus », pas en produit, dans le journal de trésorerie qui reçoit l'argent.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>552100 Monnaie électronique, Orange Money</td>
+<td>50 000</td>
+<td></td>
+</tr>
+<tr>
+<td>419100 Clients, avances et acomptes reçus</td>
+<td></td>
+<td>50 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>À la facture du séjour, l'acompte s'impute : débit 419100, crédit 411100. Un solde créditeur de 419100 va en DI au passif. Le module ne calcule pas la TVA d'un acompte : son traitement est à valider avec l'expert-comptable.</p>
+<h3 id="achats-de-marchandises">Achats de marchandises<a class="anchor" href="#achats-de-marchandises" aria-label="Lien vers cette section">#</a></h3>
+<p>Une facture de boissons se saisit dans « Factures fournisseurs » avec la taxe « 19.25% G » sur le compte 601100. La TVA va en 445200 et alimente L18.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>601100 Achats de biens dans la région</td>
+<td>800 000</td>
+<td></td>
+</tr>
+<tr>
+<td>445200 État, TVA récupérable sur achats</td>
+<td>154 000</td>
+<td></td>
+</tr>
+<tr>
+<td>401100 Fournisseurs</td>
+<td></td>
+<td>954 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans les états : RA, puis XA avec la variation de stock ; DJ pour la dette ; 445200 en BJ tant que la TVA n'est pas liquidée. Un paiement fournisseur de plus de 100 000 FCFA dans un journal de type Espèces est relevé par le contrôle « Paiements fournisseurs en espèces &gt; 100 000 FCFA ».</p>
+<h3 id="services-achetes">Services achetés<a class="anchor" href="#services-achetes" aria-label="Lien vers cette section">#</a></h3>
+<p>Un service acheté prend la taxe « 19.25% S », dont le paramétrage a basculé le compte de 445200 vers 445400. Elle alimente L19, distincte de L18. La bascule n'a lieu que si la taxe n'a servi à aucune écriture comptabilisée.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>631800 Autres frais bancaires</td>
+<td>10 000</td>
+<td></td>
+</tr>
+<tr>
+<td>445400 État, TVA récupérable sur services extérieurs et autres charges</td>
+<td>1 925</td>
+<td></td>
+</tr>
+<tr>
+<td>401100 Fournisseurs</td>
+<td></td>
+<td>11 925</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le même schéma vaut pour des honoraires en 632400.</p>
+<h3 id="immobilisations">Immobilisations<a class="anchor" href="#immobilisations" aria-label="Lien vers cette section">#</a></h3>
+<p>Une immobilisation se facture avec la taxe « 19,25 % I » et un compte de classe 2. Le fournisseur d'investissement a 481200 comme « Compte fournisseur », rendu lettrable par le paramétrage.</p>
+<ol>
+<li>Sur la fiche du fournisseur, onglet « Facturation », mettre 481200 dans « Compte fournisseur ».</li>
+<li>Sur la ligne de facture, choisir le compte d'immobilisation, par exemple 241100, et la taxe « 19,25 % I ».</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>241100 Matériel industriel</td>
+<td>2 400 000</td>
+<td></td>
+</tr>
+<tr>
+<td>445100 État, TVA récupérable sur immobilisations</td>
+<td>462 000</td>
+<td></td>
+</tr>
+<tr>
+<td>481200 Fournisseurs d'investissements, immobilisations corporelles</td>
+<td></td>
+<td>2 862 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans les états : AM brut 2 400 000 ; DH tant que la dette court ; L18 pour 462 000. Au tableau des flux, FG reprend l'acquisition corrigée de la variation de la dette 481.</p>
+<h3 id="fournisseur-etranger">Fournisseur étranger<a class="anchor" href="#fournisseur-etranger" aria-label="Lien vers cette section">#</a></h3>
+<p>Une prestation d'un prestataire étranger relève de la taxe « TVA 19,25 % autoliquidée, services étrangers (à valider) », inactive à l'installation. Elle porte deux lignes de taxe : 445400 à +100 % avec l'étiquette de L21, et 447161 à −100 %. La dette fournisseur ne comprend pas de TVA.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>632400 Frais pour les professions réglementées</td>
+<td>1 000 000</td>
+<td></td>
+</tr>
+<tr>
+<td>445400 État, TVA récupérable sur services extérieurs et autres charges</td>
+<td>192 500</td>
+<td></td>
+</tr>
+<tr>
+<td>447161 État, TVA autoliquidée sur prestations étrangères</td>
+<td></td>
+<td>192 500</td>
+</tr>
+<tr>
+<td>401100 Fournisseurs</td>
+<td></td>
+<td>1 000 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans la déclaration : L21 pour 192 500 en déductible et L38 pour 192 500 à reverser. Si la TSR est due, elle passe par la taxe « TSR sur rémunérations versées à l'étranger (taux à valider) », compte 447120, ligne L0.</p>
+<h3 id="retenues-a-la-source-subies-et-operees">Retenues à la source subies et opérées<a class="anchor" href="#retenues-a-la-source-subies-et-operees" aria-label="Lien vers cette section">#</a></h3>
+<p>Les retenues sont des taxes à taux négatif, rangées dans le groupe « Retenues, précomptes et autres taxes » et inactives jusqu'à validation des taux. Une retenue opérée réduit la dette fournisseur ; une retenue subie réduit la créance client. La ligne de la déclaration lit les mouvements du compte de la retenue. Pour les activer : Facturation &gt; Configuration &gt; Comptabilité &gt; Taxes, filtre « Inactif ».</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Taxe dans Odoo</th>
+<th>Sens</th>
+<th>Taux dans le code</th>
+<th>Compte</th>
+<th>Ligne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>« Précompte sur loyers retenu (taux à valider) »</td>
+<td>achat</td>
+<td>−15 %</td>
+<td>447130</td>
+<td>L42</td>
+</tr>
+<tr>
+<td>« Retenue sur honoraires (taux à valider) »</td>
+<td>achat</td>
+<td>−5 %</td>
+<td>447140</td>
+<td>L43</td>
+</tr>
+<tr>
+<td>« TSR sur rémunérations versées à l'étranger (taux à valider) »</td>
+<td>achat</td>
+<td>−15 %</td>
+<td>447120</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>« TVA retenue à la source, entreprise habilitée (taux à valider) »</td>
+<td>achat</td>
+<td>−19,25 %</td>
+<td>447160</td>
+<td>L37</td>
+</tr>
+<tr>
+<td>« Acompte sur CA retenu à la source (taux à valider) »</td>
+<td>achat</td>
+<td>−2 %</td>
+<td>447170</td>
+<td>L40</td>
+</tr>
+<tr>
+<td>« Acompte sur CA retenu par le client (taux à valider) »</td>
+<td>vente</td>
+<td>−2 %</td>
+<td>449220</td>
+<td>L45</td>
+</tr>
+<tr>
+<td>« Précompte sur loyers retenu par le locataire (taux à valider) »</td>
+<td>vente</td>
+<td>−15 %</td>
+<td>449230</td>
+<td>L47</td>
+</tr>
+<tr>
+<td>« Retenue sur honoraires subie (taux à valider) »</td>
+<td>vente</td>
+<td>−5 %</td>
+<td>449240</td>
+<td>L48</td>
+</tr>
+</tbody>
+</table></div>
+<p>Retenue opérée, loyer de 500 000 :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>622200 Location d'immeubles</td>
+<td>500 000</td>
+<td></td>
+</tr>
+<tr>
+<td>447130 État, précomptes retenus sur loyers</td>
+<td></td>
+<td>75 000</td>
+</tr>
+<tr>
+<td>401100 Fournisseurs</td>
+<td></td>
+<td>425 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Retenue subie, vente de 1 000 000 avec « 19.25% » et « Acompte sur CA retenu par le client (taux à valider) » :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>411100 Clients</td>
+<td>1 172 500</td>
+<td></td>
+</tr>
+<tr>
+<td>449220 État, acomptes sur chiffre d'affaires retenus par les clients</td>
+<td>20 000</td>
+<td></td>
+</tr>
+<tr>
+<td>701100 Vente de marchandises dans la région</td>
+<td></td>
+<td>1 000 000</td>
+</tr>
+<tr>
+<td>443100 État, TVA facturée sur ventes</td>
+<td></td>
+<td>192 500</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans la déclaration : L42 base 500 000 et 75 000 à reverser ; L45 base 1 000 000 et 20 000 à déduire, repris en L52. La liquidation de TVA ne touche pas ces comptes. Attention : une facture fournisseur avec retenue extournée dans le mois reste comptée dans la ligne de retenue (défaut connu, voir la section Dépannage).</p>
+<h3 id="precompte-sur-achats">Précompte sur achats<a class="anchor" href="#precompte-sur-achats" aria-label="Lien vers cette section">#</a></h3>
+<p>Le précompte facturé par un fournisseur n'est pas une charge : c'est une avance d'impôt en 449210. La taxe « Précompte sur achats (taux à valider) » vaut 2 % dans le code, reste inactive et s'ajoute à « 19.25% G » sur la ligne d'achat.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>601100 Achats de biens dans la région</td>
+<td>1 000 000</td>
+<td></td>
+</tr>
+<tr>
+<td>445200 État, TVA récupérable sur achats</td>
+<td>192 500</td>
+<td></td>
+</tr>
+<tr>
+<td>449210 État, précomptes sur achats subis</td>
+<td>20 000</td>
+<td></td>
+</tr>
+<tr>
+<td>401100 Fournisseurs</td>
+<td></td>
+<td>1 212 500</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dans la déclaration : L46 base 1 000 000 et 20 000, repris en L49 puis L52. Le compte 447180 alimente L41 mais aucune taxe ne l'utilise : il se mouvemente par écriture manuelle.</p>
+<h3 id="taxe-de-sejour">Taxe de séjour<a class="anchor" href="#taxe-de-sejour" aria-label="Lien vers cette section">#</a></h3>
+<p>La taxe de séjour est une taxe à montant fixe, créée inactive avec un montant de 0 et le compte 442200. Elle n'alimente aucune ligne de la déclaration. Son compte, sa base et son exigibilité sont des questions ouvertes de <code>ROADMAP.md</code>. Exemple illustratif, deux nuits à 50 000 hors taxes et 2 000 de taxe :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>411100 Clients</td>
+<td>121 250</td>
+<td></td>
+</tr>
+<tr>
+<td>706100 Services vendus dans la région</td>
+<td></td>
+<td>100 000</td>
+</tr>
+<tr>
+<td>443800 État, TVA facturée sur prestations non encore exigible</td>
+<td></td>
+<td>19 250</td>
+</tr>
+<tr>
+<td>442200 État, impôts et taxes pour les collectivités publiques</td>
+<td></td>
+<td>2 000</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="point-de-vente-et-caisse">Point de vente et caisse<a class="anchor" href="#point-de-vente-et-caisse" aria-label="Lien vers cette section">#</a></h3>
+<p>Le point de vente passe une écriture de synthèse à la fermeture de la session, dans le journal « Point de Vente ». Chaque mode de paiement est rattaché à un journal : « Espèces » pour la caisse, un journal de type Banque par opérateur de monnaie électronique. Le plan « cm » n'a pas de compte 515 : il faut créer 515000 pour les cartes.</p>
+<p>Exemple : 596 250 TTC, encaissés 350 000 en espèces, 146 250 en mobile money, 100 000 par carte.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>571001 Espèces</td>
+<td>350 000</td>
+<td></td>
+</tr>
+<tr>
+<td>552100 Monnaie électronique, Orange Money</td>
+<td>146 250</td>
+<td></td>
+</tr>
+<tr>
+<td>515000 Cartes de crédit à encaisser, à créer</td>
+<td>100 000</td>
+<td></td>
+</tr>
+<tr>
+<td>701100 Vente de marchandises dans la région</td>
+<td></td>
+<td>500 000</td>
+</tr>
+<tr>
+<td>443100 État, TVA facturée sur ventes</td>
+<td></td>
+<td>96 250</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ce tableau est une vue nette : Odoo crédite les ventes et la TVA contre 411300 « Clients, point de vente », puis solde ce compte par mode de paiement.</p>
+<ul>
+<li><strong>Écart de caisse</strong> : un manquant de 5 000 donne débit 658800, crédit 571001.</li>
+<li><strong>Dépôt en banque</strong> : il transite par 585001, compte de virements internes créé par Odoo. Débit 585001, crédit 571001 au départ ; débit 521001, crédit 585001 à réception.</li>
+<li><strong>Note de chambre</strong> : le mode de paiement « Compte client » avec « Identifier le client » débite le compte client du client, 411100 par défaut. La note de séjour récapitule cette consommation sans la refacturer.</li>
+<li><strong>Contrôles</strong> : « Comptes d'attente et de virements internes soldés » signale tout solde sur 471, 585 ou 588 ; « Aucune caisse créditrice » signale en erreur un compte 57 créditeur.</li>
+</ul>
+<h3 id="stocks">Stocks<a class="anchor" href="#stocks" aria-label="Lien vers cette section">#</a></h3>
+<p>Le référentiel lit le stock de marchandises dans BB (comptes 31 à 38, nets de 39) et sa variation dans RB (6031). En inventaire intermittent, les achats restent en 601100 toute l'année et deux écritures corrigent le coût des ventes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1er janvier, reprise du stock initial</td>
+<td>603100 : 2 000 000</td>
+<td>311100 : 2 000 000</td>
+</tr>
+<tr>
+<td>31 décembre, stock compté</td>
+<td>311100 : 3 000 000</td>
+<td>603100 : 3 000 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Avec la valorisation automatisée d'Odoo Inventaire, les catégories d'articles doivent pointer sur des comptes 31 et 6031, sinon BB et RB ne voient pas les mouvements.</p>
+<h3 id="paie-en-ecriture-manuelle">Paie en écriture manuelle<a class="anchor" href="#paie-en-ecriture-manuelle" aria-label="Lien vers cette section">#</a></h3>
+<p>Tant que le lot 5 n'est pas livré, la paie se passe en écriture manuelle. Chaque impôt sur salaire a son compte, et chaque compte sa ligne : 447210 et 447215 alimentent L67, 447220 L68, 447230 L69, 447240 L70, 447250 L71, 447260 L72. Le compte générique 447200 n'alimente aucune ligne.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>661100 Salaires et commissions</td>
+<td>1 000 000</td>
+<td></td>
+</tr>
+<tr>
+<td>447210 État, IRPP retenu sur salaires</td>
+<td></td>
+<td>100 000</td>
+</tr>
+<tr>
+<td>447215 État, centimes additionnels communaux sur IRPP</td>
+<td></td>
+<td>10 000</td>
+</tr>
+<tr>
+<td>447220 État, Crédit foncier du Cameroun, part salariale</td>
+<td></td>
+<td>10 000</td>
+</tr>
+<tr>
+<td>447250 État, redevance audiovisuelle</td>
+<td></td>
+<td>2 000</td>
+</tr>
+<tr>
+<td>447260 État, taxe de développement local</td>
+<td></td>
+<td>1 000</td>
+</tr>
+<tr>
+<td>422000 Personnel, rémunérations dues</td>
+<td></td>
+<td>877 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Charges de l'employeur : débit 641300 pour 25 000, crédit 447230 pour 15 000 et 447240 pour 10 000. Les montants sont illustratifs. La part salariale CNPS se crédite en 431 ; la part patronale passe par 664100 et 431. Déclaration : L67 110 000 avec les CAC, L68 10 000, L69 15 000, L70 10 000, L71 2 000, L72 1 000, L73 148 000.</p>
+<h3 id="immobilisations-et-amortissements">Immobilisations et amortissements<a class="anchor" href="#immobilisations-et-amortissements" aria-label="Lien vers cette section">#</a></h3>
+<p>La dotation annuelle débite 681300 et crédite le compte 28 de l'immobilisation, dans « Opérations diverses ». En Community, le module OCA <code>account_asset_management</code> peut générer ces écritures. Exemple : chambre froide amortie en cinq ans, débit 681300 et crédit 284100 pour 480 000. Dans les états : RL, colonne amortissements de AM, et réintégration dans la CAFG (FA).</p>
+<h3 id="emprunts">Emprunts<a class="anchor" href="#emprunts" aria-label="Lien vers cette section">#</a></h3>
+<p>Un emprunt se crédite en 162000 à la réception des fonds. À chaque échéance, seul l'intérêt est une charge, en 671200 ; le capital remboursé débite 162000.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Réception des fonds</td>
+<td>521001 : 4 000 000</td>
+<td>162000 : 4 000 000</td>
+</tr>
+<tr>
+<td>Échéance</td>
+<td>162000 : 800 000 ; 671200 : 120 000</td>
+<td>521001 : 920 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>À la clôture, les intérêts courus se constatent par débit 671200, crédit 166200. Au tableau des flux : FO 4 000 000 et FQ −800 000 ; 166 est exclu des deux.</p>
+<h3 id="affectation-du-resultat">Affectation du résultat<a class="anchor" href="#affectation-du-resultat" aria-label="Lien vers cette section">#</a></h3>
+<p>Tant que l'affectation n'est pas passée, le résultat de N-1 reste dans CJ et le contrôle « Résultats antérieurs à affecter » le signale, sans bloquer. L'affectation se passe après l'assemblée générale.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Débit</th>
+<th>Crédit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>131000 Résultat net : bénéfice</td>
+<td>2 200 000</td>
+<td></td>
+</tr>
+<tr>
+<td>111000 Réserve légale</td>
+<td></td>
+<td>220 000</td>
+</tr>
+<tr>
+<td>465000 Associés, dividendes à payer</td>
+<td></td>
+<td>1 000 000</td>
+</tr>
+<tr>
+<td>121000 Report à nouveau créditeur</td>
+<td></td>
+<td>980 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Avant cette écriture, le résultat de N-1 est porté en 131000 par débit 999999 « Profits/pertes non distribués » ; ce transfert est neutre pour CJ.</p>
+<h3 id="dividendes">Dividendes<a class="anchor" href="#dividendes" aria-label="Lien vers cette section">#</a></h3>
+<p>Le paiement des dividendes débite 465000 et crédite la banque ; le tableau des flux le montre en FN. La retenue sur les dividendes se déclare à la ligne L57 « Revenus des actions, parts sociales et assimilés », colonne « Base saisie ». Le code propose 15 % dans « Taux ou tarif » et 10 % de CAC, tous deux modifiables. Le compte 447110 « État, IRCM retenu à la source » existe, mais aucune taxe ni aucune ligne ne le lit.</p>
+<h3 id="ce-qu-il-ne-faut-pas-faire">Ce qu'il ne faut pas faire<a class="anchor" href="#ce-qu-il-ne-faut-pas-faire" aria-label="Lien vers cette section">#</a></h3>
+<ul>
+<li><strong>« 19.25% G » sur un service</strong> : le montant passe en L18 au lieu de L19.</li>
+<li><strong>« 19,25 % S (encaissement) » sur une vente de marchandises</strong> : la TVA reste en 443800 et n'entre en L10 qu'au paiement.</li>
+<li><strong>« 19.25% » sur une prestation</strong> : la TVA entre en L10 dès la facture, sans attendre l'encaissement.</li>
+<li><strong>TVA saisie à la main sur 443 ou 445 sans taxe</strong> : la déclaration ne la voit pas et la liquidation ne la solde pas.</li>
+<li><strong>Fournisseur payé plus de 100 000 FCFA par un journal Espèces</strong> : le contrôle signale une TVA non déductible.</li>
+<li><strong>Solde laissé sur 471, 585 ou 588</strong> : il cache un dépôt en route ou une opération non identifiée.</li>
+<li><strong>Immobilisation facturée sur un fournisseur en 401100</strong> : la dette sort en DJ au lieu de DH, et le flux FG est faux.</li>
+<li><strong>Paie passée sur 447200</strong> : les lignes L67 à L73 restent à zéro.</li>
+<li><strong>Affectation du résultat N-1 oubliée</strong> : il reste dans CJ et le contrôle le signale.</li>
+</ul>
+</section><section class="chapter"><h2 id="5-etats-financiers">5. États financiers<a class="anchor" href="#5-etats-financiers" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="ou-trouver-les-etats">Où trouver les états<a class="anchor" href="#ou-trouver-les-etats" aria-label="Lien vers cette section">#</a></h3>
+<p>Les états SYSCOHADA s'ouvrent depuis le menu Facturation &gt; Analyse &gt; Syscohada (Comptabilité &gt; Analyse &gt; Syscohada sur Enterprise). Le menu « Syscohada » vient du module <code>l10n_syscohada</code> d'Odoo et est réservé au groupe <code>account.group_account_readonly</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Module</th>
+<th>Ce qui s'ouvre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>États et contrôles (AITE)</td>
+<td>aite_syscohada_base</td>
+<td>Assistant « États SYSCOHADA et contrôles »</td>
+</tr>
+<tr>
+<td>Bilan actif, Bilan passif, Compte de résultat, Tableau des flux de trésorerie</td>
+<td>aite_syscohada_community</td>
+<td>Instance MIS « SYSCOHADA – … »</td>
+</tr>
+<tr>
+<td>Déclarations de TVA (Cameroun)</td>
+<td>aite_syscohada_community</td>
+<td>Déclaration mensuelle I/TVA-IR</td>
+</tr>
+<tr>
+<td>SYSCOHADA – Bilan actif … Tableau des flux de trésorerie</td>
+<td>aite_syscohada_reports</td>
+<td>Rapports <code>account.<wbr>report</code>, Enterprise seulement</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le référentiel des rubriques se consulte dans Facturation &gt; Configuration &gt; SYSCOHADA &gt; Rubriques des états, réservé au groupe <code>account.group_account_manager</code>.</p>
+<h3 id="l-assistant-etats-syscohada-et-controles">L'assistant « États SYSCOHADA et contrôles »<a class="anchor" href="#l-assistant-etats-syscohada-et-controles" aria-label="Lien vers cette section">#</a></h3>
+<p>L'assistant calcule les quatre états et les contrôles en une seule action, pour une société et une période. Il appelle le moteur de référence, celui auquel les tests comparent MIS et Enterprise. Ses résultats sont temporaires et ne lisent que les pièces comptabilisées.</p>
+<ol>
+<li>Ouvrir Facturation &gt; Analyse &gt; Syscohada &gt; États et contrôles (AITE).</li>
+<li>Vérifier la société, puis les dates « Du » et « Au ». Par défaut : 1er janvier et 31 décembre de l'année en cours.</li>
+<li>Laisser « Exercice N-1 » coché pour obtenir la colonne comparative, calculée sur les mêmes dates décalées d'un an.</li>
+<li>Cliquer sur « Calculer ». Les onglets apparaissent sous l'en-tête.</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Onglet</th>
+<th>Colonnes</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contrôles</td>
+<td>Contrôle, Libellé, Résultat, Détail</td>
+<td>Les contrôles de la période, colorés selon le résultat</td>
+</tr>
+<tr>
+<td>Bilan actif</td>
+<td>Réf, Rubrique, Brut, Amort. et dépréc., Exercice N, Exercice N-1</td>
+<td>Rubriques AD à BZ</td>
+</tr>
+<tr>
+<td>Bilan passif</td>
+<td>Réf, Rubrique, Exercice N, Exercice N-1</td>
+<td>Rubriques CA à DZ</td>
+</tr>
+<tr>
+<td>Compte de résultat</td>
+<td>Réf, Rubrique, Exercice N, Exercice N-1</td>
+<td>Rubriques TA à XI</td>
+</tr>
+<tr>
+<td>Flux de trésorerie</td>
+<td>Réf, Rubrique, Exercice N, Exercice N-1</td>
+<td>Rubriques ZA à ZH</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le bilan est calculé sur les soldes cumulés à la date « Au » ; le compte de résultat et le tableau des flux portent sur la période. La colonne Exercice N-1 ne donne que le net. Les contrôles ne portent que sur la période N. La colonne « Résultat » prend quatre valeurs : Conforme en vert, Information en bleu, Alerte en orange, Bloquant en rouge.</p>
+<h3 id="les-9-controles">Les 9 contrôles<a class="anchor" href="#les-9-controles" aria-label="Lien vers cette section">#</a></h3>
+<p>Aucun niveau ne bloque une saisie dans Odoo : les niveaux guident l'arrêté des comptes. Un Bloquant se corrige avant d'arrêter les comptes, une Alerte se corrige ou se justifie par écrit, une Information se lit.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Libellé</th>
+<th>Niveaux</th>
+<th>Ce qui est vérifié</th>
+<th>Que faire s'il n'est pas vert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RATTACHEMENT</td>
+<td>Rattachement des comptes</td>
+<td>Conforme, Alerte, Bloquant</td>
+<td>Chaque compte est capté une fois au débit et une fois au crédit par le bilan ; chaque compte 6, 7 ou 8 une fois par le compte de résultat</td>
+<td>Bloquant « Comptes mouvementés non rattachés » : corriger le code du compte ou faire évoluer le référentiel. Alerte « Comptes non rattachés (sans mouvement) » : peut attendre</td>
+</tr>
+<tr>
+<td>BROUILLONS</td>
+<td>Pièces non validées sur la période</td>
+<td>Conforme, Alerte</td>
+<td>Pièces en brouillon datées de la période</td>
+<td>Valider ou supprimer ces pièces</td>
+</tr>
+<tr>
+<td>EQUILIBRE</td>
+<td>Total actif = total passif (BZ = DZ)</td>
+<td>Conforme, Bloquant</td>
+<td>Égalité des deux totaux du bilan</td>
+<td>Corriger d'abord RATTACHEMENT</td>
+</tr>
+<tr>
+<td>RESULTAT</td>
+<td>Résultat net : XI = CJ hors résultats antérieurs non affectés</td>
+<td>Conforme, Bloquant</td>
+<td>Résultat du compte de résultat égal à celui du bilan</td>
+<td>Vérifier qu'aucun compte 13 ou 999999 n'a servi à une opération courante</td>
+</tr>
+<tr>
+<td>AFFECTATION</td>
+<td>Résultats antérieurs à affecter</td>
+<td>Alerte</td>
+<td>Si RESULTAT est Conforme, des résultats antérieurs restent en CJ</td>
+<td>Passer l'écriture d'affectation</td>
+</tr>
+<tr>
+<td>ATTENTE</td>
+<td>Comptes d'attente et de virements internes soldés</td>
+<td>Conforme, Alerte</td>
+<td>Soldes de 471, 585, 588, du compte d'attente bancaire et du compte de virements internes</td>
+<td>Justifier et solder chaque compte listé</td>
+</tr>
+<tr>
+<td>CAISSE</td>
+<td>Aucune caisse créditrice</td>
+<td>Conforme, Bloquant</td>
+<td>Aucun compte 57 à solde créditeur</td>
+<td>Chercher la recette manquante à la date du passage en négatif</td>
+</tr>
+<tr>
+<td>TFT</td>
+<td>Trésorerie de clôture du TFT (ZH) = BT − DT</td>
+<td>Conforme, Bloquant</td>
+<td>Trésorerie du tableau des flux égale à celle du bilan</td>
+<td>Avec EQUILIBRE et RESULTAT verts, signaler l'écart : il relève des formules de flux</td>
+</tr>
+<tr>
+<td>ESPECES</td>
+<td>Paiements fournisseurs en espèces &gt; 100 000 FCFA</td>
+<td>Conforme, Alerte</td>
+<td>Paiements fournisseurs sortants sur un journal de type Espèces au-delà de 100 000</td>
+<td>Le code tient la TVA de ces factures pour non déductible ; règle à faire confirmer par l'expert-comptable</td>
+</tr>
+<tr>
+<td>BASCULES</td>
+<td>Comptes reclassés selon le sens du solde</td>
+<td>Conforme, Information</td>
+<td>Comptes 40 débiteurs hors 409, 41 créditeurs hors 419, 52 et 53 à découvert</td>
+<td>Vérifier qu'il s'agit d'un trop-perçu, d'une avance ou d'un découvert réel</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-etats-mis-builder-en-community">Les états MIS Builder en Community<a class="anchor" href="#les-etats-mis-builder-en-community" aria-label="Lien vers cette section">#</a></h3>
+<p>Chaque menu Bilan actif, Bilan passif, Compte de résultat et Tableau des flux de trésorerie ouvre l'aperçu d'une instance MIS Builder. L'instance est créée au premier clic pour la société courante, puis réutilisée. Elle porte deux colonnes, « Exercice N » et « Exercice N-1 », années civiles relatives à la date de référence de l'instance (par défaut l'année en cours).</p>
+<p>Pour éditer un exercice clos :</p>
+<ol>
+<li>Ouvrir Facturation &gt; Analyse &gt; MIS Reporting &gt; MIS Reports, puis l'instance voulue.</li>
+<li>Dans l'onglet « Colonnes », renseigner « Date de référence » avec une date de l'exercice voulu.</li>
+<li>Cliquer sur « Prévisualisation ». Vider le champ pour revenir à l'année en cours.</li>
+</ol>
+<p>Les boutons de l'aperçu sont ceux de MIS Builder : « Imprimer » produit le PDF, « Export » le fichier Excel. Ne pas supprimer ni renommer les instances créées par les menus Syscohada.</p>
+<p><strong>Limite connue</strong> : le TFT MIS ne neutralise pas les virements internes entre comptes d'immobilisations. Une mise en service (débit 2441, crédit 2491) gonfle FG dans MIS, pas dans l'assistant. En cas d'écart entre MIS et l'assistant, l'assistant fait foi.</p>
+<h3 id="les-rapports-enterprise">Les rapports Enterprise<a class="anchor" href="#les-rapports-enterprise" aria-label="Lien vers cette section">#</a></h3>
+<p>Le module <code>aite_syscohada_reports</code> ajoute les quatre états au moteur de rapports d'Odoo Enterprise ; il s'installe automatiquement quand <code>account_reports</code> est présent.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Rapport</th>
+<th>Colonnes</th>
+<th>Filtre de date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SYSCOHADA – Bilan actif</td>
+<td>Brut, Amort. et dépréc., Net</td>
+<td>Date unique</td>
+</tr>
+<tr>
+<td>SYSCOHADA – Bilan passif</td>
+<td>Net</td>
+<td>Date unique</td>
+</tr>
+<tr>
+<td>SYSCOHADA – Compte de résultat</td>
+<td>Net</td>
+<td>Période</td>
+</tr>
+<tr>
+<td>SYSCOHADA – Tableau des flux de trésorerie</td>
+<td>Montant</td>
+<td>Période</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le fichier XML de ces rapports se régénère depuis le référentiel, jamais à la main (voir Développement). Sur une base Enterprise réelle, l'outil <code>tools/compare_with_engine.py</code> compare chaque rubrique au moteur :</p>
+<pre><code class="language-bash">COMPANY_ID=1 DATE_FROM=2025-01-01 DATE_TO=2025-12-31 odoo-bin shell -d &lt;base&gt; --no-http &lt; addons/aite_syscohada_reports/tools/compare_with_engine.py
+</code></pre>
+<p>Les rapports Enterprise partagent la limite du TFT MIS sur les virements internes.</p>
+<h3 id="lire-les-rubriques">Lire les rubriques<a class="anchor" href="#lire-les-rubriques" aria-label="Lien vers cette section">#</a></h3>
+<p>Le référentiel compte 124 rubriques, chacune avec un code de deux lettres, un libellé et une formule.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>État</th>
+<th>Codes</th>
+<th>Nombre</th>
+<th>Sous-totaux et totaux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bilan actif</td>
+<td>AD à BZ</td>
+<td>29</td>
+<td>AD, AI, AQ, AZ, BG, BK, BT, BZ</td>
+</tr>
+<tr>
+<td>Bilan passif</td>
+<td>CA à DZ</td>
+<td>28</td>
+<td>CP, DD, DF, DP, DT, DZ</td>
+</tr>
+<tr>
+<td>Compte de résultat</td>
+<td>TA à XI</td>
+<td>42</td>
+<td>XA, XB, XC, XD, XE, XF, XG, XH, XI</td>
+</tr>
+<tr>
+<td>Tableau des flux de trésorerie</td>
+<td>ZA à ZH</td>
+<td>25</td>
+<td>ZB, ZC, ZD, ZE, ZF, ZG, ZH</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Signes</strong> : un produit, un passif et une entrée de trésorerie s'affichent en positif ; une charge, une perte et une sortie de trésorerie en négatif. Un achat de marchandises de 800 000 donne RA à −800 000. Le classeur DSF attend les charges en positif : la colonne « Signe DSF » du référentiel vaut −1 sur ces lignes.</p>
+<p><strong>Bascules selon le sens du solde</strong> : un compte est classé compte par compte, selon le signe de son solde à la date du bilan.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Comptes</th>
+<th>Solde débiteur</th>
+<th>Solde créditeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40</td>
+<td>BH Fournisseurs, avances versées</td>
+<td>DJ Fournisseurs d'exploitation</td>
+</tr>
+<tr>
+<td>41</td>
+<td>BI Clients</td>
+<td>DI Clients, avances reçues</td>
+</tr>
+<tr>
+<td>42, 43, 44</td>
+<td>BJ Autres créances</td>
+<td>DK Dettes fiscales et sociales</td>
+</tr>
+<tr>
+<td>18 hors 181 à 184, 45, 46, 47 hors 478 et 479</td>
+<td>BJ Autres créances</td>
+<td>DM Autres dettes</td>
+</tr>
+<tr>
+<td>48</td>
+<td>BA Actif circulant HAO</td>
+<td>DH Dettes circulantes HAO</td>
+</tr>
+<tr>
+<td>52, 53, 54, 55, 57, 58</td>
+<td>BS Banques, caisse et assimilés</td>
+<td>DR Crédits de trésorerie</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les comptes 564 et 565 vont toujours en DQ, 478 en BU, 479 en DV. La bascule se fait au niveau du compte, pas client par client : un compte 411100 globalement débiteur reste entier en BI.</p>
+<p><strong>Rubrique CJ et compte 999999</strong> : la formule de CJ est <code>-13-6-7-8-999999</code>. Odoo ne solde jamais les comptes de charges et de produits ; le transfert du résultat N-1 vers la classe 13 passe par 999999 « Profits/pertes non distribués ». Une fois ce transfert passé, il reste dans CJ le résultat de l'exercice et les comptes 13 non encore affectés. Ne jamais imputer une opération courante sur 999999.</p>
+</section><section class="chapter"><h2 id="6-declaration-mensuelle-i-tva-ir">6. Déclaration mensuelle I/TVA-IR<a class="anchor" href="#6-declaration-mensuelle-i-tva-ir" aria-label="Lien vers cette section">#</a></h2>
+<p>Une déclaration par mois, créée dans Facturation &gt; Analyse &gt; Syscohada &gt; Déclarations de TVA (Cameroun), calcule les lignes L0 à L80 depuis les écritures comptabilisées, passe l'écriture de liquidation et imprime un document de travail pour le portail de la DGI. Lecture réservée au groupe <code>account.group_account_readonly</code> ; création, calcul et validation réservés à <code>account.group_account_manager</code>. Dans cette section, 4441 désigne le compte 444100.</p>
+<h3 id="creer-la-declaration">Créer la déclaration<a class="anchor" href="#creer-la-declaration" aria-label="Lien vers cette section">#</a></h3>
+<ol>
+<li>Cliquer sur Nouveau.</li>
+<li>Vérifier « Du » et « Au ». Par défaut : premier et dernier jour du mois précédent.</li>
+<li>Enregistrer. Le nom est calculé, par exemple <code>TVA 2026-03-01 – 2026-03-31</code>.</li>
+</ol>
+<p>Deux contrôles bloquent l'enregistrement : « La date de début doit précéder la date de fin. » et « Une déclaration existe déjà pour cette période. ». Le code n'impose pas la durée d'un mois et ne bloque pas les périodes qui se chevauchent.</p>
+<h3 id="onglet-saisies-du-declarant">Onglet « Saisies du déclarant »<a class="anchor" href="#onglet-saisies-du-declarant" aria-label="Lien vers cette section">#</a></h3>
+<p>Ces champs restent modifiables tant que la déclaration est en brouillon.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Rôle</th>
+<th>Défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>« L17 – Crédit antérieur »</td>
+<td>Repris du L35 de la dernière déclaration validée. Modifiable. Voir la mise en garde plus bas</td>
+<td>L35 repris, sinon 0</td>
+</tr>
+<tr>
+<td>« L34 – Remboursement demandé »</td>
+<td>Retranché du crédit L33 pour donner L35</td>
+<td>0</td>
+</tr>
+<tr>
+<td>« Taux de l'acompte sur CA (%) »</td>
+<td>Taux de la ligne L50</td>
+<td>2,0</td>
+</tr>
+<tr>
+<td>« Centimes additionnels communaux (%) »</td>
+<td>CAC des lignes L50, L51, L56 à L61, L63 à L65</td>
+<td>10,0</td>
+</tr>
+<tr>
+<td>« L11 – Droits d'accises (base) » et « (taxe) »</td>
+<td>Ligne L11, entre dans L15 et L28</td>
+<td>0</td>
+</tr>
+<tr>
+<td>« L24 » à « L27 »</td>
+<td>Régularisations, reprises en L30 (L24 + L25) et L31 (L26 + L27)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>« Compte de contrepartie des régularisations »</td>
+<td>Compte mouvementé par la liquidation pour L11 et L24 à L27</td>
+<td>vide</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="bouton-calculer">Bouton « Calculer »<a class="anchor" href="#bouton-calculer" aria-label="Lien vers cette section">#</a></h3>
+<p>« Calculer » remplit les onglets « Déclaration I/TVA-IR » et « Retenues, acomptes, IRCM, salaires ». Pour la TVA, il lit :</p>
+<ol>
+<li>La définition officielle du rapport de TVA <code>l10n_cm.account_tax_report_cm</code>, présente dans Odoo Community. Chaque ligne L10 à L35 y porte un code, par exemple <code>CM_NORMAL</code> pour L10.</li>
+<li>Les lignes d'écritures comptabilisées de la période portant des étiquettes de taxe et exigibles. La TVA des prestations à l'encaissement n'entre qu'au paiement ; en attendant, elle reste en 443800.</li>
+<li>Les saisies du déclarant pour L11, L17, L24 à L27 et L34.</li>
+<li>Les formules d'agrégation de la DGI ; L32, L33 et L35 sont plancherées à zéro.</li>
+</ol>
+<p>Les résultats remontent dans l'en-tête : « L28 – TVA collectée », « L29 – TVA déductible », « L32 – TVA à payer », « L33 – Crédit de TVA », « L35 – Crédit à reporter », « L54 – Acompte à payer » et « Total à payer ». Sur une déclaration validée, le calcul est refusé : « Déclaration validée : remettez-la en brouillon pour la recalculer. »</p>
+<h3 id="onglet-declaration-i-tva-ir-lignes-l10-a-l35">Onglet « Déclaration I/TVA-IR » : lignes L10 à L35<a class="anchor" href="#onglet-declaration-i-tva-ir-lignes-l10-a-l35" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Ligne</th>
+<th>Provenance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CM_<wbr>NORMAL</code></td>
+<td>10. Opérations taxables au taux normal</td>
+<td>Taxes de vente « 19.25% » et « 19,25 % S (encaissement) »</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>EXCISE</code></td>
+<td>11. Montant du Droit d'Accises</td>
+<td>Saisies L11</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>OTHER</code></td>
+<td>12. Autres opérations taxables</td>
+<td>Aucune taxe livrée ne la porte</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>EXPORT</code></td>
+<td>13. Exportations</td>
+<td>Taxe de vente « 0% EX »</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>EXEMPT</code></td>
+<td>14. Chiffre d'affaires exonéré</td>
+<td>Taxe de vente « 0% »</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>GLOBAL</code></td>
+<td>15. CA global hors taxes</td>
+<td>L10 + L11 + L12 + L13 + L14 ; base de l'acompte L50</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>CREDIT_<wbr>REPORTED</code></td>
+<td>17. Report du crédit antérieur</td>
+<td>Champ « L17 – Crédit antérieur »</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>LOCAL_<wbr>PURCHASE</code></td>
+<td>18. TVA déductible sur achats locaux</td>
+<td>« 19.25% G » (4452) et « 19,25 % I » (4451)</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>LOCAL_<wbr>SERVICE</code></td>
+<td>19. TVA déductible sur services locaux</td>
+<td>« 19.25% S » (4454)</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>FOREIGN_<wbr>PURCHASE</code></td>
+<td>20. TVA déductible sur achats à l'étranger</td>
+<td>Aucune taxe livrée ne la porte</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>FOREIGN_<wbr>SERVICE</code></td>
+<td>21. TVA déductible sur services versés à l'étranger</td>
+<td>Taxe d'autoliquidation, inactive par défaut</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>DEDUCTIBLE_<wbr>VAT</code></td>
+<td>22. Total TVA déductible</td>
+<td>L17 + L18 + L19 + L20 + L21</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>ADJUSTMENT_<wbr>DEDUCTIBLE</code> à <code>CM_<wbr>ADJUSTMENT_<wbr>OTHER</code></td>
+<td>24 à 27. Régularisations</td>
+<td>Saisies L24 à L27</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>COLLECTED</code></td>
+<td>28. TVA collectée</td>
+<td>L10 + L11 + L12</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>DEDUCTIBLE_<wbr>VAT_<wbr>29</code></td>
+<td>29. TVA déductible</td>
+<td>L22</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>VAT_<wbr>TO_<wbr>PAY</code></td>
+<td>32. TVA à payer</td>
+<td>L28 − L29 − L30 + L31, plancher à zéro</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>CREDIT</code></td>
+<td>33. Crédit de TVA</td>
+<td>L29 + L30 − L28 − L31, plancher à zéro</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>REIMBURSEMENT</code></td>
+<td>34. Remboursement demandé</td>
+<td>Saisie L34</td>
+</tr>
+<tr>
+<td><code>CM_<wbr>CREDIT_<wbr>REPORT</code></td>
+<td>35. Crédit à reporter</td>
+<td>L33 − L34 ; repris en L17 le mois suivant</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="onglet-retenues-acomptes-ircm-salaires">Onglet « Retenues, acomptes, IRCM, salaires »<a class="anchor" href="#onglet-retenues-acomptes-ircm-salaires" aria-label="Lien vers cette section">#</a></h3>
+<p>Cet onglet porte les 54 lignes du formulaire hors TVA (liste complète en annexe). Les lignes sont créées au premier « Calculer » et conservées ensuite : les saisies survivent au recalcul. Colonnes de saisie : « Base saisie », « Taux ou tarif », « Montant saisi », « Pénalités ». Colonnes calculées : « Base », « Principal », « CAC », « Total », avec Total = Principal + CAC + Pénalités.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Nature</th>
+<th>Calcul du principal</th>
+<th>Saisie possible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>credit</td>
+<td>Somme des crédits de la période sur le compte dédié (L0, L37, L38, L40 à L43, L67 à L72)</td>
+<td>« Pénalités »</td>
+</tr>
+<tr>
+<td>debit</td>
+<td>Somme des débits de la période sur le compte dédié (L45 à L48)</td>
+<td>Aucune</td>
+</tr>
+<tr>
+<td>manual</td>
+<td>« Base saisie » × « Taux ou tarif » / 100</td>
+<td>Base, taux, pénalités</td>
+</tr>
+<tr>
+<td>manual_unit</td>
+<td>« Base saisie » × « Taux ou tarif » (timbre d'aéroport)</td>
+<td>Base, tarif, pénalités</td>
+</tr>
+<tr>
+<td>manual_amount</td>
+<td>« Montant saisi »</td>
+<td>Montant, pénalités</td>
+</tr>
+<tr>
+<td>acompte</td>
+<td>Base L15 (ou « Base saisie ») × taux de l'acompte / 100, base plancherée à zéro</td>
+<td>Base, pénalités</td>
+</tr>
+<tr>
+<td>vat</td>
+<td>« L32 – TVA à payer »</td>
+<td>Aucune</td>
+</tr>
+<tr>
+<td>carry</td>
+<td>« Montant saisi », sinon L55 de la déclaration validée précédente</td>
+<td>Montant, pénalités</td>
+</tr>
+<tr>
+<td>formula</td>
+<td>Combinaison des totaux précédents</td>
+<td>Aucune</td>
+</tr>
+</tbody>
+</table></div>
+<p>Section 9 : L54 = max(L50 + L51 − L52 − L53, 0) et L55 = max(L52 + L53 − L50 − L51, 0), avec L52 = L49. Le report L55 vers L53 n'a lieu que depuis une déclaration validée et il est recherché à chaque calcul. La ligne TOTAL additionne L0 + L8 + L39 + L44 + L54 + L62 + L66 + L73 + L77 + L80 ; L49 n'y entre pas, car elle est déjà déduite dans L54.</p>
+<p>Aucune taxe n'alimente L41 : la ligne ne bouge que par des écritures manuelles au crédit de 447180. La section 12 attend des écritures de paie au crédit de 447210 à 447260.</p>
+<h3 id="bouton-passer-l-ecriture-de-liquidation">Bouton « Passer l'écriture de liquidation »<a class="anchor" href="#bouton-passer-l-ecriture-de-liquidation" aria-label="Lien vers cette section">#</a></h3>
+<p>Le bouton recalcule la déclaration, puis génère et comptabilise l'écriture de clôture de TVA et d'acompte, ouverte ensuite par le bouton « Écriture ».</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Compte</th>
+<th>Sens</th>
+<th>Montant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chaque compte 443 et 445 portant des lignes de taxe exigibles, hors 443800</td>
+<td>Inverse du solde de la période</td>
+<td>Solde du mois</td>
+</tr>
+<tr>
+<td>4449</td>
+<td>Crédit</td>
+<td>L17, crédit antérieur imputé</td>
+</tr>
+<tr>
+<td>4441</td>
+<td>Crédit</td>
+<td>L32</td>
+</tr>
+<tr>
+<td>4449</td>
+<td>Débit</td>
+<td>L35</td>
+</tr>
+<tr>
+<td>4445</td>
+<td>Débit</td>
+<td>L34</td>
+</tr>
+<tr>
+<td>Compte de contrepartie</td>
+<td>Débit si positif, crédit sinon</td>
+<td>L11 taxe + L26 + L27 − L24 − L25</td>
+</tr>
+<tr>
+<td>449250 / 441100</td>
+<td>Débit / crédit</td>
+<td>L54</td>
+</tr>
+</tbody>
+</table></div>
+<p>L'écriture est datée du dernier jour de la période, sur le premier journal de type « Divers » de la société. Les comptes de retenue 447 et 449 ne sont pas touchés.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Une écriture est déjà liée</td>
+<td>« L'écriture de liquidation existe déjà. »</td>
+</tr>
+<tr>
+<td>Comptes 4441, 4449 ou 4445 absents</td>
+<td>« Comptes 4441, 4449 ou 4445 introuvables. »</td>
+</tr>
+<tr>
+<td>Les lignes de TVA ne s'équilibrent pas avec la déclaration</td>
+<td>« Écart de … entre le grand livre et la déclaration : vérifiez les étiquettes de taxe. »</td>
+</tr>
+<tr>
+<td>Régularisation sans compte de contrepartie</td>
+<td>« Renseignez le compte de contrepartie des régularisations (L11, L24 à L27). »</td>
+</tr>
+<tr>
+<td>Acompte à payer et comptes 449250 ou 441100 absents</td>
+<td>« Comptes 449250 ou 441100 introuvables : appliquez le paramétrage SYSCOHADA. »</td>
+</tr>
+<tr>
+<td>Rien à écrire</td>
+<td>« Rien à liquider pour cette période. »</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="valider-remettre-en-brouillon-et-impression">« Valider », « Remettre en brouillon » et impression<a class="anchor" href="#valider-remettre-en-brouillon-et-impression" aria-label="Lien vers cette section">#</a></h3>
+<p>« Valider » passe la déclaration à « Validée » sans recalculer si des lignes existent déjà : cliquer sur « Calculer » avant de valider. La déclaration devient alors la source de L17 et de L53 pour le mois suivant. « Remettre en brouillon » est refusé si une déclaration ultérieure est validée : « Une déclaration ultérieure est validée : son crédit antérieur dépend de celle-ci. » Le retour en brouillon ne touche pas l'écriture de liquidation.</p>
+<p>Le rapport « Déclaration I/TVA-IR », dans le menu Imprimer, reprend la période, le NIU, la date limite, le tableau TVA, un tableau par section et le « TOTAL À PAYER ». Il porte la mention : « Document de travail établi par Odoo pour la saisie de la déclaration sur le portail de la DGI ; il ne remplace pas la déclaration officielle. » La « Date limite de dépôt et de paiement » vaut le 15 du mois qui suit la fin de période.</p>
+<h3 id="defauts-connus-mis-en-evidence-par-les-tests-avances">Défauts connus, mis en évidence par les tests avancés<a class="anchor" href="#defauts-connus-mis-en-evidence-par-les-tests-avances" aria-label="Lien vers cette section">#</a></h3>
+<ul>
+<li><strong>L17 non repris si le mois suivant existe déjà.</strong> « L17 – Crédit antérieur » n'est calculé qu'à la création de la déclaration. Si avril est créée avant la validation de mars, avril garde 0, même après « Calculer ». Aucun contrôle ne le signale. Contournement : valider chaque mois avant de créer le suivant, ou saisir L17 à la main puis cliquer sur « Calculer ». L53 n'a pas ce défaut.</li>
+<li><strong>Retenues surestimées après une extourne dans le mois.</strong> Une ligne credit additionne les seuls crédits du compte : le débit d'une extourne n'est pas déduit. Exemple testé : honoraires de 1 000 000 et de 400 000 avec retenue, la seconde facture extournée. L43 affiche 70 000 sur une base de 1 800 000 au lieu de 50 000 sur 1 000 000. Avant de reporter ces lignes sur le portail, les comparer au solde du compte sur la période.</li>
+<li><strong>Liquidation lancée depuis une autre société.</strong> En multi-sociétés, si la société courante n'est pas celle de la déclaration, la liquidation est refusée par un « Écart … ». Contournement : sélectionner la société déclarante avant de liquider.</li>
+</ul>
+<h3 id="exemple-chiffre-mars-2026-formulaire-complet">Exemple chiffré : mars 2026, formulaire complet<a class="anchor" href="#exemple-chiffre-mars-2026-formulaire-complet" aria-label="Lien vers cette section">#</a></h3>
+<p>Scénario du test <code>test_march_full_form</code>, taxes de retenue activées pour le test.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Pièce</th>
+<th>Montant HT</th>
+<th>Taxes</th>
+<th>Effet comptable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>05/03</td>
+<td>Facture client</td>
+<td>2 000 000</td>
+<td>« 19.25% »</td>
+<td>385 000 au crédit de 4431</td>
+</tr>
+<tr>
+<td>06/03</td>
+<td>Facture client</td>
+<td>1 000 000</td>
+<td>« 19.25% » et acompte retenu par le client</td>
+<td>192 500 au crédit de 4431 ; 20 000 au débit de 449220</td>
+</tr>
+<tr>
+<td>07/03</td>
+<td>Loyer</td>
+<td>500 000</td>
+<td>Précompte sur loyers retenu</td>
+<td>75 000 au crédit de 447130</td>
+</tr>
+<tr>
+<td>08/03</td>
+<td>Honoraires</td>
+<td>200 000</td>
+<td>Retenue sur honoraires</td>
+<td>10 000 au crédit de 447140</td>
+</tr>
+<tr>
+<td>09/03</td>
+<td>Achats</td>
+<td>1 000 000</td>
+<td>« 19.25% G » et précompte sur achats</td>
+<td>192 500 au débit de 4452 ; 20 000 au débit de 449210</td>
+</tr>
+<tr>
+<td>31/03</td>
+<td>Paie</td>
+<td>1 000 000</td>
+<td>aucune</td>
+<td>447210 100 000, 447215 10 000, 447220 10 000, 447250 2 000, 447260 1 000</td>
+</tr>
+<tr>
+<td>31/03</td>
+<td>Charges patronales</td>
+<td>25 000</td>
+<td>aucune</td>
+<td>447230 15 000, 447240 10 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Après un premier « Calculer », le déclarant saisit une « Base saisie » de 1 000 000 sur L57 (dividendes), puis recalcule.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Base</th>
+<th>Principal</th>
+<th>CAC</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L10 / L28</td>
+<td>3 000 000</td>
+<td>577 500</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L18 / L29</td>
+<td></td>
+<td>192 500</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L32 = L36 = L39</td>
+<td></td>
+<td>385 000</td>
+<td></td>
+<td>385 000</td>
+</tr>
+<tr>
+<td>L42</td>
+<td>500 000</td>
+<td>75 000</td>
+<td>0</td>
+<td>75 000</td>
+</tr>
+<tr>
+<td>L43</td>
+<td>200 000</td>
+<td>10 000</td>
+<td>0</td>
+<td>10 000</td>
+</tr>
+<tr>
+<td>L44</td>
+<td></td>
+<td>85 000</td>
+<td></td>
+<td>85 000</td>
+</tr>
+<tr>
+<td>L45 + L46 = L49 = L52</td>
+<td></td>
+<td>40 000</td>
+<td></td>
+<td>40 000</td>
+</tr>
+<tr>
+<td>L50</td>
+<td>3 000 000</td>
+<td>60 000</td>
+<td>6 000</td>
+<td>66 000</td>
+</tr>
+<tr>
+<td>L54</td>
+<td></td>
+<td>26 000</td>
+<td></td>
+<td>26 000</td>
+</tr>
+<tr>
+<td>L57 = L62</td>
+<td>1 000 000</td>
+<td>150 000</td>
+<td>15 000</td>
+<td>165 000</td>
+</tr>
+<tr>
+<td>L67</td>
+<td></td>
+<td>100 000</td>
+<td>10 000</td>
+<td>110 000</td>
+</tr>
+<tr>
+<td>L73</td>
+<td></td>
+<td>148 000</td>
+<td></td>
+<td>148 000</td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td></td>
+<td></td>
+<td></td>
+<td>809 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le total vaut 385 000 + 85 000 + 26 000 + 165 000 + 148 000 = 809 000, à payer le 15 avril 2026. L'écriture de liquidation débite 4431 de 577 500 et 449250 de 26 000 ; elle crédite 4452 de 192 500, 4441 de 385 000 et 441100 de 26 000.</p>
+<h3 id="exemple-de-credit-de-tva-reporte-mars-puis-avril-2026">Exemple de crédit de TVA reporté : mars puis avril 2026<a class="anchor" href="#exemple-de-credit-de-tva-reporte-mars-puis-avril-2026" aria-label="Lien vers cette section">#</a></h3>
+<p>Scénario du test <code>test_march_credit_then_april_payable</code>. En mars : ventes de biens 1 000 000, prestation de 200 000 payée et de 400 000 impayée, export 300 000, exonéré 100 000, achats 600 000, services 100 000, immobilisation 1 000 000.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Mars</th>
+<th>Avril</th>
+<th>Calcul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L10 base</td>
+<td>1 200 000</td>
+<td>2 400 000</td>
+<td>Mars : biens + prestation payée. Avril : vente 2 000 000 + prestation de mars encaissée</td>
+</tr>
+<tr>
+<td>L10 taxe = L28</td>
+<td>231 000</td>
+<td>462 000</td>
+<td>19,25 %</td>
+</tr>
+<tr>
+<td>L17</td>
+<td>0</td>
+<td>96 250</td>
+<td>L35 de mars repris</td>
+</tr>
+<tr>
+<td>L18</td>
+<td>308 000</td>
+<td>96 250</td>
+<td>Mars : 115 500 + 192 500</td>
+</tr>
+<tr>
+<td>L19</td>
+<td>19 250</td>
+<td>0</td>
+<td>Services</td>
+</tr>
+<tr>
+<td>L29</td>
+<td>327 250</td>
+<td>192 500</td>
+<td>L17 + L18 + L19</td>
+</tr>
+<tr>
+<td>L32</td>
+<td>0</td>
+<td>269 500</td>
+<td>462 000 − 192 500</td>
+</tr>
+<tr>
+<td>L33 = L35</td>
+<td>96 250</td>
+<td>0</td>
+<td>327 250 − 231 000</td>
+</tr>
+</tbody>
+</table></div>
+<p>En mars, l'écriture solde 4431, 4432, 4451, 4452 et 4454 et porte 96 250 au débit de 4449 ; 443800 garde 77 000, la TVA de la prestation impayée. En avril, elle impute le crédit (4449 au crédit pour 96 250) et crédite 4441 de 269 500.</p>
+</section><section class="chapter"><h2 id="7-cloture-d-exercice-et-preparation-de-la-dsf">7. Clôture d'exercice et préparation de la DSF<a class="anchor" href="#7-cloture-d-exercice-et-preparation-de-la-dsf" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="ordre-des-travaux-de-cloture">Ordre des travaux de clôture<a class="anchor" href="#ordre-des-travaux-de-cloture" aria-label="Lien vers cette section">#</a></h3>
+<p>La clôture suit un ordre fixe : chaque étape alimente la suivante et l'impôt se calcule en dernier. Les écritures sont datées du 31 décembre dans un journal d'opérations diverses ; les numéros ci-dessous sont des préfixes.</p>
+<ol>
+<li><strong>Inventaires.</strong> Compter les stocks, les caisses et les immobilisations. En inventaire intermittent, annuler le stock initial (débit 6031, crédit 31) puis constater le stock final (débit 31, crédit 6031). Le contrôle CAISSE doit être vert.</li>
+<li><strong>Rattachements.</strong> Factures non parvenues : débit de la charge et de 4455, crédit 408. Factures à établir : débit 418, crédit du produit et de 4435. Charges constatées d'avance : débit 476. Produits constatés d'avance : crédit 477. Chaque écriture est extournée au 1er janvier suivant.</li>
+<li><strong>Amortissements et dépréciations.</strong> Dotation : débit 681, crédit 28. Créance douteuse : reclassement en 416, puis débit 659 et crédit 491. Stock déprécié : débit 659, crédit 39.</li>
+<li><strong>Justification des comptes.</strong> Rapprocher les banques, lettrer clients et fournisseurs, solder 471, 585 et 588. Les contrôles ATTENTE et BROUILLONS doivent être verts.</li>
+<li><strong>Impôt sur le résultat.</strong> Calculer le résultat fiscal puis l'impôt : débit 891, crédit 441. Les modules ne calculent pas encore l'impôt (lot 3). Les acomptes mensuels, passés par la liquidation (débit 449250, crédit 441100), s'imputent par écriture manuelle.</li>
+<li><strong>Contrôles.</strong> Lancer États et contrôles (AITE) sur l'exercice, « Exercice N-1 » coché : aucun Bloquant, chaque Alerte justifiée par écrit.</li>
+<li><strong>Verrouillage.</strong> Poser les dates de verrouillage décrites ci-dessous.</li>
+<li><strong>Affectation du résultat</strong>, après l'assemblée, dans l'exercice suivant (voir la saisie quotidienne).</li>
+</ol>
+<h3 id="dates-de-verrouillage">Dates de verrouillage<a class="anchor" href="#dates-de-verrouillage" aria-label="Lien vers cette section">#</a></h3>
+<p>Odoo 18 porte cinq dates de verrouillage sur la société : TVA, ventes, achats, globale et verrou définitif (irréversible, à poser après le dépôt de la DSF). Odoo 18 Community n'offre aucun écran pour les saisir et les modules AITE n'en ajoutent pas. Le module OCA <code>account_lock_date_update</code> (dépôt account-financial-tools, branche 18.0) couvre les cinq dates et ajoute le menu Facturation &gt; Comptabilité &gt; Lock Dates. Poser la date de verrouillage de la TVA après chaque déclaration mensuelle validée, et la date globale au 31 décembre une fois les états arrêtés.</p>
+<h3 id="lien-avec-la-dsf">Lien avec la DSF<a class="anchor" href="#lien-avec-la-dsf" aria-label="Lien vers cette section">#</a></h3>
+<p>L'assistant fournit dès aujourd'hui les quatre états en colonnes Exercice N et Exercice N-1 : ce sont les valeurs à reporter dans les onglets BILAN PAYSAGE, COMPTE DE RESULTAT et TABLEAU DES FLUX DE TRESORERIE du classeur DSF. Chaque rubrique du référentiel connaît sa cellule (champs « Onglet DSF », « Cellule N », « Cellule N-1 », « Signe DSF »). Deux codes diffèrent dans le classeur : BG y est codé BC et DV y est codé DY. Le classeur attend les charges en positif, l'assistant les affiche en négatif.</p>
+<p>Le remplissage automatique du classeur et les notes annexes sont les lots 3 et 4 de la feuille de route, non livrés. Le relevé <code>docs/dsf/Releve_classeur_DSF_Normal_2021.xlsx</code> décrit la version du 9 mars 2021 : 74 onglets, 4 435 cellules dont 3 215 à saisir, 104 liens états-notes et 18 anomalies de formules.</p>
+<p><strong>Ne jamais utiliser le classeur comme référence de calcul.</strong> Principales anomalies relevées :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Onglet</th>
+<th>Cellules</th>
+<th>Constat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BILAN PAYSAGE</td>
+<td>E13:E16</td>
+<td>Amortissements des incorporels lus dans les dotations de l'exercice au lieu du cumul</td>
+</tr>
+<tr>
+<td>BILAN PAYSAGE</td>
+<td>K23:K25</td>
+<td>DA, DB, DC lus dans la note 15A au lieu de la note 16A</td>
+</tr>
+<tr>
+<td>BILAN PAYSAGE</td>
+<td>K40</td>
+<td>DZ sans l'écart de conversion-passif</td>
+</tr>
+<tr>
+<td>COMPTE DE RESULTAT</td>
+<td>E13</td>
+<td>RB calculé sur tous les stocks</td>
+</tr>
+<tr>
+<td>COMPTE DE RESULTAT</td>
+<td>E43</td>
+<td>XF additionne RM et RN au lieu de les soustraire</td>
+</tr>
+<tr>
+<td>NOTE 34</td>
+<td>B36</td>
+<td>CAFG incomplète</td>
+</tr>
+<tr>
+<td>CF1, CF1 BIS</td>
+<td>libellés</td>
+<td>Taux d'IS « 30 % ou 28 % », antérieur au barème en vigueur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les montants viennent du moteur ; tout écart avec une formule du classeur se documente, sans modifier le moteur pour le reproduire.</p>
+<h3 id="echeances-de-depot">Échéances de dépôt<a class="anchor" href="#echeances-de-depot" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Obligation</th>
+<th>Échéance</th>
+<th>Appui dans les modules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Déclaration mensuelle I/TVA-IR et paiement</td>
+<td>Le 15 du mois suivant</td>
+<td>Calculée par la déclaration</td>
+</tr>
+<tr>
+<td>DSF et solde de l'IS, contribuables de la DGE</td>
+<td>15 mars</td>
+<td>États N et N-1 de l'assistant</td>
+</tr>
+<tr>
+<td>DSF, contribuables des CIME</td>
+<td>15 avril</td>
+<td>Idem</td>
+</tr>
+<tr>
+<td>DSF, contribuables des CDI</td>
+<td>15 mai</td>
+<td>Idem</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ces échéances et le taux d'IS (30 %, ou 25 % si le chiffre d'affaires ne dépasse pas 3 milliards, plus 10 % de CAC) viennent du skill <code>fiscalite-cameroun</code> du dépôt. La loi de finances peut les changer : les vérifier sur impots.cm en début d'exercice.</p>
+</section><section class="chapter"><h2 id="8-tests">8. Tests<a class="anchor" href="#8-tests" aria-label="Lien vers cette section">#</a></h2>
+<p>La suite complète passe sur Odoo 18 Community installé dans cette session (6 octobre 2026, base neuve) : 104 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 38 secondes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ensemble</th>
+<th>Tests</th>
+<th>Résultat</th>
+<th>Durée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Suite de référence (modules base, mis, community)</td>
+<td>62</td>
+<td>0 échec</td>
+<td>174 s seule</td>
+</tr>
+<tr>
+<td>Tests avancés <code>test_<wbr>adv_<wbr>*.<wbr>py</code> hors volume</td>
+<td>42</td>
+<td>0 échec, 3 échecs attendus</td>
+<td>inclus ci-dessous</td>
+</tr>
+<tr>
+<td>Suite complète (référence et avancés)</td>
+<td>104</td>
+<td>0 échec</td>
+<td>245 s</td>
+</tr>
+<tr>
+<td>Volume (étiquette <code>aite_<wbr>syscohada_<wbr>volume</code>)</td>
+<td>1</td>
+<td>0 échec</td>
+<td>38 s</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-tests-avances-ajoutes">Les tests avancés ajoutés<a class="anchor" href="#les-tests-avances-ajoutes" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Fichier</th>
+<th>Tests</th>
+<th>Ce qui est vérifié, montants calculés à la main</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_<wbr>adv_<wbr>bar_<wbr>hotel_<wbr>year.<wbr>py</code></td>
+<td>8</td>
+<td>Exercice complet d'un bar-hôtel sur deux ans : comptoir, hébergement sur encaissement, consignes, ristournes, paie, stocks, emprunt, affectation. Compte de résultat (XI 150 000), bilan (BZ = DZ = 33 598 750), TFT (ZH 23 689 000 = BT − DT), 9 contrôles verts, égalité moteur et MIS en N et N-1</td>
+</tr>
+<tr>
+<td><code>test_<wbr>adv_<wbr>declaration_<wbr>sequence.<wbr>py</code></td>
+<td>4</td>
+<td>Quatre déclarations enchaînées de janvier à avril : crédits de TVA et d'acompte reportés, prestation payée en deux fois, avoir, immobilisation, remboursement L34, soldes des neuf comptes de TVA après chaque liquidation, ordre de saisie, remise en brouillon</td>
+</tr>
+<tr>
+<td><code>test_<wbr>adv_<wbr>withholding_<wbr>mixed.<wbr>py</code></td>
+<td>11</td>
+<td>Factures avec retenues opérées et subies, autoliquidation et TSR, précompte, extourne : lignes d'écriture exactes, lignes L0 à L55, bases de taxe, total à payer</td>
+</tr>
+<tr>
+<td><code>test_<wbr>adv_<wbr>multi_<wbr>company.<wbr>py</code></td>
+<td>11</td>
+<td>Deux sociétés camerounaises et une belge : paramétrage par société, isolation des calculs et des déclarations, sous-comptes à sept chiffres, compte hors plan signalé</td>
+</tr>
+<tr>
+<td><code>test_<wbr>adv_<wbr>closing_<wbr>lifecycle.<wbr>py</code></td>
+<td>8</td>
+<td>Écriture de liquidation au compte près, messages d'erreur exacts, validation et remise en brouillon, date limite, crédit antérieur saisi, régularisation L27, compte 443800 jamais touché</td>
+</tr>
+<tr>
+<td><code>test_<wbr>adv_<wbr>volume.<wbr>py</code></td>
+<td>1</td>
+<td>450 factures et 3 000 lignes de vente en un mois : déclaration et liquidation exactes dans les deux modes d'arrondi ; calcul de la déclaration en 0,23 s et des états en 0,05 s</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="defauts-mis-en-evidence">Défauts mis en évidence<a class="anchor" href="#defauts-mis-en-evidence" aria-label="Lien vers cette section">#</a></h3>
+<p>Les trois défauts sont décrits par des tests en échec attendu : l'assertion décrit le comportement correct, et le test échouera exprès le jour où le défaut sera corrigé, pour rappeler de retirer le décorateur.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Défaut</th>
+<th>Test</th>
+<th>Effet</th>
+<th>Correction proposée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L17 non recalculé</td>
+<td><code>test_<wbr>order_<wbr>of_<wbr>entry_<wbr>vat_<wbr>credit</code></td>
+<td>Si avril est créée avant la validation de mars, le crédit de TVA de mars n'est pas reporté : TVA d'avril surévaluée</td>
+<td>Recalculer le crédit antérieur à chaque « Calculer », refuser la validation si le mois précédent est en brouillon</td>
+</tr>
+<tr>
+<td>Extourne ignorée dans les retenues</td>
+<td><code>test_<wbr>may_<wbr>l43_<wbr>excludes_<wbr>reversed_<wbr>invoice</code></td>
+<td>L43 à 70 000 au lieu de 50 000 après une facture d'honoraires extournée</td>
+<td>Lire le solde net du compte ou exclure les pièces extournées</td>
+</tr>
+<tr>
+<td>Liquidation depuis une autre société</td>
+<td><code>test_<wbr>closing_<wbr>entry_<wbr>of_<wbr>b_<wbr>from_<wbr>company_<wbr>a_<wbr>context</code></td>
+<td>« Écart de 96250.0 … » : la recherche par code de compte dépend de la société courante</td>
+<td>Filtrer par les comptes de la société de la déclaration dans <code>_<wbr>closing_<wbr>balances</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="lancer-les-tests">Lancer les tests<a class="anchor" href="#lancer-les-tests" aria-label="Lien vers cette section">#</a></h3>
+<pre><code class="language-bash"># suite complète (référence et tests avancés)
+scripts/run_tests.sh aite_dev aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
+# tests avancés seuls
+scripts/run_tests.sh aite_dev aite_syscohada_community aite_syscohada_advanced
+# volume, sur une base neuve
+createdb -T aite_dev aite_volume
+scripts/run_tests.sh aite_volume aite_syscohada_community aite_syscohada_volume
+</code></pre>
+<p>L'intégration continue GitHub Actions exécute la suite complète puis le test de volume à chaque push. Sur GitHub, les deux premières exécutions (code initial, puis trois premiers fichiers avancés) sont vertes ; celle du dernier commit était en cours au moment de la rédaction. Les résultats se lisent dans l'onglet Actions du dépôt.</p>
+</section><section class="chapter"><h2 id="9-developpement">9. Développement<a class="anchor" href="#9-developpement" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="architecture-et-flux-de-donnees">Architecture et flux de données<a class="anchor" href="#architecture-et-flux-de-donnees" aria-label="Lien vers cette section">#</a></h3>
+<p>Tous les états viennent d'un seul référentiel de 124 rubriques. Chaque rendu le lit, aucun ne le recopie.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Fichier ou objet</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Source</td>
+<td><code>addons/<wbr>aite_<wbr>syscohada_<wbr>base/<wbr>tools/<wbr>gen_<wbr>rubriques.<wbr>py</code></td>
+<td>Listes <code>ACTIF</code>, <code>PASSIF</code>, <code>RESULTAT</code> et <code>FLUX</code> : code, libellé, type, formules, note, ligne du classeur DSF</td>
+</tr>
+<tr>
+<td>2. Données</td>
+<td><code>addons/<wbr>aite_<wbr>syscohada_<wbr>base/<wbr>data/<wbr>aite.<wbr>syscohada.<wbr>rubrique.<wbr>csv</code></td>
+<td>Chargé dans <code>aite.<wbr>syscohada.<wbr>rubrique</code> à l'installation et à chaque mise à jour du socle</td>
+</tr>
+<tr>
+<td>3. Moteur</td>
+<td><code>syscohada_<wbr>engine.<wbr>compute(company, date_<wbr>from, date_<wbr>to)</code></td>
+<td>Calcul de référence en Python pur : clés <code>actif</code>, <code>passif</code>, <code>resultat</code>, <code>flux</code></td>
+</tr>
+<tr>
+<td>4a. Assistant</td>
+<td><code>wizard/<wbr>syscohada_<wbr>statement_<wbr>wizard.<wbr>py</code></td>
+<td>Moteur pour N et N-1, puis les 9 contrôles de <code>syscohada_<wbr>check.<wbr>py</code></td>
+</tr>
+<tr>
+<td>4b. MIS</td>
+<td><code>aite_<wbr>syscohada_<wbr>mis/<wbr>models/<wbr>mis_<wbr>report.<wbr>py</code></td>
+<td><code>_<wbr>aite_<wbr>syscohada_<wbr>build()</code> traduit chaque formule en expression MIS</td>
+</tr>
+<tr>
+<td>4c. Enterprise</td>
+<td><code>aite_<wbr>syscohada_<wbr>base/<wbr>models/<wbr>syscohada_<wbr>enterprise.<wbr>py</code></td>
+<td><code>generate_<wbr>xml()</code> produit <code>aite_<wbr>syscohada_<wbr>reports/<wbr>data/<wbr>syscohada_<wbr>reports.<wbr>xml</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>La déclaration mensuelle suit un autre chemin : <code>vat_declaration.py</code> lit le rapport de TVA officiel de <code>l10n_cm</code>, <code>itvair.py</code> lit les comptes de retenue créés par le socle. Les tests comparent chaque rendu au moteur : scénario chiffré à la main (<code>test_statements.py</code>), grands livres aléatoires (<code>test_tft_properties.py</code>), MIS (<code>test_mis_templates.py</code>), XML Enterprise émulé (<code>test_enterprise_xml.py</code>) et <code>account.report</code> sur Enterprise (<code>test_enterprise_reports.py</code>).</p>
+<h3 id="syntaxe-des-formules">Syntaxe des formules<a class="anchor" href="#syntaxe-des-formules" aria-label="Lien vers cette section">#</a></h3>
+<p>Une formule de comptes suit la syntaxe <code>account_codes</code> d'Enterprise : <code>[signe] préfixe [\(exclusion1,exclusion2)] [D|C]</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Exemple tiré du CSV</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Préfixes additionnés</td>
+<td>AE brut : <code>211+2181+2191</code></td>
+<td>Somme des soldes des comptes commençant par 211, 2181 ou 2191</td>
+</tr>
+<tr>
+<td>Signe moins</td>
+<td>CA : <code>-101-102-103-104</code></td>
+<td>Au passif et au résultat, les soldes créditeurs s'affichent en positif</td>
+</tr>
+<tr>
+<td>Exclusions</td>
+<td>AM brut : <code>24\(245,2495)</code></td>
+<td>Comptes 24 sauf 245 et 2495</td>
+</tr>
+<tr>
+<td>Suffixe <code>D</code></td>
+<td>BA brut : <code>48D</code></td>
+<td>Seuls les comptes 48 à solde débiteur, compte par compte</td>
+</tr>
+<tr>
+<td>Suffixe <code>C</code></td>
+<td>DJ : <code>-40C</code></td>
+<td>Seuls les comptes 40 à solde créditeur</td>
+</tr>
+<tr>
+<td>Actif en deux formules</td>
+<td>AH : brut <code>217+218\(2181)+2198</code>, amortissements <code>2817+…</code></td>
+<td>Net = brut − amortissements</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les agrégations additionnent les rubriques d'un même état : <code>AE+AF+AG+AH</code> (AD), <code>ZA+ZG</code> (ZH). Le TFT utilise des termes signés <code>TYPE:ARGUMENT</code> :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Argument</th>
+<th>Valeur</th>
+<th>Exemple du CSV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>R:</code></td>
+<td>Rubrique du compte de résultat</td>
+<td>Montant de la période</td>
+<td>FA : <code>R:XI+P:681+…</code></td>
+</tr>
+<tr>
+<td><code>B:</code> / <code>B0:</code></td>
+<td>Rubrique de bilan</td>
+<td>Montant à la clôture / à l'ouverture</td>
+<td>ZA : <code>B0:BT-B0:DT</code></td>
+</tr>
+<tr>
+<td><code>V:</code></td>
+<td>Rubrique de bilan</td>
+<td><code>B</code> − <code>B0</code></td>
+<td>FC : <code>-V:BB</code></td>
+</tr>
+<tr>
+<td><code>P:</code></td>
+<td>Comptes</td>
+<td>Solde de la période</td>
+<td>FA : <code>P:681</code></td>
+</tr>
+<tr>
+<td><code>E:</code> / <code>S:</code></td>
+<td>Comptes</td>
+<td>Solde de clôture / d'ouverture</td>
+<td>FB : <code>-V:BA+E:485-S:485</code></td>
+</tr>
+<tr>
+<td><code>D:</code> / <code>C:</code></td>
+<td>Comptes</td>
+<td>Débits / crédits de la période</td>
+<td>FN : <code>-D:465</code> ; FL : <code>C:14</code></td>
+</tr>
+<tr>
+<td><code>DX:</code> / <code>CX:</code></td>
+<td>Comptes</td>
+<td>Idem hors virements internes au groupe</td>
+<td>FF : <code>-DX:(21+251)-E:4811+S:4811</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Un argument de plusieurs termes se met entre parenthèses, les exclusions y sont permises, les suffixes D et C y sont refusés. Au chargement du CSV, la contrainte <code>_check_formulas</code> refuse toute formule invalide.</p>
+<h3 id="ajouter-ou-corriger-une-rubrique">Ajouter ou corriger une rubrique<a class="anchor" href="#ajouter-ou-corriger-une-rubrique" aria-label="Lien vers cette section">#</a></h3>
+<p>Le CSV et le XML ne s'éditent jamais à la main.</p>
+<ol>
+<li>Écrire d'abord le test chiffré à la main. Pour une nouvelle rubrique, ajuster <code>test_counts</code> dans <code>test_referential.py</code> (29, 28, 42 et 25 aujourd'hui).</li>
+<li>Modifier le tuple dans <code>gen_rubriques.py</code>.</li>
+<li>Régénérer le CSV : <code>python addons/aite_syscohada_base/tools/gen_rubriques.py</code> (affiche <code>rubriques écrites : 124</code>).</li>
+<li>Mettre à jour la base : <code>../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d aite_dev -u aite_syscohada_base --stop-after-init</code>.</li>
+<li>Régénérer le XML Enterprise : <code>../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http &lt; addons/aite_syscohada_reports/tools/generate_enterprise_xml.py</code>.</li>
+<li>Reconstruire les modèles MIS, que <code>-u</code> ne régénère pas : <code>echo 'env["mis.report"]._aite_syscohada_build(); env.cr.commit()' | ../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http</code>.</li>
+<li>Lancer toute la suite. <code>test_shipped_file_is_up_to_date</code> échoue si l'étape 5 manque.</li>
+<li>Incrémenter la version dans <code>__manifest__.py</code> et ajouter <code>migrations/&lt;version&gt;/post-migrate.py</code>. Prévoir aussi, pour les bases des clients, un script qui reconstruit les modèles MIS : <code>aite_syscohada_mis</code> n'a pas encore de dossier <code>migrations</code>.</li>
+<li>Cocher <code>ROADMAP.md</code>.</li>
+</ol>
+<h3 id="regles-du-projet">Règles du projet<a class="anchor" href="#regles-du-projet" aria-label="Lien vers cette section">#</a></h3>
+<ol>
+<li>Le référentiel est la source unique.</li>
+<li>Chaque montant attendu se calcule à la main et le test montre le calcul ; on ne recopie jamais la sortie du code.</li>
+<li>Le paramétrage passe par <code>res.company._aite_syscohada_setup()</code> et reste idempotent.</li>
+<li>Une taxe dont le taux n'est pas validé reste inactive, libellée « (taux à valider) ».</li>
+<li>Tout changement de paramétrage incrémente la version et ajoute un <code>post-migrate.py</code>.</li>
+<li>On trouve un compte par <code>company._aite_account("447210")</code> ou <code>_aite_accounts_prefix("445")</code>.</li>
+<li>On respecte Odoo 18 : <code>&lt;list&gt;</code>, <code>invisible=</code> en expressions, <code>Command</code>, <code>_read_group</code>.</li>
+<li>Les modules base, mis et community n'ont aucune dépendance Enterprise.</li>
+<li>Quatre invariants tiennent toujours : BZ = DZ ; XI = CJ hors résultats antérieurs ; ZH = BT − DT ; chaque compte capté une fois au débit et une fois au crédit.</li>
+<li>La liquidation ne touche que 443 et 445, hors 4438 ; chaque retenue a son compte ; les crédits L35 et L55 ne se reportent que depuis une déclaration validée.</li>
+</ol>
+<h3 id="tests">Tests<a class="anchor" href="#tests" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Étiquette</th>
+<th>Tests concernés</th>
+<th>Lancement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aite_<wbr>syscohada</code></td>
+<td>Suite de référence et tests avancés, sauf le volume</td>
+<td><code>scripts/<wbr>run_<wbr>tests.<wbr>sh &lt;base&gt; aite_<wbr>syscohada_<wbr>base,aite_<wbr>syscohada_<wbr>mis,aite_<wbr>syscohada_<wbr>community</code></td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>advanced</code></td>
+<td>Les cinq fichiers <code>test_<wbr>adv_<wbr>*.<wbr>py</code> hors volume</td>
+<td><code>scripts/<wbr>run_<wbr>tests.<wbr>sh &lt;base&gt; aite_<wbr>syscohada_<wbr>community aite_<wbr>syscohada_<wbr>advanced</code></td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>volume</code></td>
+<td><code>test_<wbr>adv_<wbr>volume.<wbr>py</code>, sur une base neuve</td>
+<td><code>scripts/<wbr>run_<wbr>tests.<wbr>sh &lt;base&gt; aite_<wbr>syscohada_<wbr>community aite_<wbr>syscohada_<wbr>volume</code></td>
+</tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>enterprise</code></td>
+<td><code>aite_<wbr>syscohada_<wbr>reports</code>, base Enterprise seulement</td>
+<td><code>scripts/<wbr>run_<wbr>tests.<wbr>sh &lt;base&gt; aite_<wbr>syscohada_<wbr>reports aite_<wbr>syscohada_<wbr>enterprise</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Un seul test : <code>scripts/run_tests.sh &lt;base&gt; aite_syscohada_community "/aite_syscohada_community:TestItvairForm.test_march_full_form"</code>. Les classes de base sont <code>SyscohadaCommon</code> (société camerounaise, plan « cm », <code>acc()</code>, <code>entry()</code>, scénario de référence) et <code>VatDeclarationCommon</code> (taxes, <code>doc()</code>, <code>pay()</code>, <code>declare()</code>).</p>
+<p><code>run_tests.sh</code> passe toujours <code>-u &lt;modules&gt;</code> : sans lui, <code>--test-tags</code> importe les tests de tous les modules installés, dont <code>web</code>, qui échoue. MIS Builder exige <code>openupgradelib</code>.</p>
+<p><strong>Échecs attendus.</strong> Le lanceur d'Odoo 18 ignore <code>@unittest.expectedFailure</code>. Les classes avancées redéfinissent donc <code>_callTestMethod</code> : une méthode décorée dont une assertion échoue est journalisée (<code>échec attendu (défaut connu) dans …</code>) et ignorée ; une méthode décorée qui réussit échoue exprès, pour rappeler de retirer le décorateur une fois le défaut corrigé.</p>
+<p><strong>Port 8069 occupé.</strong> Un serveur Odoo déjà lancé bloque les tests (<code>Port 8069 is in use by another program</code>). <code>http_enable = False</code> ne suffit pas : Odoo 18 ouvre le port pendant les tests. Copier <code>odoo.conf</code> avec un autre <code>http_port</code> et un autre <code>gevent_port</code>, puis passer la copie par <code>ODOO_CONF</code>.</p>
+<p><strong>Intégration continue.</strong> <code>.github/workflows/tests.yml</code> s'exécute à chaque push et pull request : Ubuntu 24.04, PostgreSQL 16, Python 3.12, Odoo 18.0 et OCA 18.0 clonés, création de la base, suite complète, puis test de volume sur une copie neuve de la base, journaux en artefact. Odoo 18.0 étant recloné à chaque exécution, une mise à jour d'Odoo peut casser un test sans changement de notre code.</p>
+<h3 id="portage-vers-odoo-19">Portage vers Odoo 19<a class="anchor" href="#portage-vers-odoo-19" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sujet</th>
+<th>Odoo 18</th>
+<th>Odoo 19</th>
+<th>Conséquence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan <code>l10n_<wbr>syscohada</code> et menu Syscohada</td>
+<td>Référence</td>
+<td>Identiques</td>
+<td>Référentiel et menus valables</td>
+</tr>
+<tr>
+<td>Rapport de TVA <code>l10n_<wbr>cm</code></td>
+<td>28 codes, formules non signées</td>
+<td>Mêmes codes, formules signées (<code>-CM_<wbr>10_<wbr>base</code>)</td>
+<td>Lire le signe dans la formule</td>
+</tr>
+<tr>
+<td>Étiquettes de taxe</td>
+<td><code>+CM_<wbr>10_<wbr>base</code> et <code>-CM_<wbr>10_<wbr>base</code></td>
+<td><code>CM_<wbr>10_<wbr>base</code> seule</td>
+<td>La recherche par nom signé ne trouve plus rien</td>
+</tr>
+<tr>
+<td><code>account.<wbr>account.<wbr>tag.<wbr>tax_<wbr>negate</code>, <code>account.<wbr>move.<wbr>line.<wbr>tax_<wbr>tag_<wbr>invert</code></td>
+<td>Présents</td>
+<td>Supprimés</td>
+<td><code>_<wbr>tag_<wbr>amounts</code> lève une erreur</td>
+</tr>
+<tr>
+<td>Positions fiscales</td>
+<td><code>account.<wbr>fiscal.<wbr>position.<wbr>tax</code></td>
+<td><code>account.<wbr>tax.<wbr>original_<wbr>tax_<wbr>ids</code></td>
+<td>Aucun code actuel ne s'en sert</td>
+</tr>
+<tr>
+<td><code>account_<wbr>reports</code></td>
+<td>Enterprise</td>
+<td>Toujours Enterprise</td>
+<td><code>aite_<wbr>syscohada_<wbr>reports</code> reste facultatif</td>
+</tr>
+<tr>
+<td>OCA</td>
+<td>18.0</td>
+<td><code>mis_<wbr>builder</code> 19.0 disponible ; <code>payroll_<wbr>account</code> et <code>account_<wbr>cutoff_<wbr>base</code> non portés</td>
+<td>MIS portable ; paie sans pont comptable Community</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quatre fonctions sont à adapter : <code>_aite_tax_tags</code> et <code>_aite_repartition</code> dans <code>res_company.py</code> (chercher le nom non signé, même étiquette en facture et en avoir), <code>_tag_amounts</code> et <code>_evaluate</code> dans <code>vat_declaration.py</code> (additionner le solde par étiquette sans les champs supprimés, appliquer le signe lu en tête de formule). Ordre conseillé : branche 19.0, ces quatre fonctions, puis <code>test_setup.py</code>, <code>test_vat_declaration.py</code> et les tests avancés, enfin <code>setup_dev.sh</code> et <code>tests.yml</code> pointés sur 19.0.</p>
+</section><section class="chapter"><h2 id="10-depannage-et-questions-frequentes">10. Dépannage et questions fréquentes<a class="anchor" href="#10-depannage-et-questions-frequentes" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="acces-et-installation">Accès et installation<a class="anchor" href="#acces-et-installation" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Cause</th>
+<th>Remède</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Le menu Syscohada est absent de Facturation &gt; Analyse</td>
+<td>Le menu exige le groupe <code>account.<wbr>group_<wbr>account_<wbr>readonly</code>, qu'un administrateur Community n'a pas d'office</td>
+<td>En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes » ; vérifier que <code>aite_<wbr>syscohada_<wbr>community</code> est installé</td>
+</tr>
+<tr>
+<td>Le plan comptable et les écritures sont invisibles</td>
+<td>Même droit technique manquant</td>
+<td>Même remède ; créer et valider une déclaration exige en plus le profil Administrateur</td>
+</tr>
+<tr>
+<td><code>External dependency openupgradelib not installed</code></td>
+<td><code>mis_<wbr>builder</code> déclare <code>openupgradelib</code> comme dépendance Python</td>
+<td><code>.<wbr>.<wbr>/<wbr>venv/<wbr>bin/<wbr>pip install openupgradelib</code>, puis relancer l'installation</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="declaration-mensuelle">Déclaration mensuelle<a class="anchor" href="#declaration-mensuelle" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Cause</th>
+<th>Remède</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>« Comptes 4441, 4449 ou 4445 introuvables. »</td>
+<td>Le module cherche exactement 444100, 444900 et 444500 ; un plan renuméroté échoue</td>
+<td>Rétablir ces comptes avec ces codes dans la société déclarante</td>
+</tr>
+<tr>
+<td>« Comptes 449250 ou 441100 introuvables : appliquez le paramétrage SYSCOHADA. »</td>
+<td>Le paramétrage du lot 2 n'a pas tourné pour cette société</td>
+<td>Configuration &gt; SYSCOHADA &gt; Appliquer le paramétrage, ou mettre à jour <code>aite_<wbr>syscohada_<wbr>base</code></td>
+</tr>
+<tr>
+<td>« Écart de … entre le grand livre et la déclaration : vérifiez les étiquettes de taxe. »</td>
+<td>Une ligne de taxe sur 443 ou 445 n'a pas l'étiquette attendue ; ou la liquidation est lancée alors qu'une autre société est la société courante (défaut connu)</td>
+<td>Contrôler les étiquettes des lignes de taxe de la période ; en multi-sociétés, sélectionner d'abord la société déclarante</td>
+</tr>
+<tr>
+<td>« Renseignez le compte de contrepartie des régularisations (L11, L24 à L27). »</td>
+<td>Une saisie en L11 ou de L24 à L27 crée un écart sans contrepartie</td>
+<td>Onglet « Saisies du déclarant » : remplir le compte de contrepartie, choisi avec l'expert-comptable</td>
+</tr>
+<tr>
+<td>La TVA d'une prestation reste en 443800 et n'apparaît pas en L10</td>
+<td>La taxe « 19,25 % S (encaissement) » n'est exigible qu'au paiement lettré</td>
+<td>Enregistrer le paiement par « Payer » ou lettrer le paiement : la TVA entre dans la déclaration du mois du paiement</td>
+</tr>
+<tr>
+<td>« Déclaration validée : remettez-la en brouillon pour la recalculer. »</td>
+<td>Calcul refusé sur une déclaration validée</td>
+<td>« Remettre en brouillon », puis « Calculer » ; l'écriture déjà passée n'est pas modifiée : l'extourner si les montants changent</td>
+</tr>
+<tr>
+<td>« Une déclaration ultérieure est validée : son crédit antérieur dépend de celle-ci. »</td>
+<td>Un mois suivant est validé</td>
+<td>Remettre en brouillon les mois suivants, du plus récent au plus ancien, puis revalider dans l'ordre</td>
+</tr>
+<tr>
+<td>L17 reste à zéro alors que le mois précédent a un crédit L35</td>
+<td>Défaut connu : L17 n'est pas recalculé si le mois suivant existait avant la validation du mois précédent</td>
+<td>Saisir L17 à la main puis « Calculer » ; mieux, valider chaque mois avant de créer le suivant</td>
+</tr>
+<tr>
+<td>L40 à L43 surévaluées après une facture fournisseur extournée dans le mois</td>
+<td>Défaut connu : seuls les crédits du compte de retenue sont lus</td>
+<td>Avant validation, saisir dans « Pénalités » de la ligne le montant annulé en négatif, puis « Calculer » ; corriger la base sur le portail</td>
+</tr>
+</tbody>
+</table></div>
+<p>D'après le code, le défaut des retenues touche toutes les lignes de nature credit (L0, L37, L38, L40 à L43, L67 à L72) et, symétriquement, les lignes debit L45 à L48 quand une facture client est extournée. Le test ne couvre que L43.</p>
+<h3 id="etats-et-controles">États et contrôles<a class="anchor" href="#etats-et-controles" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Contrôle</th>
+<th>Cause</th>
+<th>Remède</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RATTACHEMENT (Bloquant ou Alerte)</td>
+<td>Un compte n'est capté par aucune rubrique, ou par plusieurs</td>
+<td>Renuméroter le compte sous une racine SYSCOHADA, sinon faire évoluer le référentiel</td>
+</tr>
+<tr>
+<td>CAISSE (Bloquant)</td>
+<td>Un compte 57 est créditeur à la date de fin</td>
+<td>Retrouver l'encaissement manquant ou la pièce mal imputée</td>
+</tr>
+<tr>
+<td>TFT (Bloquant)</td>
+<td>Une opération échappe aux formules de flux, souvent un compte mal rattaché</td>
+<td>Corriger d'abord RATTACHEMENT, puis réduire la période pour isoler la pièce</td>
+</tr>
+<tr>
+<td>AFFECTATION (Alerte)</td>
+<td>Le résultat d'un exercice antérieur figure encore en CJ</td>
+<td>Passer l'écriture d'affectation : 999999 vers 13, puis 13 vers 11, 12 et 465</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="tests-2">Tests<a class="anchor" href="#tests-2" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Cause</th>
+<th>Remède</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Les tests de <code>web</code> échouent à l'import</td>
+<td><code>--test-tags</code> lancé sans <code>-u &lt;modules&gt;</code></td>
+<td>Passer par <code>scripts/<wbr>run_<wbr>tests.<wbr>sh</code></td>
+</tr>
+<tr>
+<td><code>test_<wbr>shipped_<wbr>file_<wbr>is_<wbr>up_<wbr>to_<wbr>date</code> ignoré</td>
+<td>Le dossier <code>aite_<wbr>syscohada_<wbr>reports</code> n'est pas dans le chemin des modules</td>
+<td>Normal en Community ; s'il échoue, régénérer le XML</td>
+</tr>
+<tr>
+<td><code>Port 8069 is in use by another program.<wbr></code></td>
+<td>Un serveur Odoo occupe déjà le port, ouvert même pendant les tests</td>
+<td>Copie d'<code>odoo.<wbr>conf</code> avec un autre <code>http_<wbr>port</code> et <code>gevent_<wbr>port</code>, passée par <code>ODOO_<wbr>CONF</code></td>
+</tr>
+<tr>
+<td>Le test de volume dépasse dix minutes</td>
+<td>Exécuté après les autres tests dans le même processus, il subit des statistiques PostgreSQL faussées</td>
+<td>Il porte sa propre étiquette <code>aite_<wbr>syscohada_<wbr>volume</code> : le lancer seul sur une base neuve</td>
+</tr>
+</tbody>
+</table></div>
+</section><section class="chapter"><h2 id="11-annexes">11. Annexes<a class="anchor" href="#11-annexes" aria-label="Lien vers cette section">#</a></h2>
+<h3 id="a-sous-comptes-crees-par-le-parametrage">A. Sous-comptes créés par le paramétrage<a class="anchor" href="#a-sous-comptes-crees-par-le-parametrage" aria-label="Lien vers cette section">#</a></h3>
+<p>Les 32 comptes de la table <code>SUB_ACCOUNTS</code> sont créés par société.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Libellé</th>
+<th>Type Odoo</th>
+<th>Lettrable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>281810</td>
+<td>Amortissements des frais de prospection et d'évaluation de ressources minérales</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>291810</td>
+<td>Dépréciations des frais de prospection et d'évaluation de ressources minérales</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>291910</td>
+<td>Dépréciations des frais de développement en cours</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>291930</td>
+<td>Dépréciations des logiciels et sites internet en cours</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>293910</td>
+<td>Dépréciations des bâtiments en cours</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>293930</td>
+<td>Dépréciations des ouvrages d'infrastructure en cours</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>294950</td>
+<td>Dépréciations du matériel de transport en cours</td>
+<td>Actifs immobilisés</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>443800</td>
+<td>État, TVA facturée sur prestations non encore exigible</td>
+<td>Dettes à court terme</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>552100</td>
+<td>Monnaie électronique, Orange Money</td>
+<td>Banque et espèces</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>552200</td>
+<td>Monnaie électronique, MTN Mobile Money</td>
+<td>Banque et espèces</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>441100</td>
+<td>État, acomptes d'impôt sur le résultat à payer</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447110</td>
+<td>État, IRCM retenu à la source</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447120</td>
+<td>État, taxe spéciale sur le revenu retenue (TSR)</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447130</td>
+<td>État, précomptes retenus sur loyers</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447140</td>
+<td>État, retenues sur rémunérations et honoraires</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447150</td>
+<td>État, IRNC retenu à la source</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447160</td>
+<td>État, TVA retenue à la source</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447161</td>
+<td>État, TVA autoliquidée sur prestations étrangères</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447170</td>
+<td>État, acomptes sur chiffre d'affaires retenus à la source</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447180</td>
+<td>État, précomptes sur achats retenus</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447210</td>
+<td>État, IRPP retenu sur salaires</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447215</td>
+<td>État, centimes additionnels communaux sur IRPP</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447220</td>
+<td>État, Crédit foncier du Cameroun, part salariale</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447230</td>
+<td>État, Crédit foncier du Cameroun, part patronale</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447240</td>
+<td>État, Fonds national de l'emploi</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447250</td>
+<td>État, redevance audiovisuelle</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>447260</td>
+<td>État, taxe de développement local</td>
+<td>Dettes à court terme</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>449210</td>
+<td>État, précomptes sur achats subis</td>
+<td>Actifs circulants</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>449220</td>
+<td>État, acomptes sur chiffre d'affaires retenus par les clients</td>
+<td>Actifs circulants</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>449230</td>
+<td>État, précomptes sur loyers subis</td>
+<td>Actifs circulants</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>449240</td>
+<td>État, retenues sur honoraires subies</td>
+<td>Actifs circulants</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>449250</td>
+<td>État, acomptes d'impôt sur le résultat versés</td>
+<td>Actifs circulants</td>
+<td>Non</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="b-taxes-creees-par-le-parametrage">B. Taxes créées par le paramétrage<a class="anchor" href="#b-taxes-creees-par-le-parametrage" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Clé</th>
+<th>Libellé</th>
+<th>Usage</th>
+<th>Taux</th>
+<th>Compte de taxe</th>
+<th>Étiquettes</th>
+<th>Active</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tva_<wbr>prestations_<wbr>encaissement</code></td>
+<td>19,25 % S (encaissement)</td>
+<td>Ventes</td>
+<td>19,25 %</td>
+<td>443200, attente 443800</td>
+<td>CM_10 base et taxe</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td><code>tva_<wbr>immobilisations</code></td>
+<td>19,25 % I</td>
+<td>Achats</td>
+<td>19,25 %</td>
+<td>445100</td>
+<td>CM_18</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td><code>taxe_<wbr>sejour</code></td>
+<td>Taxe de séjour (à paramétrer)</td>
+<td>Ventes</td>
+<td>0, montant fixe</td>
+<td>442200</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>precompte_<wbr>achats</code></td>
+<td>Précompte sur achats (taux à valider)</td>
+<td>Achats</td>
+<td>2 %</td>
+<td>449210</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>retenue_<wbr>loyers</code></td>
+<td>Précompte sur loyers retenu (taux à valider)</td>
+<td>Achats</td>
+<td>−15 %</td>
+<td>447130</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>retenue_<wbr>honoraires</code></td>
+<td>Retenue sur honoraires (taux à valider)</td>
+<td>Achats</td>
+<td>−5 %</td>
+<td>447140</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>retenue_<wbr>tsr</code></td>
+<td>TSR sur rémunérations versées à l'étranger (taux à valider)</td>
+<td>Achats</td>
+<td>−15 %</td>
+<td>447120</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>retenue_<wbr>tva</code></td>
+<td>TVA retenue à la source, entreprise habilitée (taux à valider)</td>
+<td>Achats</td>
+<td>−19,25 %</td>
+<td>447160</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>retenue_<wbr>acompte_<wbr>ca</code></td>
+<td>Acompte sur CA retenu à la source (taux à valider)</td>
+<td>Achats</td>
+<td>−2 %</td>
+<td>447170</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>subie_<wbr>acompte_<wbr>ca</code></td>
+<td>Acompte sur CA retenu par le client (taux à valider)</td>
+<td>Ventes</td>
+<td>−2 %</td>
+<td>449220</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>subie_<wbr>loyers</code></td>
+<td>Précompte sur loyers retenu par le locataire (taux à valider)</td>
+<td>Ventes</td>
+<td>−15 %</td>
+<td>449230</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>subie_<wbr>honoraires</code></td>
+<td>Retenue sur honoraires subie (taux à valider)</td>
+<td>Ventes</td>
+<td>−5 %</td>
+<td>449240</td>
+<td>aucune</td>
+<td>Non</td>
+</tr>
+<tr>
+<td><code>autoliquidation_<wbr>services</code></td>
+<td>TVA 19,25 % autoliquidée, services étrangers (à valider)</td>
+<td>Achats</td>
+<td>19,25 %</td>
+<td>445400 à +100 %, 447161 à −100 %</td>
+<td>CM_21</td>
+<td>Non</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le paramétrage déplace aussi la taxe « 19.25% S » de <code>l10n_cm</code> du compte 445200 vers 445400, si aucune écriture comptabilisée ne l'utilise. Aucune taxe livrée ou créée ne porte les étiquettes CM_12 ni CM_20.</p>
+<h3 id="c-lignes-du-formulaire-i-tva-ir-hors-tva">C. Lignes du formulaire I/TVA-IR hors TVA<a class="anchor" href="#c-lignes-du-formulaire-i-tva-ir-hors-tva" aria-label="Lien vers cette section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Libellé</th>
+<th>Nature</th>
+<th>Compte ou taux par défaut</th>
+<th>CAC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0</td>
+<td>TSR sur rémunérations versées à l'étranger</td>
+<td>credit</td>
+<td>447120</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L1</td>
+<td>Chiffre d'affaires taxable au taux général des accises</td>
+<td>manual</td>
+<td>25</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Chiffre d'affaires taxable au taux réduit des accises</td>
+<td>manual</td>
+<td>12,5</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>Droits d'accises ad valorem (L1 + L2)</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L4</td>
+<td>Droits d'accises spécifiques</td>
+<td>manual_amount</td>
+<td></td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>Droits d'accises à reverser (L3 + L4)</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L6</td>
+<td>Droits d'accises payés à l'importation</td>
+<td>manual_amount</td>
+<td></td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>Total des droits d'accises à payer (L5 − L6)</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L36</td>
+<td>TVA à payer (L32)</td>
+<td>vat</td>
+<td></td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L37</td>
+<td>TVA retenue à la source (entreprise habilitée)</td>
+<td>credit</td>
+<td>447160</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L38</td>
+<td>TVA retenue sur rémunérations versées à l'étranger</td>
+<td>credit</td>
+<td>447161</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L39</td>
+<td>Montant de TVA à payer (L36 + L37 + L38)</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L40</td>
+<td>Acompte sur chiffre d'affaires retenu à la source</td>
+<td>credit</td>
+<td>447170</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L41</td>
+<td>Précomptes sur achats retenus</td>
+<td>credit</td>
+<td>447180</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L42</td>
+<td>Précomptes sur loyers (15 %)</td>
+<td>credit</td>
+<td>447130</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L43</td>
+<td>Précomptes sur rémunérations et honoraires (5 %)</td>
+<td>credit</td>
+<td>447140</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L44</td>
+<td>Total des acomptes et précomptes à reverser</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L45</td>
+<td>Acompte sur chiffre d'affaires retenu à la source (subi)</td>
+<td>debit</td>
+<td>449220</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L46</td>
+<td>Précomptes sur achats (subis)</td>
+<td>debit</td>
+<td>449210</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L47</td>
+<td>Précomptes de 15 % sur loyers (subis)</td>
+<td>debit</td>
+<td>449230</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L48</td>
+<td>Précomptes sur rémunérations et honoraires (subis)</td>
+<td>debit</td>
+<td>449240</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L49</td>
+<td>Total des acomptes et précomptes à déduire</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L50</td>
+<td>Acompte sur chiffre d'affaires déclaré</td>
+<td>acompte</td>
+<td>Taux de l'acompte</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>L51</td>
+<td>Acompte de 15 % sur loyers perçus</td>
+<td>manual</td>
+<td>15</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>L52</td>
+<td>Déductions à opérer (L49)</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L53</td>
+<td>Crédit antérieur (L55 de la déclaration précédente)</td>
+<td>carry</td>
+<td></td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L54</td>
+<td>Acompte à payer</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L55</td>
+<td>Crédit d'impôt à reporter</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L56 à L61</td>
+<td>IRCM : obligations, actions, créances, cessions, dividendes hors Cameroun, dirigeants</td>
+<td>manual</td>
+<td>15</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>L62</td>
+<td>Total de l'IRCM</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L63 à L65</td>
+<td>IRNC : conseils d'administration, commissions et comités, artistes et sportifs</td>
+<td>manual</td>
+<td>15</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>L66</td>
+<td>Total de l'IRNC</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L67</td>
+<td>IRPP sur traitements et salaires</td>
+<td>credit</td>
+<td>447210, CAC lus sur 447215</td>
+<td>447215</td>
+</tr>
+<tr>
+<td>L68</td>
+<td>Crédit foncier du Cameroun, part salariale</td>
+<td>credit</td>
+<td>447220</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L69</td>
+<td>Crédit foncier du Cameroun, part patronale</td>
+<td>credit</td>
+<td>447230</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L70</td>
+<td>Fonds national de l'emploi</td>
+<td>credit</td>
+<td>447240</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L71</td>
+<td>Redevance audiovisuelle</td>
+<td>credit</td>
+<td>447250</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L72</td>
+<td>Taxe de développement local</td>
+<td>credit</td>
+<td>447260</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L73</td>
+<td>Total des impôts retenus sur salaires</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L74 à L76</td>
+<td>Plus-values : immobilière des particuliers, titres négociables, immobilisations</td>
+<td>manual</td>
+<td>0, taux à saisir</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L77</td>
+<td>Total des impôts sur les plus-values</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>L78</td>
+<td>Timbre d'aéroport, vols internationaux (passagers × tarif)</td>
+<td>manual_unit</td>
+<td>10 000</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L79</td>
+<td>Timbre d'aéroport, vols nationaux (passagers × tarif)</td>
+<td>manual_unit</td>
+<td>1 000</td>
+<td>Non</td>
+</tr>
+<tr>
+<td>L80</td>
+<td>Total du droit de timbre d'aéroport</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td>Total à payer</td>
+<td>formula</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Les taux par défaut sont ceux de la table <code>LINES</code> de <code>models/itvair.py</code>, modifiables ligne par ligne ; aucun n'est validé fiscalement par le module.</p>
+<h3 id="d-libelles-de-comptes-corriges-extrait">D. Libellés de comptes corrigés (extrait)<a class="anchor" href="#d-libelles-de-comptes-corriges-extrait" aria-label="Lien vers cette section">#</a></h3>
+<p>Le paramétrage réécrit 45 libellés du plan <code>syscohada</code> d'Odoo (table <code>ACCOUNT_LABELS</code>), dont :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Libellé Odoo d'origine</th>
+<th>Libellé corrigé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>121</td>
+<td>Créancier reporté</td>
+<td>Report à nouveau créditeur</td>
+</tr>
+<tr>
+<td>131</td>
+<td>Revenu net : profit</td>
+<td>Résultat net : bénéfice</td>
+</tr>
+<tr>
+<td>2441</td>
+<td>Fournitures de bureau</td>
+<td>Matériel de bureau</td>
+</tr>
+<tr>
+<td>4081</td>
+<td>Fournisseurs</td>
+<td>Fournisseurs, factures non parvenues</td>
+</tr>
+<tr>
+<td>4281</td>
+<td>Dettes de vacances à payer</td>
+<td>Dettes provisionnées pour congés à payer</td>
+</tr>
+<tr>
+<td>4449</td>
+<td>Report du crédit d'impôt de l'État et de la TVA</td>
+<td>État, crédit de TVA à reporter</td>
+</tr>
+<tr>
+<td>465</td>
+<td>Associates, dividends to be paid</td>
+<td>Associés, dividendes à payer</td>
+</tr>
+<tr>
+<td>476</td>
+<td>Dépenses prépayées</td>
+<td>Charges constatées d'avance</td>
+</tr>
+<tr>
+<td>477</td>
+<td>Revenu différé</td>
+<td>Produits constatés d'avance</td>
+</tr>
+<tr>
+<td>4812</td>
+<td>Immobilisations corporelles</td>
+<td>Fournisseurs d'investissements, immobilisations corporelles</td>
+</tr>
+<tr>
+<td>585</td>
+<td>Transferts de fonds</td>
+<td>Virements de fonds</td>
+</tr>
+<tr>
+<td>6613</td>
+<td>Vacances payées</td>
+<td>Congés payés</td>
+</tr>
+</tbody>
+</table></div>
+<p>La liste complète est dans <code>addons/aite_syscohada_base/models/res_company.py</code>. Le compte 129 n'existe pas dans le plan « cm » : son libellé est ignoré.</p>
+<h3 id="e-sources">E. Sources<a class="anchor" href="#e-sources" aria-label="Lien vers cette section">#</a></h3>
+<ul>
+<li>Code du dépôt <code>BigWenceslas/AITE-SYSCO-OHADA</code>, branche <code>claude/keen-bohr-76nuin</code>, et ses documents <code>CLAUDE.md</code>, <code>ROADMAP.md</code>, <code>docs/flux-comptables-syscohada.html</code>, <code>.claude/skills/</code>.</li>
+<li>Odoo 18.0 Community : <code>addons/l10n_cm</code> (taxes, rapport de TVA, traductions), <code>addons/l10n_syscohada</code> (plan, menu), <code>addons/account</code>.</li>
+<li>OCA 18.0 : mis-builder, server-ux, reporting-engine, account-financial-tools.</li>
+<li>Formulaire I/TVA-IR de la DGI : https://www.impots.cm/sites/default/files/documents/ITVA-IR.pdf</li>
+</ul></section>
+    <footer>Guide établi pour les modules AITE SYSCOHADA (branche claude/keen-bohr-76nuin). Taux et barèmes fiscaux : à vérifier à chaque loi de finances ; les positions fiscales engageantes se valident avec un expert-comptable agréé.</footer>
+  </main>
+</div>
+<button class="btn" id="to-top" type="button" onclick="window.scrollTo({top:0})">Haut de page</button>
+<script>
+(function () {
+  var root = document.documentElement;
+  try { var t = localStorage.getItem("aite-guide-theme"); if (t) root.setAttribute("data-theme", t); } catch (e) {}
+  document.getElementById("theme-toggle").addEventListener("click", function () {
+    var dark = root.getAttribute("data-theme") === "dark" ||
+      (!root.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+    var next = dark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("aite-guide-theme", next); } catch (e) {}
+  });
+  var toc = document.getElementById("toc"), tog = document.getElementById("toc-toggle");
+  tog.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); tog.setAttribute("aria-expanded", o ? "true" : "false");
+  });
+  toc.addEventListener("click", function (e) { if (e.target.tagName === "A") toc.classList.remove("open"); });
+  var filter = document.getElementById("toc-filter");
+  var norm = function (s) { return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); };
+  filter.addEventListener("input", function () {
+    var q = norm(filter.value.trim());
+    toc.classList.toggle("filtering", q.length > 0);
+    toc.querySelectorAll(".toc-ch").forEach(function (ch) {
+      var any = norm(ch.firstElementChild.textContent).indexOf(q) >= 0;
+      ch.querySelectorAll(".toc-sub li").forEach(function (li) {
+        var hit = !q || norm(li.textContent).indexOf(q) >= 0;
+        li.classList.toggle("hidden", !hit && !any);
+        if (hit && q) any = true;
+      });
+      ch.classList.toggle("hidden", !any && q.length > 0);
+    });
+  });
+  var links = {};
+  toc.querySelectorAll("a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+  var heads = document.querySelectorAll("main h2[id], main h3[id]");
+  var current = null;
+  var onScroll = function () {
+    var y = window.scrollY + 90, id = null;
+    heads.forEach(function (h) { if (h.offsetTop <= y) id = h.id; });
+    if (id !== current) {
+      if (current && links[current]) links[current].classList.remove("active");
+      toc.querySelectorAll(".toc-ch.open").forEach(function (c) { c.classList.remove("open"); });
+      current = id;
+      if (id && links[id]) { links[id].classList.add("active"); links[id].closest(".toc-ch").classList.add("open"); }
+    }
+    document.getElementById("to-top").style.display = window.scrollY > 800 ? "inline-block" : "none";
+  };
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+})();
+</script>
+</body>
+</html>
