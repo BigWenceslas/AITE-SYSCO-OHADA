@@ -1,0 +1,86 @@
+name: Tests Odoo 18
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U odoo"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Dépôt AITE
+        uses: actions/checkout@v4
+        with:
+          path: aite
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Odoo 18.0 Community (clone superficiel)
+        run: git clone --depth 1 --branch 18.0 https://github.com/odoo/odoo.git odoo18
+
+      - name: Modules OCA 18.0
+        run: |
+          mkdir -p oca oca_addons
+          for repo in mis-builder server-ux reporting-engine; do
+            git clone --depth 1 --branch 18.0 "https://github.com/OCA/$repo.git" "oca/$repo"
+          done
+          ln -s "$PWD/oca/mis-builder/mis_builder" oca_addons/mis_builder
+          ln -s "$PWD/oca/server-ux/date_range" oca_addons/date_range
+          ln -s "$PWD/oca/reporting-engine/report_xlsx" oca_addons/report_xlsx
+
+      - name: Dépendances Python
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q libpq-dev libldap2-dev libsasl2-dev libxml2-dev libxslt1-dev libjpeg-dev
+          python -m pip install --upgrade pip wheel
+          pip install -r odoo18/requirements.txt openupgradelib
+
+      - name: Configuration
+        run: |
+          cat > aite/odoo.conf <<EOF
+          [options]
+          addons_path = $PWD/odoo18/odoo/addons,$PWD/odoo18/addons,$PWD/oca_addons,$PWD/aite/addons
+          admin_passwd = admin
+          without_demo = all
+          log_level = warn
+          data_dir = $PWD/odoo-data
+          db_host = 127.0.0.1
+          db_port = 5432
+          db_user = odoo
+          db_password = odoo
+          EOF
+
+      - name: Création de la base
+        run: python odoo18/odoo-bin -c aite/odoo.conf -d aite_ci -i aite_syscohada_community --stop-after-init
+
+      - name: Suite de tests
+        working-directory: aite
+        env:
+          ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
+          PYTHON: python
+        run: scripts/run_tests.sh aite_ci aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
+
+      - name: Journaux
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: journaux-tests
+          path: aite/logs/
