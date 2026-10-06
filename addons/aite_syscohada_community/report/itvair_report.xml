@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_itvair" model="ir.actions.report">
+        <field name="name">Déclaration I/TVA-IR</field>
+        <field name="model">aite.cm.vat.declaration</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aite_syscohada_community.report_itvair</field>
+        <field name="report_file">aite_syscohada_community.report_itvair</field>
+        <field name="print_report_name">'I-TVA-IR %s' % (object.date_to and object.date_to.strftime('%Y-%m') or '')</field>
+        <field name="binding_model_id" ref="model_aite_cm_vat_declaration"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_itvair">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <t t-set="fmt" t-value="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                    <div class="page" style="font-size: 11px;">
+                        <h4>Déclaration des taxes sur le chiffre d'affaires et des impôts sur le revenu (I/TVA-IR)</h4>
+                        <p>
+                            Période du <span t-field="o.date_from"/> au <span t-field="o.date_to"/>
+                            · NIU : <span t-esc="o.company_id.vat or '—'"/>
+                            · Date limite de dépôt et de paiement : <span t-field="o.date_due"/>
+                            · État : <span t-field="o.state"/>
+                        </p>
+                        <h5>Sections 2 à 5 : TVA (lignes L10 à L35)</h5>
+                        <table class="table table-sm">
+                            <thead><tr><th>Ligne</th><th class="text-end">Base</th><th class="text-end">Taxe</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l" t-att-style="'font-weight: bold;' if l.level == 0 else ''">
+                                    <td t-esc="l.name"/>
+                                    <td class="text-end"><span t-if="l.has_base" t-esc="l.base" t-options="fmt"/></td>
+                                    <td class="text-end"><span t-if="l.has_tax" t-esc="l.tax" t-options="fmt"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <t t-foreach="o._itvair_lines_by_section()" t-as="section">
+                            <h5 t-esc="section[0]"/>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr><th>Ligne</th><th>Libellé</th><th class="text-end">Base</th><th class="text-end">Taux</th>
+                                        <th class="text-end">Principal</th><th class="text-end">CAC</th>
+                                        <th class="text-end">Pénalités</th><th class="text-end">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="section[1]" t-as="l" t-att-style="'font-weight: bold;' if l.kind == 'formula' else ''">
+                                        <td t-esc="l.code"/>
+                                        <td t-esc="l.name"/>
+                                        <td class="text-end"><span t-if="l.base" t-esc="l.base" t-options="fmt"/></td>
+                                        <td class="text-end"><span t-if="l.rate" t-esc="'%g' % l.rate"/></td>
+                                        <td class="text-end"><span t-esc="l.principal" t-options="fmt"/></td>
+                                        <td class="text-end"><span t-if="l.cac" t-esc="l.cac" t-options="fmt"/></td>
+                                        <td class="text-end"><span t-if="l.penalty" t-esc="l.penalty" t-options="fmt"/></td>
+                                        <td class="text-end"><span t-esc="l.total" t-options="fmt"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <h4 class="text-end">TOTAL À PAYER : <span t-esc="o.total_to_pay" t-options="fmt"/></h4>
+                        <p style="font-size: 9px;">Document de travail établi par Odoo pour la saisie de la déclaration sur le portail de la DGI ;
+                            il ne remplace pas la déclaration officielle.</p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_aite_syscohada_config" name="SYSCOHADA" parent="account.menu_finance_configuration" sequence="90"
+              groups="account.group_account_manager"/>
+    <menuitem id="menu_aite_syscohada_rubrique" name="Rubriques des états" parent="menu_aite_syscohada_config"
+              action="action_aite_syscohada_rubrique" sequence="10"/>
+    <record id="action_aite_syscohada_setup" model="ir.actions.server">
+        <field name="name">Appliquer le paramétrage SYSCOHADA</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">action = env.company.action_aite_syscohada_setup()</field>
+    </record>
+    <menuitem id="menu_aite_syscohada_setup" name="Appliquer le paramétrage" parent="menu_aite_syscohada_config"
+              action="action_aite_syscohada_setup" sequence="20"/>
+    <menuitem id="menu_aite_syscohada_statements" name="États et contrôles (AITE)"
+              parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_aite_syscohada_statement_wizard" sequence="5" groups="account.group_account_readonly"/>
+</odoo>

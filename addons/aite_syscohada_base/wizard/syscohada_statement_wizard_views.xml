@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_aite_syscohada_statement_line_list" model="ir.ui.view">
+        <field name="name">aite.syscohada.statement.line.list</field>
+        <field name="model">aite.syscohada.statement.line</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-bf="line_type != 'detail'">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="line_type" column_invisible="1"/>
+                <field name="statement" column_invisible="1"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="brut" optional="show"/>
+                <field name="amort" optional="show"/>
+                <field name="net"/>
+                <field name="net_n1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_aite_syscohada_statement_wizard_form" model="ir.ui.view">
+        <field name="name">aite.syscohada.statement.wizard.form</field>
+        <field name="model">aite.syscohada.statement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="États SYSCOHADA">
+                <header>
+                    <button name="action_compute" type="object" string="Calculer" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="compare"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <notebook invisible="not computed">
+                        <page string="Contrôles" name="checks">
+                            <field name="check_ids" readonly="1">
+                                <list decoration-danger="level == 'error'" decoration-warning="level == 'warning'"
+                                      decoration-success="level == 'ok'" decoration-info="level == 'info'">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="level"/>
+                                    <field name="message"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bilan actif" name="actif">
+                            <field name="actif_line_ids" readonly="1"/>
+                        </page>
+                        <page string="Bilan passif" name="passif">
+                            <field name="passif_line_ids" readonly="1">
+                                <list decoration-bf="line_type != 'detail'">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="line_type" column_invisible="1"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="net"/>
+                                    <field name="net_n1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Compte de résultat" name="resultat">
+                            <field name="resultat_line_ids" readonly="1">
+                                <list decoration-bf="line_type != 'detail'">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="line_type" column_invisible="1"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="net"/>
+                                    <field name="net_n1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Flux de trésorerie" name="flux">
+                            <field name="flux_line_ids" readonly="1">
+                                <list decoration-bf="line_type != 'detail'">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="line_type" column_invisible="1"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="net"/>
+                                    <field name="net_n1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="computed" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_aite_syscohada_statement_wizard" model="ir.actions.act_window">
+        <field name="name">États SYSCOHADA et contrôles</field>
+        <field name="res_model">aite.syscohada.statement.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

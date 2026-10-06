@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_open_actif" model="ir.actions.server">
+        <field name="name">SYSCOHADA – Bilan actif</field>
+        <field name="model_id" ref="mis_builder.model_mis_report_instance"/>
+        <field name="state">code</field>
+        <field name="code">action = model._aite_syscohada_open("actif")</field>
+    </record>
+    <record id="action_open_passif" model="ir.actions.server">
+        <field name="name">SYSCOHADA – Bilan passif</field>
+        <field name="model_id" ref="mis_builder.model_mis_report_instance"/>
+        <field name="state">code</field>
+        <field name="code">action = model._aite_syscohada_open("passif")</field>
+    </record>
+    <record id="action_open_resultat" model="ir.actions.server">
+        <field name="name">SYSCOHADA – Compte de résultat</field>
+        <field name="model_id" ref="mis_builder.model_mis_report_instance"/>
+        <field name="state">code</field>
+        <field name="code">action = model._aite_syscohada_open("resultat")</field>
+    </record>
+    <record id="action_open_flux" model="ir.actions.server">
+        <field name="name">SYSCOHADA – Tableau des flux de trésorerie</field>
+        <field name="model_id" ref="mis_builder.model_mis_report_instance"/>
+        <field name="state">code</field>
+        <field name="code">action = model._aite_syscohada_open("flux")</field>
+    </record>
+    <menuitem id="menu_open_actif" name="Bilan actif" parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_open_actif" sequence="10" groups="account.group_account_readonly"/>
+    <menuitem id="menu_open_passif" name="Bilan passif" parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_open_passif" sequence="11" groups="account.group_account_readonly"/>
+    <menuitem id="menu_open_resultat" name="Compte de résultat" parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_open_resultat" sequence="12" groups="account.group_account_readonly"/>
+    <menuitem id="menu_open_flux" name="Tableau des flux de trésorerie" parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_open_flux" sequence="13" groups="account.group_account_readonly"/>
+    <menuitem id="menu_vat_declaration" name="Déclarations de TVA (Cameroun)"
+              parent="l10n_syscohada.account_reports_syscohada_statements_menu"
+              action="action_aite_cm_vat_declaration" sequence="20" groups="account.group_account_readonly"/>
+</odoo>

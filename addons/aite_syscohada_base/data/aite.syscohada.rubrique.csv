@@ -1,0 +1,125 @@
+id,statement,code,name,sequence,line_type,formula,formula_brut,formula_amort,aggregation,note,dsf_code,dsf_sheet,dsf_cell_brut,dsf_cell_amort,dsf_cell,dsf_cell_n1,dsf_sign
+rub_actif_AD,actif,AD,Immobilisations incorporelles,10,subtotal,,,,AE+AF+AG+AH,3,AD,BILAN PAYSAGE,D12,E12,F12,G12,1
+rub_actif_AE,actif,AE,Frais de développement et de prospection,20,detail,,211+2181+2191,2811+28181+2911+29181+29191,,3,AE,BILAN PAYSAGE,D13,E13,F13,G13,1
+rub_actif_AF,actif,AF,"Brevets, licences, logiciels et droits similaires",30,detail,,212+213+214+2193,2812+2813+2814+2912+2913+2914+29193,,3,AF,BILAN PAYSAGE,D14,E14,F14,G14,1
+rub_actif_AG,actif,AG,Fonds commercial et droit au bail,40,detail,,215+216,2815+2816+2915+2916,,3,AG,BILAN PAYSAGE,D15,E15,F15,G15,1
+rub_actif_AH,actif,AH,Autres immobilisations incorporelles,50,detail,,217+218\(2181)+2198,"2817+2818\(28181)+2917+2918\(29181)+2919\(29191,29193)",,3,AH,BILAN PAYSAGE,D16,E16,F16,G16,1
+rub_actif_AI,actif,AI,Immobilisations corporelles,60,subtotal,,,,AJ+AK+AL+AM+AN,3,AI,BILAN PAYSAGE,D17,E17,F17,G17,1
+rub_actif_AJ,actif,AJ,Terrains,70,detail,,22,282+292,,3,AJ,BILAN PAYSAGE,D18,E18,F18,G18,1
+rub_actif_AK,actif,AK,Bâtiments,80,detail,,231+232+233+237+2391+2393,2831+2832+2833+2837+2931+2932+2933+2937+29391+29393,,3,AK,BILAN PAYSAGE,D19,E19,F19,G19,1
+rub_actif_AL,actif,AL,"Aménagements, agencements et installations",90,detail,,"234+235+238+239\(2391,2393)","2834+2835+2838+2934+2935+2938+2939\(29391,29393)",,3,AL,BILAN PAYSAGE,D20,E20,F20,G20,1
+rub_actif_AM,actif,AM,"Matériel, mobilier et actifs biologiques",100,detail,,"24\(245,2495)","284\(2845)+294\(2945,2949)+2949\(29495)",,3,AM,BILAN PAYSAGE,D21,E21,F21,G21,1
+rub_actif_AN,actif,AN,Matériel de transport,110,detail,,245+2495,2845+2945+29495,,3,AN,BILAN PAYSAGE,D22,E22,F22,G22,1
+rub_actif_AP,actif,AP,Avances et acomptes versés sur immobilisations,120,detail,,251+252,2951+2952,,3,AP,BILAN PAYSAGE,D23,E23,F23,G23,1
+rub_actif_AQ,actif,AQ,Immobilisations financières,130,subtotal,,,,AR+AS,4,AQ,BILAN PAYSAGE,D24,E24,F24,G24,1
+rub_actif_AR,actif,AR,Titres de participation,140,detail,,26,296,,4,AR,BILAN PAYSAGE,D25,E25,F25,G25,1
+rub_actif_AS,actif,AS,Autres immobilisations financières,150,detail,,27,297,,4,AS,BILAN PAYSAGE,D26,E26,F26,G26,1
+rub_actif_AZ,actif,AZ,TOTAL ACTIF IMMOBILISÉ,160,total,,,,AD+AI+AP+AQ,,AZ,BILAN PAYSAGE,D27,E27,F27,G27,1
+rub_actif_BA,actif,BA,Actif circulant HAO,170,detail,,48D,498,,5,BA,BILAN PAYSAGE,D28,E28,F28,G28,1
+rub_actif_BB,actif,BB,Stocks et encours,180,detail,,31+32+33+34+35+36+37+38,39,,6,BB,BILAN PAYSAGE,D29,E29,F29,G29,1
+rub_actif_BG,actif,BG,Créances et emplois assimilés,190,subtotal,,,,BH+BI+BJ,,BC,BILAN PAYSAGE,D30,E30,F30,G30,1
+rub_actif_BH,actif,BH,"Fournisseurs, avances versées",200,detail,,40D,490,,17,BH,BILAN PAYSAGE,D31,E31,F31,G31,1
+rub_actif_BI,actif,BI,Clients,210,detail,,41D,491,,7,BI,BILAN PAYSAGE,D32,E32,F32,G32,1
+rub_actif_BJ,actif,BJ,Autres créances,220,detail,,"18\(181,182,183,184)D+42D+43D+44D+45D+46D+47\(478,479)D",492+493+494+495+496+497,,8,BJ,BILAN PAYSAGE,D33,E33,F33,G33,1
+rub_actif_BK,actif,BK,TOTAL ACTIF CIRCULANT,230,total,,,,BA+BB+BG,,BK,BILAN PAYSAGE,D34,E34,F34,G34,1
+rub_actif_BQ,actif,BQ,Titres de placement,240,detail,,50,590,,9,BQ,BILAN PAYSAGE,D35,E35,F35,G35,1
+rub_actif_BR,actif,BR,Valeurs à encaisser,250,detail,,51,591,,10,BR,BILAN PAYSAGE,D36,E36,F36,G36,1
+rub_actif_BS,actif,BS,"Banques, chèques postaux, caisse et assimilés",260,detail,,52D+53D+54D+55D+57D+58D,592+593+594,,11,BS,BILAN PAYSAGE,D37,E37,F37,G37,1
+rub_actif_BT,actif,BT,TOTAL TRÉSORERIE-ACTIF,270,total,,,,BQ+BR+BS,,BT,BILAN PAYSAGE,D38,E38,F38,G38,1
+rub_actif_BU,actif,BU,Écart de conversion-actif,280,detail,,478,,,12,BU,BILAN PAYSAGE,D39,E39,F39,G39,1
+rub_actif_BZ,actif,BZ,TOTAL GÉNÉRAL,290,total,,,,AZ+BK+BT+BU,,BZ,BILAN PAYSAGE,D40,E40,F40,G40,1
+rub_passif_CA,passif,CA,Capital,300,detail,-101-102-103-104,,,,13,CA,BILAN PAYSAGE,,,K12,L12,1
+rub_passif_CB,passif,CB,"Apporteurs, capital non appelé",310,detail,-109,,,,13,CB,BILAN PAYSAGE,,,K13,L13,1
+rub_passif_CD,passif,CD,Primes liées au capital social,320,detail,-105,,,,14,CD,BILAN PAYSAGE,,,K14,L14,1
+rub_passif_CE,passif,CE,Écarts de réévaluation,330,detail,-106,,,,3e,CE,BILAN PAYSAGE,,,K15,L15,1
+rub_passif_CF,passif,CF,Réserves indisponibles,340,detail,-111-112-113,,,,14,CF,BILAN PAYSAGE,,,K16,L16,1
+rub_passif_CG,passif,CG,Réserves libres,350,detail,-118,,,,14,CG,BILAN PAYSAGE,,,K17,L17,1
+rub_passif_CH,passif,CH,Report à nouveau,360,detail,-12,,,,14,CH,BILAN PAYSAGE,,,K18,L18,1
+rub_passif_CJ,passif,CJ,Résultat net de l'exercice,370,detail,-13-6-7-8-999999,,,,,CJ,BILAN PAYSAGE,,,K19,L19,1
+rub_passif_CL,passif,CL,Subventions d'investissement,380,detail,-14,,,,15,CL,BILAN PAYSAGE,,,K20,L20,1
+rub_passif_CM,passif,CM,Provisions réglementées,390,detail,-15,,,,15,CM,BILAN PAYSAGE,,,K21,L21,1
+rub_passif_CP,passif,CP,TOTAL CAPITAUX PROPRES ET RESSOURCES ASSIMILÉES,400,total,,,,CA+CB+CD+CE+CF+CG+CH+CJ+CL+CM,,CP,BILAN PAYSAGE,,,K22,L22,1
+rub_passif_DA,passif,DA,Emprunts et dettes financières diverses,410,detail,-16-181-182-183-184,,,,16,DA,BILAN PAYSAGE,,,K23,L23,1
+rub_passif_DB,passif,DB,Dettes de location-acquisition,420,detail,-17,,,,16,DB,BILAN PAYSAGE,,,K24,L24,1
+rub_passif_DC,passif,DC,Provisions pour risques et charges,430,detail,-19,,,,16,DC,BILAN PAYSAGE,,,K25,L25,1
+rub_passif_DD,passif,DD,TOTAL DETTES FINANCIÈRES ET RESSOURCES ASSIMILÉES,440,total,,,,DA+DB+DC,,DD,BILAN PAYSAGE,,,K26,L26,1
+rub_passif_DF,passif,DF,TOTAL RESSOURCES STABLES,450,total,,,,CP+DD,,DF,BILAN PAYSAGE,,,K27,L27,1
+rub_passif_DH,passif,DH,Dettes circulantes HAO,460,detail,-48C-4998,,,,5,DH,BILAN PAYSAGE,,,K28,L28,1
+rub_passif_DI,passif,DI,"Clients, avances reçues",470,detail,-41C,,,,7,DI,BILAN PAYSAGE,,,K29,L29,1
+rub_passif_DJ,passif,DJ,Fournisseurs d'exploitation,480,detail,-40C,,,,17,DJ,BILAN PAYSAGE,,,K30,L30,1
+rub_passif_DK,passif,DK,Dettes fiscales et sociales,490,detail,-42C-43C-44C,,,,18,DK,BILAN PAYSAGE,,,K31,L31,1
+rub_passif_DM,passif,DM,Autres dettes,500,detail,"-18\(181,182,183,184)C-45C-46C-47\(478,479)C",,,,19,DM,BILAN PAYSAGE,,,K32,L32,1
+rub_passif_DN,passif,DN,Provisions pour risques à court terme,510,detail,-499\(4998)-599,,,,19,DN,BILAN PAYSAGE,,,K33,L33,1
+rub_passif_DP,passif,DP,TOTAL PASSIF CIRCULANT,520,total,,,,DH+DI+DJ+DK+DM+DN,,DP,BILAN PAYSAGE,,,K34,L34,1
+rub_passif_DQ,passif,DQ,"Banques, crédits d'escompte",530,detail,-564-565,,,,20,DQ,BILAN PAYSAGE,,,K36,L36,1
+rub_passif_DR,passif,DR,"Banques, établissements financiers et crédits de trésorerie",540,detail,"-52C-53C-54C-55C-57C-58C-56\(564,565)",,,,20,DR,BILAN PAYSAGE,,,K37,L37,1
+rub_passif_DT,passif,DT,TOTAL TRÉSORERIE-PASSIF,550,total,,,,DQ+DR,,DT,BILAN PAYSAGE,,,K38,L38,1
+rub_passif_DV,passif,DV,Écart de conversion-passif,560,detail,-479,,,,12,DY,BILAN PAYSAGE,,,K39,L39,1
+rub_passif_DZ,passif,DZ,TOTAL GÉNÉRAL,570,total,,,,DF+DP+DT+DV,,DZ,BILAN PAYSAGE,,,K40,L40,1
+rub_resultat_TA,resultat,TA,Ventes de marchandises,580,detail,-701,,,,21,TA,COMPTE DE RESULTAT,,,E11,F11,1
+rub_resultat_RA,resultat,RA,Achats de marchandises,590,detail,-601,,,,22,RA,COMPTE DE RESULTAT,,,E12,F12,-1
+rub_resultat_RB,resultat,RB,Variation de stocks de marchandises,600,detail,-6031,,,,6,RB,COMPTE DE RESULTAT,,,E13,F13,-1
+rub_resultat_XA,resultat,XA,MARGE COMMERCIALE,610,subtotal,,,,TA+RA+RB,,XA,COMPTE DE RESULTAT,,,E14,F14,1
+rub_resultat_TB,resultat,TB,Ventes de produits fabriqués,620,detail,-702-703-704,,,,21,TB,COMPTE DE RESULTAT,,,E15,F15,1
+rub_resultat_TC,resultat,TC,"Travaux, services vendus",630,detail,-705-706,,,,21,TC,COMPTE DE RESULTAT,,,E16,F16,1
+rub_resultat_TD,resultat,TD,Produits accessoires,640,detail,-707,,,,21,TD,COMPTE DE RESULTAT,,,E17,F17,1
+rub_resultat_XB,resultat,XB,CHIFFRE D'AFFAIRES,650,subtotal,,,,TA+TB+TC+TD,,XB,COMPTE DE RESULTAT,,,E18,F18,1
+rub_resultat_TE,resultat,TE,Production stockée (ou déstockage),660,detail,-73,,,,6,TE,COMPTE DE RESULTAT,,,E19,F19,1
+rub_resultat_TF,resultat,TF,Production immobilisée,670,detail,-72,,,,21,TF,COMPTE DE RESULTAT,,,E20,F20,1
+rub_resultat_TG,resultat,TG,Subventions d'exploitation,680,detail,-71,,,,21,TG,COMPTE DE RESULTAT,,,E21,F21,1
+rub_resultat_TH,resultat,TH,Autres produits,690,detail,-75,,,,21,TH,COMPTE DE RESULTAT,,,E22,F22,1
+rub_resultat_TI,resultat,TI,Transferts de charges d'exploitation,700,detail,-781,,,,12,TI,COMPTE DE RESULTAT,,,E23,F23,1
+rub_resultat_RC,resultat,RC,Achats de matières premières et fournitures liées,710,detail,-602,,,,22,RC,COMPTE DE RESULTAT,,,E24,F24,-1
+rub_resultat_RD,resultat,RD,Variation de stocks de matières premières et fournitures liées,720,detail,-6032,,,,6,RD,COMPTE DE RESULTAT,,,E25,F25,-1
+rub_resultat_RE,resultat,RE,Autres achats,730,detail,-604-605-608,,,,22,RE,COMPTE DE RESULTAT,,,E26,F26,-1
+rub_resultat_RF,resultat,RF,Variation de stocks d'autres approvisionnements,740,detail,-6033,,,,6,RF,COMPTE DE RESULTAT,,,E27,F27,-1
+rub_resultat_RG,resultat,RG,Transports,750,detail,-61,,,,23,RG,COMPTE DE RESULTAT,,,E28,F28,-1
+rub_resultat_RH,resultat,RH,Services extérieurs,760,detail,-62-63,,,,24,RH,COMPTE DE RESULTAT,,,E29,F29,-1
+rub_resultat_RI,resultat,RI,Impôts et taxes,770,detail,-64,,,,25,RI,COMPTE DE RESULTAT,,,E30,F30,-1
+rub_resultat_RJ,resultat,RJ,Autres charges,780,detail,-65,,,,26,RJ,COMPTE DE RESULTAT,,,E31,F31,-1
+rub_resultat_XC,resultat,XC,VALEUR AJOUTÉE,790,subtotal,,,,XB+RA+RB+TE+TF+TG+TH+TI+RC+RD+RE+RF+RG+RH+RI+RJ,,XC,COMPTE DE RESULTAT,,,E32,F32,1
+rub_resultat_RK,resultat,RK,Charges de personnel,800,detail,-66,,,,27,RK,COMPTE DE RESULTAT,,,E33,F33,-1
+rub_resultat_XD,resultat,XD,EXCÉDENT BRUT D'EXPLOITATION,810,subtotal,,,,XC+RK,28,XD,COMPTE DE RESULTAT,,,E34,F34,1
+rub_resultat_TJ,resultat,TJ,"Reprises d'amortissements, provisions et dépréciations",820,detail,-791-798-799,,,,28,TJ,COMPTE DE RESULTAT,,,E35,F35,1
+rub_resultat_RL,resultat,RL,"Dotations aux amortissements, aux provisions et dépréciations",830,detail,-681-691,,,,3C&28,RL,COMPTE DE RESULTAT,,,E36,F36,-1
+rub_resultat_XE,resultat,XE,RÉSULTAT D'EXPLOITATION,840,subtotal,,,,XD+TJ+RL,,XE,COMPTE DE RESULTAT,,,E37,F37,1
+rub_resultat_TK,resultat,TK,Revenus financiers et assimilés,850,detail,-77,,,,29,TK,COMPTE DE RESULTAT,,,E38,F38,1
+rub_resultat_TL,resultat,TL,Reprises de provisions et dépréciations financières,860,detail,-797,,,,28,TL,COMPTE DE RESULTAT,,,E39,F39,1
+rub_resultat_TM,resultat,TM,Transferts de charges financières,870,detail,-787,,,,12,TM,COMPTE DE RESULTAT,,,E40,F40,1
+rub_resultat_RM,resultat,RM,Frais financiers et charges assimilées,880,detail,-67,,,,29,RM,COMPTE DE RESULTAT,,,E41,F41,-1
+rub_resultat_RN,resultat,RN,Dotations aux provisions et aux dépréciations financières,890,detail,-687-697,,,,3C&28,RN,COMPTE DE RESULTAT,,,E42,F42,-1
+rub_resultat_XF,resultat,XF,RÉSULTAT FINANCIER,900,subtotal,,,,TK+TL+TM+RM+RN,,XF,COMPTE DE RESULTAT,,,E43,F43,1
+rub_resultat_XG,resultat,XG,RÉSULTAT DES ACTIVITÉS ORDINAIRES,910,subtotal,,,,XE+XF,,XG,COMPTE DE RESULTAT,,,E44,F44,1
+rub_resultat_TN,resultat,TN,Produits des cessions d'immobilisations,920,detail,-82,,,,3D,TN,COMPTE DE RESULTAT,,,E45,F45,1
+rub_resultat_TO,resultat,TO,Autres produits HAO,930,detail,-84-86-88,,,,30,TO,COMPTE DE RESULTAT,,,E46,F46,1
+rub_resultat_RO,resultat,RO,Valeurs comptables des cessions d'immobilisations,940,detail,-81,,,,3D,RO,COMPTE DE RESULTAT,,,E47,F47,-1
+rub_resultat_RP,resultat,RP,Autres charges HAO,950,detail,-83-85,,,,30,RP,COMPTE DE RESULTAT,,,E48,F48,-1
+rub_resultat_XH,resultat,XH,RÉSULTAT HORS ACTIVITÉS ORDINAIRES,960,subtotal,,,,TN+TO+RO+RP,,XH,COMPTE DE RESULTAT,,,E49,F49,1
+rub_resultat_RQ,resultat,RQ,Participation des travailleurs,970,detail,-87,,,,30,RQ,COMPTE DE RESULTAT,,,E50,F50,-1
+rub_resultat_RS,resultat,RS,Impôts sur le résultat,980,detail,-89,,,,,RS,COMPTE DE RESULTAT,,,E51,F51,-1
+rub_resultat_XI,resultat,XI,RÉSULTAT NET,990,total,,,,XG+XH+RQ+RS,,XI,COMPTE DE RESULTAT,,,E52,F52,1
+rub_flux_ZA,flux,ZA,Trésorerie nette au 1er janvier,1000,detail,B0:BT-B0:DT,,,,,ZA,TABLEAU DES FLUX DE TRESORERIE,,,E10,F10,1
+rub_flux_FA,flux,FA,Capacité d'autofinancement globale (CAFG),1010,detail,R:XI+P:681+P:687+P:691+P:697+P:85+P:791+P:797+P:798+P:799+P:86+P:81+P:654+P:82+P:754,,,,,FA,TABLEAU DES FLUX DE TRESORERIE,,,E12,F12,1
+rub_flux_FB,flux,FB,Actif circulant HAO,1020,detail,-V:BA+E:485-S:485,,,,,FB,TABLEAU DES FLUX DE TRESORERIE,,,E13,F13,-1
+rub_flux_FC,flux,FC,Variation des stocks,1030,detail,-V:BB,,,,,FC,TABLEAU DES FLUX DE TRESORERIE,,,E14,F14,-1
+rub_flux_FD,flux,FD,Variation des créances,1040,detail,-V:BG-V:BU,,,,,FD,TABLEAU DES FLUX DE TRESORERIE,,,E15,F15,-1
+rub_flux_FE,flux,FE,Variation du passif circulant,1050,detail,V:DI+V:DJ+V:DK+V:DM+V:DN+V:DH+V:DV+E:481-S:481+E:482-S:482+E:465-S:465-E:166+S:166-E:176+S:176,,,,,FE,TABLEAU DES FLUX DE TRESORERIE,,,E16,F16,1
+rub_flux_ZB,flux,ZB,Flux de trésorerie provenant des activités opérationnelles,1060,subtotal,,,,FA+FB+FC+FD+FE,,ZB,TABLEAU DES FLUX DE TRESORERIE,,,E18,F18,1
+rub_flux_FF,flux,FF,Décaissements liés aux acquisitions d'immobilisations incorporelles,1070,detail,-DX:(21+251)-E:4811+S:4811,,,,,FF,TABLEAU DES FLUX DE TRESORERIE,,,E20,F20,-1
+rub_flux_FG,flux,FG,Décaissements liés aux acquisitions d'immobilisations corporelles,1080,detail,-DX:(22+23+24+252)-E:481\(4811)+S:481\(4811)-E:482+S:482,,,,,FG,TABLEAU DES FLUX DE TRESORERIE,,,E21,F21,-1
+rub_flux_FH,flux,FH,Décaissements liés aux acquisitions d'immobilisations financières,1090,detail,-DX:(26+27),,,,,FH,TABLEAU DES FLUX DE TRESORERIE,,,E22,F22,-1
+rub_flux_FI,flux,FI,Encaissements liés aux cessions d'immobilisations incorporelles et corporelles,1100,detail,-P:82\(826)-P:754-E:485+S:485,,,,,FI,TABLEAU DES FLUX DE TRESORERIE,,,E23,F23,1
+rub_flux_FJ,flux,FJ,Encaissements liés aux cessions d'immobilisations financières,1110,detail,-P:826+CX:(26+27)-P:816,,,,,FJ,TABLEAU DES FLUX DE TRESORERIE,,,E24,F24,1
+rub_flux_ZC,flux,ZC,Flux de trésorerie provenant des activités d'investissement,1120,subtotal,,,,FF+FG+FH+FI+FJ,,ZC,TABLEAU DES FLUX DE TRESORERIE,,,E25,F25,1
+rub_flux_FK,flux,FK,Augmentations de capital par apports nouveaux,1130,detail,V:CA+V:CB+V:CD+V:CE+V:CF+V:CG+V:CH+V:CJ-R:XI-E:465+S:465+D:465+D:104,,,,,FK,TABLEAU DES FLUX DE TRESORERIE,,,E27,F27,1
+rub_flux_FL,flux,FL,Subventions d'investissement reçues,1140,detail,C:14,,,,,FL,TABLEAU DES FLUX DE TRESORERIE,,,E28,F28,1
+rub_flux_FM,flux,FM,Prélèvements sur le capital,1150,detail,-D:104,,,,,FM,TABLEAU DES FLUX DE TRESORERIE,,,E29,F29,-1
+rub_flux_FN,flux,FN,Dividendes versés,1160,detail,-D:465,,,,,FN,TABLEAU DES FLUX DE TRESORERIE,,,E30,F30,-1
+rub_flux_ZD,flux,ZD,Flux de trésorerie provenant des capitaux propres,1170,subtotal,,,,FK+FL+FM+FN,,ZD,TABLEAU DES FLUX DE TRESORERIE,,,E31,F31,1
+rub_flux_FO,flux,FO,Emprunts,1180,detail,C:16\(166),,,,,FO,TABLEAU DES FLUX DE TRESORERIE,,,E33,F33,1
+rub_flux_FP,flux,FP,Autres dettes financières,1190,detail,C:(17\(176)+181+182+183+184),,,,,FP,TABLEAU DES FLUX DE TRESORERIE,,,E34,F34,1
+rub_flux_FQ,flux,FQ,Remboursements des emprunts et autres dettes financières,1200,detail,-D:(16\(166)+17\(176)+181+182+183+184),,,,,FQ,TABLEAU DES FLUX DE TRESORERIE,,,E35,F35,-1
+rub_flux_ZE,flux,ZE,Flux de trésorerie provenant des capitaux étrangers,1210,subtotal,,,,FO+FP+FQ,,ZE,TABLEAU DES FLUX DE TRESORERIE,,,E36,F36,1
+rub_flux_ZF,flux,ZF,Flux de trésorerie provenant des activités de financement,1220,subtotal,,,,ZD+ZE,,ZF,TABLEAU DES FLUX DE TRESORERIE,,,E37,F37,1
+rub_flux_ZG,flux,ZG,Variation de la trésorerie nette de la période,1230,subtotal,,,,ZB+ZC+ZF,,ZG,TABLEAU DES FLUX DE TRESORERIE,,,E38,F38,1
+rub_flux_ZH,flux,ZH,Trésorerie nette au 31 décembre,1240,total,,,,ZA+ZG,,ZH,TABLEAU DES FLUX DE TRESORERIE,,,E39,F39,1

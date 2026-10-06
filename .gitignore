@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+logs/
+odoo.conf
+odoo-data/
+venv/
+.venv/
+.claude/settings.local.json

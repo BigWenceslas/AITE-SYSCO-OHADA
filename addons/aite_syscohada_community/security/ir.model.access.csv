@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vat_decl_readonly,déclaration TVA lecture,model_aite_cm_vat_declaration,account.group_account_readonly,1,0,0,0
+access_vat_decl_manager,déclaration TVA gestion,model_aite_cm_vat_declaration,account.group_account_manager,1,1,1,1
+access_vat_line_readonly,lignes TVA lecture,model_aite_cm_vat_declaration_line,account.group_account_readonly,1,0,0,0
+access_vat_line_manager,lignes TVA gestion,model_aite_cm_vat_declaration_line,account.group_account_manager,1,1,1,1
+access_itvair_line_readonly,lignes I/TVA-IR lecture,model_aite_cm_itvair_line,account.group_account_readonly,1,0,0,0
+access_itvair_line_manager,lignes I/TVA-IR gestion,model_aite_cm_itvair_line,account.group_account_manager,1,1,1,1

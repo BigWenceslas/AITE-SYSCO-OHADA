@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_aite_syscohada_rubrique_list" model="ir.ui.view">
+        <field name="name">aite.syscohada.rubrique.list</field>
+        <field name="model">aite.syscohada.rubrique</field>
+        <field name="arch" type="xml">
+            <list string="Rubriques SYSCOHADA" decoration-bf="line_type != 'detail'">
+                <field name="sequence" widget="handle"/>
+                <field name="statement"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="line_type"/>
+                <field name="formula_brut" optional="show"/>
+                <field name="formula_amort" optional="show"/>
+                <field name="formula" optional="show"/>
+                <field name="aggregation" optional="show"/>
+                <field name="note" optional="hide"/>
+                <field name="dsf_code" optional="hide"/>
+                <field name="dsf_cell" optional="hide"/>
+                <field name="dsf_cell_n1" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_aite_syscohada_rubrique_search" model="ir.ui.view">
+        <field name="name">aite.syscohada.rubrique.search</field>
+        <field name="model">aite.syscohada.rubrique</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="formula"/>
+                <filter name="actif" string="Bilan actif" domain="[('statement', '=', 'actif')]"/>
+                <filter name="passif" string="Bilan passif" domain="[('statement', '=', 'passif')]"/>
+                <filter name="resultat" string="Compte de résultat" domain="[('statement', '=', 'resultat')]"/>
+                <filter name="flux" string="Flux de trésorerie" domain="[('statement', '=', 'flux')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="by_statement" string="État" context="{'group_by': 'statement'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_aite_syscohada_rubrique" model="ir.actions.act_window">
+        <field name="name">Rubriques SYSCOHADA</field>
+        <field name="res_model">aite.syscohada.rubrique</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_by_statement': 1}</field>
+    </record>
+</odoo>

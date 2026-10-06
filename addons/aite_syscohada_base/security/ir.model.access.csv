@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rubrique_readonly,rubrique lecture,model_aite_syscohada_rubrique,account.group_account_readonly,1,0,0,0
+access_rubrique_manager,rubrique gestion,model_aite_syscohada_rubrique,account.group_account_manager,1,1,1,1
+access_wizard_readonly,assistant états,model_aite_syscohada_statement_wizard,account.group_account_readonly,1,1,1,1
+access_line_readonly,lignes états,model_aite_syscohada_statement_line,account.group_account_readonly,1,1,1,1
+access_check_line_readonly,lignes contrôles,model_aite_syscohada_check_line,account.group_account_readonly,1,1,1,1

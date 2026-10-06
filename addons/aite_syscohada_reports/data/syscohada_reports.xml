@@ -1,0 +1,2700 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <record id="report_actif" model="account.report">
+    <field name="name">SYSCOHADA – Bilan actif</field>
+    <field name="availability_condition">always</field>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="default_opening_date_filter">this_year</field>
+    <field name="column_ids">
+      <record id="report_actif_col_brut" model="account.report.column">
+        <field name="name">Brut</field>
+        <field name="expression_label">brut</field>
+        <field name="sequence">1</field>
+      </record>
+      <record id="report_actif_col_amort" model="account.report.column">
+        <field name="name">Amort. et dépréc.</field>
+        <field name="expression_label">amort</field>
+        <field name="sequence">2</field>
+      </record>
+      <record id="report_actif_col_net" model="account.report.column">
+        <field name="name">Net</field>
+        <field name="expression_label">net</field>
+        <field name="sequence">3</field>
+      </record>
+    </field>
+    <field name="line_ids">
+      <record id="report_actif_line_AD" model="account.report.line">
+        <field name="name">AD – Immobilisations incorporelles</field>
+        <field name="code">AD</field>
+        <field name="sequence">10</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AD_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AE.brut+AF.brut+AG.brut+AH.brut</field>
+          </record>
+          <record id="report_actif_line_AD_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AE.amort+AF.amort+AG.amort+AH.amort</field>
+          </record>
+          <record id="report_actif_line_AD_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AE.net+AF.net+AG.net+AH.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AE" model="account.report.line">
+        <field name="name">AE – Frais de développement et de prospection</field>
+        <field name="code">AE</field>
+        <field name="sequence">20</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AE_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">211+2181+2191</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AE_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2811-28181-2911-29181-29191</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AE_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">211+2181+2191+2811+28181+2911+29181+29191</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AF" model="account.report.line">
+        <field name="name">AF – Brevets, licences, logiciels et droits similaires</field>
+        <field name="code">AF</field>
+        <field name="sequence">30</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AF_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">212+213+214+2193</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AF_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2812-2813-2814-2912-2913-2914-29193</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AF_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">212+213+214+2193+2812+2813+2814+2912+2913+2914+29193</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AG" model="account.report.line">
+        <field name="name">AG – Fonds commercial et droit au bail</field>
+        <field name="code">AG</field>
+        <field name="sequence">40</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AG_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">215+216</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AG_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2815-2816-2915-2916</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AG_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">215+216+2815+2816+2915+2916</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AH" model="account.report.line">
+        <field name="name">AH – Autres immobilisations incorporelles</field>
+        <field name="code">AH</field>
+        <field name="sequence">50</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AH_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">217+218\(2181)+2198</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AH_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2817-2818\(28181)-2917-2918\(29181)-2919\(29191,29193)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AH_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">217+218\(2181)+2198+2817+2818\(28181)+2917+2918\(29181)+2919\(29191,29193)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AI" model="account.report.line">
+        <field name="name">AI – Immobilisations corporelles</field>
+        <field name="code">AI</field>
+        <field name="sequence">60</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AI_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AJ.brut+AK.brut+AL.brut+AM.brut+AN.brut</field>
+          </record>
+          <record id="report_actif_line_AI_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AJ.amort+AK.amort+AL.amort+AM.amort+AN.amort</field>
+          </record>
+          <record id="report_actif_line_AI_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AJ.net+AK.net+AL.net+AM.net+AN.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AJ" model="account.report.line">
+        <field name="name">AJ – Terrains</field>
+        <field name="code">AJ</field>
+        <field name="sequence">70</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AJ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">22</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AJ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-282-292</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AJ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">22+282+292</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AK" model="account.report.line">
+        <field name="name">AK – Bâtiments</field>
+        <field name="code">AK</field>
+        <field name="sequence">80</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AK_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">231+232+233+237+2391+2393</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AK_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2831-2832-2833-2837-2931-2932-2933-2937-29391-29393</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AK_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">231+232+233+237+2391+2393+2831+2832+2833+2837+2931+2932+2933+2937+29391+29393</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AL" model="account.report.line">
+        <field name="name">AL – Aménagements, agencements et installations</field>
+        <field name="code">AL</field>
+        <field name="sequence">90</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AL_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">234+235+238+239\(2391,2393)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AL_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2834-2835-2838-2934-2935-2938-2939\(29391,29393)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AL_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">234+235+238+239\(2391,2393)+2834+2835+2838+2934+2935+2938+2939\(29391,29393)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AM" model="account.report.line">
+        <field name="name">AM – Matériel, mobilier et actifs biologiques</field>
+        <field name="code">AM</field>
+        <field name="sequence">100</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AM_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">24\(245,2495)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AM_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-284\(2845)-294\(2945,2949)-2949\(29495)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AM_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">24\(245,2495)+284\(2845)+294\(2945,2949)+2949\(29495)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AN" model="account.report.line">
+        <field name="name">AN – Matériel de transport</field>
+        <field name="code">AN</field>
+        <field name="sequence">110</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AN_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">245+2495</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AN_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2845-2945-29495</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AN_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">245+2495+2845+2945+29495</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AP" model="account.report.line">
+        <field name="name">AP – Avances et acomptes versés sur immobilisations</field>
+        <field name="code">AP</field>
+        <field name="sequence">120</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AP_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">251+252</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AP_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-2951-2952</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AP_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">251+252+2951+2952</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AQ" model="account.report.line">
+        <field name="name">AQ – Immobilisations financières</field>
+        <field name="code">AQ</field>
+        <field name="sequence">130</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AQ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AR.brut+AS.brut</field>
+          </record>
+          <record id="report_actif_line_AQ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AR.amort+AS.amort</field>
+          </record>
+          <record id="report_actif_line_AQ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AR.net+AS.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AR" model="account.report.line">
+        <field name="name">AR – Titres de participation</field>
+        <field name="code">AR</field>
+        <field name="sequence">140</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AR_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">26</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AR_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-296</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AR_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">26+296</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AS" model="account.report.line">
+        <field name="name">AS – Autres immobilisations financières</field>
+        <field name="code">AS</field>
+        <field name="sequence">150</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AS_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">27</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AS_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-297</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_AS_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">27+297</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_AZ" model="account.report.line">
+        <field name="name">AZ – TOTAL ACTIF IMMOBILISÉ</field>
+        <field name="code">AZ</field>
+        <field name="sequence">160</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_AZ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AD.brut+AI.brut+AP.brut+AQ.brut</field>
+          </record>
+          <record id="report_actif_line_AZ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AD.amort+AI.amort+AP.amort+AQ.amort</field>
+          </record>
+          <record id="report_actif_line_AZ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AD.net+AI.net+AP.net+AQ.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BA" model="account.report.line">
+        <field name="name">BA – Actif circulant HAO</field>
+        <field name="code">BA</field>
+        <field name="sequence">170</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BA_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">48D</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BA_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-498</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BA_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">48D+498</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BB" model="account.report.line">
+        <field name="name">BB – Stocks et encours</field>
+        <field name="code">BB</field>
+        <field name="sequence">180</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BB_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">31+32+33+34+35+36+37+38</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BB_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-39</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BB_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">31+32+33+34+35+36+37+38+39</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BG" model="account.report.line">
+        <field name="name">BG – Créances et emplois assimilés</field>
+        <field name="code">BG</field>
+        <field name="sequence">190</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BG_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BH.brut+BI.brut+BJ.brut</field>
+          </record>
+          <record id="report_actif_line_BG_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BH.amort+BI.amort+BJ.amort</field>
+          </record>
+          <record id="report_actif_line_BG_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BH.net+BI.net+BJ.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BH" model="account.report.line">
+        <field name="name">BH – Fournisseurs, avances versées</field>
+        <field name="code">BH</field>
+        <field name="sequence">200</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BH_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">40D</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BH_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-490</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BH_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">40D+490</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BI" model="account.report.line">
+        <field name="name">BI – Clients</field>
+        <field name="code">BI</field>
+        <field name="sequence">210</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BI_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">41D</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BI_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-491</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BI_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">41D+491</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BJ" model="account.report.line">
+        <field name="name">BJ – Autres créances</field>
+        <field name="code">BJ</field>
+        <field name="sequence">220</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BJ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">18\(181,182,183,184)D+42D+43D+44D+45D+46D+47\(478,479)D</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BJ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-492-493-494-495-496-497</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BJ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">18\(181,182,183,184)D+42D+43D+44D+45D+46D+47\(478,479)D+492+493+494+495+496+497</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BK" model="account.report.line">
+        <field name="name">BK – TOTAL ACTIF CIRCULANT</field>
+        <field name="code">BK</field>
+        <field name="sequence">230</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BK_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BA.brut+BB.brut+BG.brut</field>
+          </record>
+          <record id="report_actif_line_BK_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BA.amort+BB.amort+BG.amort</field>
+          </record>
+          <record id="report_actif_line_BK_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BA.net+BB.net+BG.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BQ" model="account.report.line">
+        <field name="name">BQ – Titres de placement</field>
+        <field name="code">BQ</field>
+        <field name="sequence">240</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BQ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">50</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BQ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-590</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BQ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">50+590</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BR" model="account.report.line">
+        <field name="name">BR – Valeurs à encaisser</field>
+        <field name="code">BR</field>
+        <field name="sequence">250</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BR_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">51</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BR_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-591</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BR_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">51+591</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BS" model="account.report.line">
+        <field name="name">BS – Banques, chèques postaux, caisse et assimilés</field>
+        <field name="code">BS</field>
+        <field name="sequence">260</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BS_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">52D+53D+54D+55D+57D+58D</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BS_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-592-593-594</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BS_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">52D+53D+54D+55D+57D+58D+592+593+594</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BT" model="account.report.line">
+        <field name="name">BT – TOTAL TRÉSORERIE-ACTIF</field>
+        <field name="code">BT</field>
+        <field name="sequence">270</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BT_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BQ.brut+BR.brut+BS.brut</field>
+          </record>
+          <record id="report_actif_line_BT_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BQ.amort+BR.amort+BS.amort</field>
+          </record>
+          <record id="report_actif_line_BT_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">BQ.net+BR.net+BS.net</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BU" model="account.report.line">
+        <field name="name">BU – Écart de conversion-actif</field>
+        <field name="code">BU</field>
+        <field name="sequence">280</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BU_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">478</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_actif_line_BU_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">0</field>
+          </record>
+          <record id="report_actif_line_BU_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">478</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_actif_line_BZ" model="account.report.line">
+        <field name="name">BZ – TOTAL GÉNÉRAL</field>
+        <field name="code">BZ</field>
+        <field name="sequence">290</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_actif_line_BZ_brut" model="account.report.expression">
+            <field name="label">brut</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AZ.brut+BK.brut+BT.brut+BU.brut</field>
+          </record>
+          <record id="report_actif_line_BZ_amort" model="account.report.expression">
+            <field name="label">amort</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AZ.amort+BK.amort+BT.amort+BU.amort</field>
+          </record>
+          <record id="report_actif_line_BZ_net" model="account.report.expression">
+            <field name="label">net</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">AZ.net+BK.net+BT.net+BU.net</field>
+          </record>
+        </field>
+      </record>
+    </field>
+  </record>
+  <record id="action_report_actif" model="ir.actions.client">
+    <field name="name">SYSCOHADA – Bilan actif</field>
+    <field name="tag">account_report</field>
+    <field name="context" eval="{'report_id': ref('report_actif')}"/>
+  </record>
+  <menuitem id="menu_report_actif" name="SYSCOHADA – Bilan actif" action="action_report_actif" parent="l10n_syscohada.account_reports_syscohada_statements_menu" sequence="10"/>
+  <record id="report_passif" model="account.report">
+    <field name="name">SYSCOHADA – Bilan passif</field>
+    <field name="availability_condition">always</field>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="default_opening_date_filter">this_year</field>
+    <field name="column_ids">
+      <record id="report_passif_col_balance" model="account.report.column">
+        <field name="name">Net</field>
+        <field name="expression_label">balance</field>
+        <field name="sequence">1</field>
+      </record>
+    </field>
+    <field name="line_ids">
+      <record id="report_passif_line_CA" model="account.report.line">
+        <field name="name">CA – Capital</field>
+        <field name="code">CA</field>
+        <field name="sequence">300</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-101-102-103-104</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CB" model="account.report.line">
+        <field name="name">CB – Apporteurs, capital non appelé</field>
+        <field name="code">CB</field>
+        <field name="sequence">310</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-109</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CD" model="account.report.line">
+        <field name="name">CD – Primes liées au capital social</field>
+        <field name="code">CD</field>
+        <field name="sequence">320</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-105</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CE" model="account.report.line">
+        <field name="name">CE – Écarts de réévaluation</field>
+        <field name="code">CE</field>
+        <field name="sequence">330</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-106</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CF" model="account.report.line">
+        <field name="name">CF – Réserves indisponibles</field>
+        <field name="code">CF</field>
+        <field name="sequence">340</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-111-112-113</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CG" model="account.report.line">
+        <field name="name">CG – Réserves libres</field>
+        <field name="code">CG</field>
+        <field name="sequence">350</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-118</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CH" model="account.report.line">
+        <field name="name">CH – Report à nouveau</field>
+        <field name="code">CH</field>
+        <field name="sequence">360</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-12</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CJ" model="account.report.line">
+        <field name="name">CJ – Résultat net de l'exercice</field>
+        <field name="code">CJ</field>
+        <field name="sequence">370</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CJ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-13-6-7-8-999999</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CL" model="account.report.line">
+        <field name="name">CL – Subventions d'investissement</field>
+        <field name="code">CL</field>
+        <field name="sequence">380</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CL_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-14</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CM" model="account.report.line">
+        <field name="name">CM – Provisions réglementées</field>
+        <field name="code">CM</field>
+        <field name="sequence">390</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CM_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-15</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_CP" model="account.report.line">
+        <field name="name">CP – TOTAL CAPITAUX PROPRES ET RESSOURCES ASSIMILÉES</field>
+        <field name="code">CP</field>
+        <field name="sequence">400</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_CP_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">CA.balance+CB.balance+CD.balance+CE.balance+CF.balance+CG.balance+CH.balance+CJ.balance+CL.balance+CM.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DA" model="account.report.line">
+        <field name="name">DA – Emprunts et dettes financières diverses</field>
+        <field name="code">DA</field>
+        <field name="sequence">410</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-16-181-182-183-184</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DB" model="account.report.line">
+        <field name="name">DB – Dettes de location-acquisition</field>
+        <field name="code">DB</field>
+        <field name="sequence">420</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-17</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DC" model="account.report.line">
+        <field name="name">DC – Provisions pour risques et charges</field>
+        <field name="code">DC</field>
+        <field name="sequence">430</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-19</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DD" model="account.report.line">
+        <field name="name">DD – TOTAL DETTES FINANCIÈRES ET RESSOURCES ASSIMILÉES</field>
+        <field name="code">DD</field>
+        <field name="sequence">440</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">DA.balance+DB.balance+DC.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DF" model="account.report.line">
+        <field name="name">DF – TOTAL RESSOURCES STABLES</field>
+        <field name="code">DF</field>
+        <field name="sequence">450</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">CP.balance+DD.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DH" model="account.report.line">
+        <field name="name">DH – Dettes circulantes HAO</field>
+        <field name="code">DH</field>
+        <field name="sequence">460</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-48C-4998</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DI" model="account.report.line">
+        <field name="name">DI – Clients, avances reçues</field>
+        <field name="code">DI</field>
+        <field name="sequence">470</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DI_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-41C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DJ" model="account.report.line">
+        <field name="name">DJ – Fournisseurs d'exploitation</field>
+        <field name="code">DJ</field>
+        <field name="sequence">480</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DJ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-40C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DK" model="account.report.line">
+        <field name="name">DK – Dettes fiscales et sociales</field>
+        <field name="code">DK</field>
+        <field name="sequence">490</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DK_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-42C-43C-44C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DM" model="account.report.line">
+        <field name="name">DM – Autres dettes</field>
+        <field name="code">DM</field>
+        <field name="sequence">500</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DM_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-18\(181,182,183,184)C-45C-46C-47\(478,479)C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DN" model="account.report.line">
+        <field name="name">DN – Provisions pour risques à court terme</field>
+        <field name="code">DN</field>
+        <field name="sequence">510</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DN_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-499\(4998)-599</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DP" model="account.report.line">
+        <field name="name">DP – TOTAL PASSIF CIRCULANT</field>
+        <field name="code">DP</field>
+        <field name="sequence">520</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DP_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">DH.balance+DI.balance+DJ.balance+DK.balance+DM.balance+DN.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DQ" model="account.report.line">
+        <field name="name">DQ – Banques, crédits d'escompte</field>
+        <field name="code">DQ</field>
+        <field name="sequence">530</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DQ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-564-565</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DR" model="account.report.line">
+        <field name="name">DR – Banques, établissements financiers et crédits de trésorerie</field>
+        <field name="code">DR</field>
+        <field name="sequence">540</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DR_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-52C-53C-54C-55C-57C-58C-56\(564,565)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DT" model="account.report.line">
+        <field name="name">DT – TOTAL TRÉSORERIE-PASSIF</field>
+        <field name="code">DT</field>
+        <field name="sequence">550</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DT_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">DQ.balance+DR.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DV" model="account.report.line">
+        <field name="name">DV – Écart de conversion-passif</field>
+        <field name="code">DV</field>
+        <field name="sequence">560</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DV_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-479</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_passif_line_DZ" model="account.report.line">
+        <field name="name">DZ – TOTAL GÉNÉRAL</field>
+        <field name="code">DZ</field>
+        <field name="sequence">570</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_passif_line_DZ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">DF.balance+DP.balance+DT.balance+DV.balance</field>
+          </record>
+        </field>
+      </record>
+    </field>
+  </record>
+  <record id="action_report_passif" model="ir.actions.client">
+    <field name="name">SYSCOHADA – Bilan passif</field>
+    <field name="tag">account_report</field>
+    <field name="context" eval="{'report_id': ref('report_passif')}"/>
+  </record>
+  <menuitem id="menu_report_passif" name="SYSCOHADA – Bilan passif" action="action_report_passif" parent="l10n_syscohada.account_reports_syscohada_statements_menu" sequence="11"/>
+  <record id="report_resultat" model="account.report">
+    <field name="name">SYSCOHADA – Compte de résultat</field>
+    <field name="availability_condition">always</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="default_opening_date_filter">this_year</field>
+    <field name="column_ids">
+      <record id="report_resultat_col_balance" model="account.report.column">
+        <field name="name">Net</field>
+        <field name="expression_label">balance</field>
+        <field name="sequence">1</field>
+      </record>
+    </field>
+    <field name="line_ids">
+      <record id="report_resultat_line_TA" model="account.report.line">
+        <field name="name">TA – Ventes de marchandises</field>
+        <field name="code">TA</field>
+        <field name="sequence">580</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-701</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RA" model="account.report.line">
+        <field name="name">RA – Achats de marchandises</field>
+        <field name="code">RA</field>
+        <field name="sequence">590</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-601</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RB" model="account.report.line">
+        <field name="name">RB – Variation de stocks de marchandises</field>
+        <field name="code">RB</field>
+        <field name="sequence">600</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-6031</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XA" model="account.report.line">
+        <field name="name">XA – MARGE COMMERCIALE</field>
+        <field name="code">XA</field>
+        <field name="sequence">610</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">TA.balance+RA.balance+RB.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TB" model="account.report.line">
+        <field name="name">TB – Ventes de produits fabriqués</field>
+        <field name="code">TB</field>
+        <field name="sequence">620</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-702-703-704</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TC" model="account.report.line">
+        <field name="name">TC – Travaux, services vendus</field>
+        <field name="code">TC</field>
+        <field name="sequence">630</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-705-706</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TD" model="account.report.line">
+        <field name="name">TD – Produits accessoires</field>
+        <field name="code">TD</field>
+        <field name="sequence">640</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-707</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XB" model="account.report.line">
+        <field name="name">XB – CHIFFRE D'AFFAIRES</field>
+        <field name="code">XB</field>
+        <field name="sequence">650</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">TA.balance+TB.balance+TC.balance+TD.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TE" model="account.report.line">
+        <field name="name">TE – Production stockée (ou déstockage)</field>
+        <field name="code">TE</field>
+        <field name="sequence">660</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-73</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TF" model="account.report.line">
+        <field name="name">TF – Production immobilisée</field>
+        <field name="code">TF</field>
+        <field name="sequence">670</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-72</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TG" model="account.report.line">
+        <field name="name">TG – Subventions d'exploitation</field>
+        <field name="code">TG</field>
+        <field name="sequence">680</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-71</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TH" model="account.report.line">
+        <field name="name">TH – Autres produits</field>
+        <field name="code">TH</field>
+        <field name="sequence">690</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-75</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TI" model="account.report.line">
+        <field name="name">TI – Transferts de charges d'exploitation</field>
+        <field name="code">TI</field>
+        <field name="sequence">700</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TI_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-781</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RC" model="account.report.line">
+        <field name="name">RC – Achats de matières premières et fournitures liées</field>
+        <field name="code">RC</field>
+        <field name="sequence">710</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-602</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RD" model="account.report.line">
+        <field name="name">RD – Variation de stocks de matières premières et fournitures liées</field>
+        <field name="code">RD</field>
+        <field name="sequence">720</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-6032</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RE" model="account.report.line">
+        <field name="name">RE – Autres achats</field>
+        <field name="code">RE</field>
+        <field name="sequence">730</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-604-605-608</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RF" model="account.report.line">
+        <field name="name">RF – Variation de stocks d'autres approvisionnements</field>
+        <field name="code">RF</field>
+        <field name="sequence">740</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-6033</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RG" model="account.report.line">
+        <field name="name">RG – Transports</field>
+        <field name="code">RG</field>
+        <field name="sequence">750</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-61</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RH" model="account.report.line">
+        <field name="name">RH – Services extérieurs</field>
+        <field name="code">RH</field>
+        <field name="sequence">760</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-62-63</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RI" model="account.report.line">
+        <field name="name">RI – Impôts et taxes</field>
+        <field name="code">RI</field>
+        <field name="sequence">770</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RI_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-64</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RJ" model="account.report.line">
+        <field name="name">RJ – Autres charges</field>
+        <field name="code">RJ</field>
+        <field name="sequence">780</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RJ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-65</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XC" model="account.report.line">
+        <field name="name">XC – VALEUR AJOUTÉE</field>
+        <field name="code">XC</field>
+        <field name="sequence">790</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">XB.balance+RA.balance+RB.balance+TE.balance+TF.balance+TG.balance+TH.balance+TI.balance+RC.balance+RD.balance+RE.balance+RF.balance+RG.balance+RH.balance+RI.balance+RJ.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RK" model="account.report.line">
+        <field name="name">RK – Charges de personnel</field>
+        <field name="code">RK</field>
+        <field name="sequence">800</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RK_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-66</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XD" model="account.report.line">
+        <field name="name">XD – EXCÉDENT BRUT D'EXPLOITATION</field>
+        <field name="code">XD</field>
+        <field name="sequence">810</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">XC.balance+RK.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TJ" model="account.report.line">
+        <field name="name">TJ – Reprises d'amortissements, provisions et dépréciations</field>
+        <field name="code">TJ</field>
+        <field name="sequence">820</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TJ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-791-798-799</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RL" model="account.report.line">
+        <field name="name">RL – Dotations aux amortissements, aux provisions et dépréciations</field>
+        <field name="code">RL</field>
+        <field name="sequence">830</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RL_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-681-691</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XE" model="account.report.line">
+        <field name="name">XE – RÉSULTAT D'EXPLOITATION</field>
+        <field name="code">XE</field>
+        <field name="sequence">840</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">XD.balance+TJ.balance+RL.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TK" model="account.report.line">
+        <field name="name">TK – Revenus financiers et assimilés</field>
+        <field name="code">TK</field>
+        <field name="sequence">850</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TK_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-77</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TL" model="account.report.line">
+        <field name="name">TL – Reprises de provisions et dépréciations financières</field>
+        <field name="code">TL</field>
+        <field name="sequence">860</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TL_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-797</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TM" model="account.report.line">
+        <field name="name">TM – Transferts de charges financières</field>
+        <field name="code">TM</field>
+        <field name="sequence">870</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TM_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-787</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RM" model="account.report.line">
+        <field name="name">RM – Frais financiers et charges assimilées</field>
+        <field name="code">RM</field>
+        <field name="sequence">880</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RM_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-67</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RN" model="account.report.line">
+        <field name="name">RN – Dotations aux provisions et aux dépréciations financières</field>
+        <field name="code">RN</field>
+        <field name="sequence">890</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RN_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-687-697</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XF" model="account.report.line">
+        <field name="name">XF – RÉSULTAT FINANCIER</field>
+        <field name="code">XF</field>
+        <field name="sequence">900</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">TK.balance+TL.balance+TM.balance+RM.balance+RN.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XG" model="account.report.line">
+        <field name="name">XG – RÉSULTAT DES ACTIVITÉS ORDINAIRES</field>
+        <field name="code">XG</field>
+        <field name="sequence">910</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">XE.balance+XF.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TN" model="account.report.line">
+        <field name="name">TN – Produits des cessions d'immobilisations</field>
+        <field name="code">TN</field>
+        <field name="sequence">920</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TN_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-82</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_TO" model="account.report.line">
+        <field name="name">TO – Autres produits HAO</field>
+        <field name="code">TO</field>
+        <field name="sequence">930</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_TO_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-84-86-88</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RO" model="account.report.line">
+        <field name="name">RO – Valeurs comptables des cessions d'immobilisations</field>
+        <field name="code">RO</field>
+        <field name="sequence">940</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RO_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-81</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RP" model="account.report.line">
+        <field name="name">RP – Autres charges HAO</field>
+        <field name="code">RP</field>
+        <field name="sequence">950</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RP_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-83-85</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XH" model="account.report.line">
+        <field name="name">XH – RÉSULTAT HORS ACTIVITÉS ORDINAIRES</field>
+        <field name="code">XH</field>
+        <field name="sequence">960</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">TN.balance+TO.balance+RO.balance+RP.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RQ" model="account.report.line">
+        <field name="name">RQ – Participation des travailleurs</field>
+        <field name="code">RQ</field>
+        <field name="sequence">970</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RQ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-87</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_RS" model="account.report.line">
+        <field name="name">RS – Impôts sur le résultat</field>
+        <field name="code">RS</field>
+        <field name="sequence">980</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_RS_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-89</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_resultat_line_XI" model="account.report.line">
+        <field name="name">XI – RÉSULTAT NET</field>
+        <field name="code">XI</field>
+        <field name="sequence">990</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_resultat_line_XI_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">XG.balance+XH.balance+RQ.balance+RS.balance</field>
+          </record>
+        </field>
+      </record>
+    </field>
+  </record>
+  <record id="action_report_resultat" model="ir.actions.client">
+    <field name="name">SYSCOHADA – Compte de résultat</field>
+    <field name="tag">account_report</field>
+    <field name="context" eval="{'report_id': ref('report_resultat')}"/>
+  </record>
+  <menuitem id="menu_report_resultat" name="SYSCOHADA – Compte de résultat" action="action_report_resultat" parent="l10n_syscohada.account_reports_syscohada_statements_menu" sequence="12"/>
+  <record id="report_flux" model="account.report">
+    <field name="name">SYSCOHADA – Tableau des flux de trésorerie</field>
+    <field name="availability_condition">always</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="default_opening_date_filter">this_year</field>
+    <field name="column_ids">
+      <record id="report_flux_col_balance" model="account.report.column">
+        <field name="name">Montant</field>
+        <field name="expression_label">balance</field>
+        <field name="sequence">1</field>
+      </record>
+    </field>
+    <field name="line_ids">
+      <record id="report_flux_line_ZA" model="account.report.line">
+        <field name="name">ZA – Trésorerie nette au 1er janvier</field>
+        <field name="code">ZA</field>
+        <field name="sequence">1000</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZA_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+50+590+51+591+52D+53D+54D+55D+57D+58D+592+593+594</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_ZA_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-564-565-52C-53C-54C-55C-57C-58C-56\(564,565)</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_ZA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">ZA.t1-ZA.t2</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FA" model="account.report.line">
+        <field name="name">FA – Capacité d'autofinancement globale (CAFG)</field>
+        <field name="code">FA</field>
+        <field name="sequence">1010</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FA_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-701-702-703-704-705-706-707-601-6031-73-72-71-75-781-602-6032-604-605-608-6033-61-62-63-64-65-66-791-798-799-681-691-77-797-787-67-687-697-82-84-86-88-81-83-85-87-89</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+681</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+687</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t4" model="account.report.expression">
+            <field name="label">t4</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+691</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t5" model="account.report.expression">
+            <field name="label">t5</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+697</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t6" model="account.report.expression">
+            <field name="label">t6</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+85</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t7" model="account.report.expression">
+            <field name="label">t7</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+791</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t8" model="account.report.expression">
+            <field name="label">t8</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+797</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t9" model="account.report.expression">
+            <field name="label">t9</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+798</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t10" model="account.report.expression">
+            <field name="label">t10</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+799</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t11" model="account.report.expression">
+            <field name="label">t11</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+86</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t12" model="account.report.expression">
+            <field name="label">t12</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+81</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t13" model="account.report.expression">
+            <field name="label">t13</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+654</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t14" model="account.report.expression">
+            <field name="label">t14</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+82</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_t15" model="account.report.expression">
+            <field name="label">t15</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+754</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FA_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FA.t1+FA.t2+FA.t3+FA.t4+FA.t5+FA.t6+FA.t7+FA.t8+FA.t9+FA.t10+FA.t11+FA.t12+FA.t13+FA.t14+FA.t15</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FB" model="account.report.line">
+        <field name="name">FB – Actif circulant HAO</field>
+        <field name="code">FB</field>
+        <field name="sequence">1020</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FB_t1e" model="account.report.expression">
+            <field name="label">t1e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+48D+498</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FB_t1s" model="account.report.expression">
+            <field name="label">t1s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+48D+498</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FB_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+485</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FB_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+485</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FB.t1e+FB.t1s+FB.t2-FB.t3</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FC" model="account.report.line">
+        <field name="name">FC – Variation des stocks</field>
+        <field name="code">FC</field>
+        <field name="sequence">1030</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FC_t1e" model="account.report.expression">
+            <field name="label">t1e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+31+32+33+34+35+36+37+38+39</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FC_t1s" model="account.report.expression">
+            <field name="label">t1s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+31+32+33+34+35+36+37+38+39</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FC.t1e+FC.t1s</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FD" model="account.report.line">
+        <field name="name">FD – Variation des créances</field>
+        <field name="code">FD</field>
+        <field name="sequence">1040</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FD_t1e" model="account.report.expression">
+            <field name="label">t1e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+40D+490+41D+491+18\(181,182,183,184)D+42D+43D+44D+45D+46D+47\(478,479)D+492+493+494+495+496+497</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FD_t1s" model="account.report.expression">
+            <field name="label">t1s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+40D+490+41D+491+18\(181,182,183,184)D+42D+43D+44D+45D+46D+47\(478,479)D+492+493+494+495+496+497</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FD_t2e" model="account.report.expression">
+            <field name="label">t2e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+478</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FD_t2s" model="account.report.expression">
+            <field name="label">t2s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+478</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FD.t1e+FD.t1s-FD.t2e+FD.t2s</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FE" model="account.report.line">
+        <field name="name">FE – Variation du passif circulant</field>
+        <field name="code">FE</field>
+        <field name="sequence">1050</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FE_t1e" model="account.report.expression">
+            <field name="label">t1e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-41C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t1s" model="account.report.expression">
+            <field name="label">t1s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-41C</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t2e" model="account.report.expression">
+            <field name="label">t2e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-40C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t2s" model="account.report.expression">
+            <field name="label">t2s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-40C</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t3e" model="account.report.expression">
+            <field name="label">t3e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-42C-43C-44C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t3s" model="account.report.expression">
+            <field name="label">t3s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-42C-43C-44C</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t4e" model="account.report.expression">
+            <field name="label">t4e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-18\(181,182,183,184)C-45C-46C-47\(478,479)C</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t4s" model="account.report.expression">
+            <field name="label">t4s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-18\(181,182,183,184)C-45C-46C-47\(478,479)C</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t5e" model="account.report.expression">
+            <field name="label">t5e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-499\(4998)-599</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t5s" model="account.report.expression">
+            <field name="label">t5s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-499\(4998)-599</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t6e" model="account.report.expression">
+            <field name="label">t6e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-48C-4998</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t6s" model="account.report.expression">
+            <field name="label">t6s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-48C-4998</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t7e" model="account.report.expression">
+            <field name="label">t7e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-479</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t7s" model="account.report.expression">
+            <field name="label">t7s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-479</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t8" model="account.report.expression">
+            <field name="label">t8</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+481</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t9" model="account.report.expression">
+            <field name="label">t9</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+481</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t10" model="account.report.expression">
+            <field name="label">t10</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+482</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t11" model="account.report.expression">
+            <field name="label">t11</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+482</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t12" model="account.report.expression">
+            <field name="label">t12</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+465</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t13" model="account.report.expression">
+            <field name="label">t13</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+465</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t14" model="account.report.expression">
+            <field name="label">t14</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+166</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t15" model="account.report.expression">
+            <field name="label">t15</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+166</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_t16" model="account.report.expression">
+            <field name="label">t16</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+176</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FE_t17" model="account.report.expression">
+            <field name="label">t17</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+176</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FE.t1e-FE.t1s+FE.t2e-FE.t2s+FE.t3e-FE.t3s+FE.t4e-FE.t4s+FE.t5e-FE.t5s+FE.t6e-FE.t6s+FE.t7e-FE.t7s+FE.t8-FE.t9+FE.t10-FE.t11+FE.t12-FE.t13-FE.t14+FE.t15-FE.t16+FE.t17</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZB" model="account.report.line">
+        <field name="name">ZB – Flux de trésorerie provenant des activités opérationnelles</field>
+        <field name="code">ZB</field>
+        <field name="sequence">1060</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZB_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FA.balance+FB.balance+FC.balance+FD.balance+FE.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FF" model="account.report.line">
+        <field name="name">FF – Décaissements liés aux acquisitions d'immobilisations incorporelles</field>
+        <field name="code">FF</field>
+        <field name="sequence">1070</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FF_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', ('account_id.code', '=like', '21%'), ('account_id.code', '=like', '251%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FF_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+4811</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FF_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+4811</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FF.t1-FF.t2+FF.t3</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FG" model="account.report.line">
+        <field name="name">FG – Décaissements liés aux acquisitions d'immobilisations corporelles</field>
+        <field name="code">FG</field>
+        <field name="sequence">1080</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FG_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', ('account_id.code', '=like', '22%'), '|', ('account_id.code', '=like', '23%'), '|', ('account_id.code', '=like', '24%'), ('account_id.code', '=like', '252%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FG_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+481\(4811)</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FG_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+481\(4811)</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FG_t4" model="account.report.expression">
+            <field name="label">t4</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+482</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FG_t5" model="account.report.expression">
+            <field name="label">t5</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+482</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FG.t1-FG.t2+FG.t3-FG.t4+FG.t5</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FH" model="account.report.line">
+        <field name="name">FH – Décaissements liés aux acquisitions d'immobilisations financières</field>
+        <field name="code">FH</field>
+        <field name="sequence">1090</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FH_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', ('account_id.code', '=like', '26%'), ('account_id.code', '=like', '27%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FH.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FI" model="account.report.line">
+        <field name="name">FI – Encaissements liés aux cessions d'immobilisations incorporelles et corporelles</field>
+        <field name="code">FI</field>
+        <field name="sequence">1100</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FI_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+82\(826)</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FI_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+754</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FI_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+485</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FI_t4" model="account.report.expression">
+            <field name="label">t4</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+485</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FI_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FI.t1-FI.t2-FI.t3+FI.t4</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FJ" model="account.report.line">
+        <field name="name">FJ – Encaissements liés aux cessions d'immobilisations financières</field>
+        <field name="code">FJ</field>
+        <field name="sequence">1110</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FJ_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+826</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FJ_t2" model="account.report.expression">
+            <field name="label">t2</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', ('account_id.code', '=like', '26%'), ('account_id.code', '=like', '27%'), ('credit', '&gt;', 0)]</field>
+            <field name="subformula">-sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FJ_t3" model="account.report.expression">
+            <field name="label">t3</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+816</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FJ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FJ.t1+FJ.t2-FJ.t3</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZC" model="account.report.line">
+        <field name="name">ZC – Flux de trésorerie provenant des activités d'investissement</field>
+        <field name="code">ZC</field>
+        <field name="sequence">1120</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZC_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FF.balance+FG.balance+FH.balance+FI.balance+FJ.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FK" model="account.report.line">
+        <field name="name">FK – Augmentations de capital par apports nouveaux</field>
+        <field name="code">FK</field>
+        <field name="sequence">1130</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FK_t1e" model="account.report.expression">
+            <field name="label">t1e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-101-102-103-104</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t1s" model="account.report.expression">
+            <field name="label">t1s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-101-102-103-104</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t2e" model="account.report.expression">
+            <field name="label">t2e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-109</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t2s" model="account.report.expression">
+            <field name="label">t2s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-109</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t3e" model="account.report.expression">
+            <field name="label">t3e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-105</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t3s" model="account.report.expression">
+            <field name="label">t3s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-105</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t4e" model="account.report.expression">
+            <field name="label">t4e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-106</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t4s" model="account.report.expression">
+            <field name="label">t4s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-106</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t5e" model="account.report.expression">
+            <field name="label">t5e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-111-112-113</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t5s" model="account.report.expression">
+            <field name="label">t5s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-111-112-113</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t6e" model="account.report.expression">
+            <field name="label">t6e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-118</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t6s" model="account.report.expression">
+            <field name="label">t6s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-118</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t7e" model="account.report.expression">
+            <field name="label">t7e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-12</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t7s" model="account.report.expression">
+            <field name="label">t7s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-12</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t8e" model="account.report.expression">
+            <field name="label">t8e</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-13-6-7-8-999999</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t8s" model="account.report.expression">
+            <field name="label">t8s</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-13-6-7-8-999999</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t9" model="account.report.expression">
+            <field name="label">t9</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">-701-702-703-704-705-706-707-601-6031-73-72-71-75-781-602-6032-604-605-608-6033-61-62-63-64-65-66-791-798-799-681-691-77-797-787-67-687-697-82-84-86-88-81-83-85-87-89</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FK_t10" model="account.report.expression">
+            <field name="label">t10</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+465</field>
+            <field name="date_scope">from_beginning</field>
+          </record>
+          <record id="report_flux_line_FK_t11" model="account.report.expression">
+            <field name="label">t11</field>
+            <field name="engine">account_codes</field>
+            <field name="formula">+465</field>
+            <field name="date_scope">to_beginning_of_period</field>
+          </record>
+          <record id="report_flux_line_FK_t12" model="account.report.expression">
+            <field name="label">t12</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('account_id.code', '=like', '465%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FK_t13" model="account.report.expression">
+            <field name="label">t13</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('account_id.code', '=like', '104%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FK_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FK.t1e-FK.t1s+FK.t2e-FK.t2s+FK.t3e-FK.t3s+FK.t4e-FK.t4s+FK.t5e-FK.t5s+FK.t6e-FK.t6s+FK.t7e-FK.t7s+FK.t8e-FK.t8s-FK.t9-FK.t10+FK.t11+FK.t12+FK.t13</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FL" model="account.report.line">
+        <field name="name">FL – Subventions d'investissement reçues</field>
+        <field name="code">FL</field>
+        <field name="sequence">1140</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FL_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('account_id.code', '=like', '14%'), ('credit', '&gt;', 0)]</field>
+            <field name="subformula">-sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FL_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FL.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FM" model="account.report.line">
+        <field name="name">FM – Prélèvements sur le capital</field>
+        <field name="code">FM</field>
+        <field name="sequence">1150</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FM_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('account_id.code', '=like', '104%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FM_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FM.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FN" model="account.report.line">
+        <field name="name">FN – Dividendes versés</field>
+        <field name="code">FN</field>
+        <field name="sequence">1160</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FN_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('account_id.code', '=like', '465%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FN_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FN.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZD" model="account.report.line">
+        <field name="name">ZD – Flux de trésorerie provenant des capitaux propres</field>
+        <field name="code">ZD</field>
+        <field name="sequence">1170</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZD_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FK.balance+FL.balance+FM.balance+FN.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FO" model="account.report.line">
+        <field name="name">FO – Emprunts</field>
+        <field name="code">FO</field>
+        <field name="sequence">1180</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FO_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['&amp;', ('account_id.code', '=like', '16%'), '!', ('account_id.code', '=like', '166%'), ('credit', '&gt;', 0)]</field>
+            <field name="subformula">-sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FO_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FO.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FP" model="account.report.line">
+        <field name="name">FP – Autres dettes financières</field>
+        <field name="code">FP</field>
+        <field name="sequence">1190</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FP_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', '&amp;', ('account_id.code', '=like', '17%'), '!', ('account_id.code', '=like', '176%'), '|', ('account_id.code', '=like', '181%'), '|', ('account_id.code', '=like', '182%'), '|', ('account_id.code', '=like', '183%'), ('account_id.code', '=like', '184%'), ('credit', '&gt;', 0)]</field>
+            <field name="subformula">-sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FP_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FP.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_FQ" model="account.report.line">
+        <field name="name">FQ – Remboursements des emprunts et autres dettes financières</field>
+        <field name="code">FQ</field>
+        <field name="sequence">1200</field>
+        <field name="hierarchy_level">3</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_FQ_t1" model="account.report.expression">
+            <field name="label">t1</field>
+            <field name="engine">domain</field>
+            <field name="formula">['|', '&amp;', ('account_id.code', '=like', '16%'), '!', ('account_id.code', '=like', '166%'), '|', '&amp;', ('account_id.code', '=like', '17%'), '!', ('account_id.code', '=like', '176%'), '|', ('account_id.code', '=like', '181%'), '|', ('account_id.code', '=like', '182%'), '|', ('account_id.code', '=like', '183%'), ('account_id.code', '=like', '184%'), ('debit', '&gt;', 0)]</field>
+            <field name="subformula">sum</field>
+            <field name="date_scope">strict_range</field>
+          </record>
+          <record id="report_flux_line_FQ_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">-FQ.t1</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZE" model="account.report.line">
+        <field name="name">ZE – Flux de trésorerie provenant des capitaux étrangers</field>
+        <field name="code">ZE</field>
+        <field name="sequence">1210</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZE_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">FO.balance+FP.balance+FQ.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZF" model="account.report.line">
+        <field name="name">ZF – Flux de trésorerie provenant des activités de financement</field>
+        <field name="code">ZF</field>
+        <field name="sequence">1220</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZF_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">ZD.balance+ZE.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZG" model="account.report.line">
+        <field name="name">ZG – Variation de la trésorerie nette de la période</field>
+        <field name="code">ZG</field>
+        <field name="sequence">1230</field>
+        <field name="hierarchy_level">1</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZG_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">ZB.balance+ZC.balance+ZF.balance</field>
+          </record>
+        </field>
+      </record>
+      <record id="report_flux_line_ZH" model="account.report.line">
+        <field name="name">ZH – Trésorerie nette au 31 décembre</field>
+        <field name="code">ZH</field>
+        <field name="sequence">1240</field>
+        <field name="hierarchy_level">0</field>
+        <field name="expression_ids">
+          <record id="report_flux_line_ZH_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">aggregation</field>
+            <field name="formula">ZA.balance+ZG.balance</field>
+          </record>
+        </field>
+      </record>
+    </field>
+  </record>
+  <record id="action_report_flux" model="ir.actions.client">
+    <field name="name">SYSCOHADA – Tableau des flux de trésorerie</field>
+    <field name="tag">account_report</field>
+    <field name="context" eval="{'report_id': ref('report_flux')}"/>
+  </record>
+  <menuitem id="menu_report_flux" name="SYSCOHADA – Tableau des flux de trésorerie" action="action_report_flux" parent="l10n_syscohada.account_reports_syscohada_statements_menu" sequence="13"/>
+</odoo>
