@@ -15,5 +15,6 @@
         "views/menus.xml",
         "report/itvair_report.xml",
     ],
+    "application": True,
     "installable": True,
 }

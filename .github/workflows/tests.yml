@@ -88,9 +88,30 @@ jobs:
           createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_volume
           scripts/run_tests.sh aite_ci_volume aite_syscohada_community aite_syscohada_volume
 
+      - name: Données de démonstration (installation puis tests, base copiée)
+        working-directory: aite
+        env:
+          ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
+          PYTHON: python
+          PGPASSWORD: odoo
+        run: |
+          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_demo
+          python "$ODOO_BIN" -c odoo.conf -d aite_ci_demo -i aite_syscohada_demo --stop-after-init
+          scripts/run_tests.sh aite_ci_demo aite_syscohada_demo aite_syscohada_demo
+
+      - name: Paquet de livraison
+        working-directory: aite
+        run: scripts/build_release.sh ../oca
+
       - name: Journaux
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: journaux-tests
           path: aite/logs/
+
+      - name: Zip d'installation
+        uses: actions/upload-artifact@v4
+        with:
+          name: paquet-odoo18
+          path: aite/dist/*.zip

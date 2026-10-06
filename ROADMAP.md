@@ -54,6 +54,13 @@ Ordre conseillé : recette 1 et 2 → lot 3 (notes exigées) → lot 4 → lot 6
 - [ ] Défaut : liquidation refusée quand la société courante n'est pas celle de la déclaration (`_closing_balances`, `test_closing_entry_of_b_from_company_a_context`)
 - [ ] Option : export au format attendu par le portail de télédéclaration, si la DGI en publie un
 
+## Livraison et démonstration
+
+- [x] Module `aite_syscohada_demo` : société « Bar-Hôtel Démo AITE », 21 mois d'opérations (bar, hôtel, achats, retenues, paie, immobilisations, emprunt, impôt, affectation, dividendes), 20 déclarations liquidées, payées et validées, septembre 2026 en brouillon ; 15 tests chiffrés à la main ; génération en une minute
+- [x] Paquet de livraison `scripts/build_release.sh` : modules AITE, OCA figés avec leur licence, guide, lisez-moi `docs/installation.md` ; installation depuis le zip vérifiée sur une base vierge (104 tests sans échec, démonstration comprise)
+- [x] Intégration continue : installation et tests de la démonstration, zip publié en artefact
+- [ ] Option : choisir le journal de la liquidation (aujourd'hui le premier journal d'opérations diverses dans l'ordre d'affichage)
+
 ## Lot 3 — Notes annexes et tableaux fiscaux
 
 Objectif : produire d'abord les notes exigées en pièces jointes de la DSF, puis le passage au résultat fiscal, puis les autres notes.

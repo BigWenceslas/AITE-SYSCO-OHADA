@@ -6,3 +6,4 @@ odoo-data/
 venv/
 .venv/
 .claude/settings.local.json
+dist/

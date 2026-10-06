@@ -73,6 +73,7 @@ ul, ol { padding-left:1.4em; }
 li { margin:4px 0; }
 strong { font-weight:600; }
 code { font-family:var(--font-mono); font-size:.86em; background:var(--code-bg); padding:.1em .35em; border-radius:4px; word-break:break-word; }
+section.chapter p, section.chapter li { overflow-wrap:break-word; }
 pre { background:var(--code-bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; font-size:14px; line-height:1.5; }
 pre code { background:none; padding:0; font-size:inherit; word-break:normal; }
 blockquote { margin:16px 0; padding:10px 16px; border-left:4px solid var(--teal); background:var(--teal-soft); border-radius:6px; }
@@ -122,7 +123,7 @@ footer { margin:40px 0 0; font-family:var(--font-ui); font-size:12.5px; color:va
     <input type="search" id="toc-filter" placeholder="Filtrer le sommaire…" aria-label="Filtrer le sommaire">
     <ul>
 <li class="toc-ch"><a href="#1-presentation">1. Présentation</a></li>
-<li class="toc-ch"><a href="#2-installation">2. Installation</a><ul class="toc-sub"><li><a href="#community-chemin-recommande">Community (chemin recommandé)</a></li><li><a href="#sur-une-instance-odoo-18-existante">Sur une instance Odoo 18 existante</a></li><li><a href="#enterprise">Enterprise</a></li><li><a href="#mise-a-jour-d-une-version-a-l-autre">Mise à jour d&#x27;une version à l&#x27;autre</a></li></ul></li>
+<li class="toc-ch"><a href="#2-installation">2. Installation</a><ul class="toc-sub"><li><a href="#community-chemin-recommande">Community (chemin recommandé)</a></li><li><a href="#depuis-le-paquet-de-livraison">Depuis le paquet de livraison</a></li><li><a href="#donnees-de-demonstration">Données de démonstration</a></li><li><a href="#sur-une-instance-odoo-18-existante">Sur une instance Odoo 18 existante</a></li><li><a href="#enterprise">Enterprise</a></li><li><a href="#mise-a-jour-d-une-version-a-l-autre">Mise à jour d&#x27;une version à l&#x27;autre</a></li></ul></li>
 <li class="toc-ch"><a href="#3-parametrage-initial">3. Paramétrage initial</a><ul class="toc-sub"><li><a href="#creation-de-la-societe-camerounaise">Création de la société camerounaise</a></li><li><a href="#ce-que-fait-le-parametrage">Ce que fait le paramétrage</a></li><li><a href="#relancer-le-parametrage">Relancer le paramétrage</a></li><li><a href="#journaux">Journaux</a></li><li><a href="#droits-des-utilisateurs">Droits des utilisateurs</a></li><li><a href="#idempotence-et-mise-a-jour">Idempotence et mise à jour</a></li></ul></li>
 <li class="toc-ch"><a href="#4-saisie-quotidienne">4. Saisie quotidienne</a><ul class="toc-sub"><li><a href="#reperes-communs-a-tous-les-flux">Repères communs à tous les flux</a></li><li><a href="#ventes-de-marchandises">Ventes de marchandises</a></li><li><a href="#prestations-de-services">Prestations de services</a></li><li><a href="#acomptes-clients">Acomptes clients</a></li><li><a href="#achats-de-marchandises">Achats de marchandises</a></li><li><a href="#services-achetes">Services achetés</a></li><li><a href="#immobilisations">Immobilisations</a></li><li><a href="#fournisseur-etranger">Fournisseur étranger</a></li><li><a href="#retenues-a-la-source-subies-et-operees">Retenues à la source subies et opérées</a></li><li><a href="#precompte-sur-achats">Précompte sur achats</a></li><li><a href="#taxe-de-sejour">Taxe de séjour</a></li><li><a href="#point-de-vente-et-caisse">Point de vente et caisse</a></li><li><a href="#stocks">Stocks</a></li><li><a href="#paie-en-ecriture-manuelle">Paie en écriture manuelle</a></li><li><a href="#immobilisations-et-amortissements">Immobilisations et amortissements</a></li><li><a href="#emprunts">Emprunts</a></li><li><a href="#affectation-du-resultat">Affectation du résultat</a></li><li><a href="#dividendes">Dividendes</a></li><li><a href="#ce-qu-il-ne-faut-pas-faire">Ce qu&#x27;il ne faut pas faire</a></li></ul></li>
 <li class="toc-ch"><a href="#5-etats-financiers">5. États financiers</a><ul class="toc-sub"><li><a href="#ou-trouver-les-etats">Où trouver les états</a></li><li><a href="#l-assistant-etats-syscohada-et-controles">L&#x27;assistant « États SYSCOHADA et contrôles »</a></li><li><a href="#les-9-controles">Les 9 contrôles</a></li><li><a href="#les-etats-mis-builder-en-community">Les états MIS Builder en Community</a></li><li><a href="#les-rapports-enterprise">Les rapports Enterprise</a></li><li><a href="#lire-les-rubriques">Lire les rubriques</a></li></ul></li>
@@ -139,7 +140,7 @@ footer { margin:40px 0 0; font-family:var(--font-ui); font-size:12.5px; color:va
       <h1>Guide complet — SYSCOHADA révisé pour Odoo 18 (AITE)</h1>
       <p>Installation, paramétrage, saisie, états financiers, déclaration mensuelle I/TVA-IR, clôture, tests et développement des modules AITE pour Odoo 18 Community.</p>
       <div class="meta">
-        <span>6 octobre 2026</span><span>AITE Consulting, Douala</span><span>Odoo 18.0 Community</span><span>Dépôt BigWenceslas/AITE-SYSCO-OHADA</span><span>13 695 mots</span>
+        <span>6 octobre 2026</span><span>AITE Consulting, Douala</span><span>Odoo 18.0 Community</span><span>Dépôt BigWenceslas/AITE-SYSCO-OHADA</span><span>14 294 mots</span>
       </div>
     </div>
 <section class="chapter"><h2 id="1-presentation">1. Présentation<a class="anchor" href="#1-presentation" aria-label="Lien vers cette section">#</a></h2>
@@ -178,6 +179,12 @@ footer { margin:40px 0 0; font-family:var(--font-ui); font-size:12.5px; color:va
 <td>Enterprise seulement, installation automatique</td>
 <td>base, <code>account_<wbr>reports</code></td>
 </tr>
+<tr>
+<td><code>aite_<wbr>syscohada_<wbr>demo</code></td>
+<td>Société de démonstration « Bar-Hôtel Démo AITE » : 21 mois d'opérations et de déclarations, générés à l'installation (bases de test seulement)</td>
+<td>Community et Enterprise, facultatif</td>
+<td>community</td>
+</tr>
 </tbody>
 </table></div>
 <p>Installer <code>aite_syscohada_community</code> suffit : les deux modules dont il dépend suivent. Sur Enterprise, <code>aite_syscohada_reports</code> s'installe de lui-même dès que <code>account_reports</code> est présent.</p>
@@ -201,6 +208,92 @@ without_demo = all
 log_level = warn
 data_dir = &lt;travail&gt;/odoo-data
 </code></pre>
+<h3 id="depuis-le-paquet-de-livraison">Depuis le paquet de livraison<a class="anchor" href="#depuis-le-paquet-de-livraison" aria-label="Lien vers cette section">#</a></h3>
+<p>Le paquet <code>aite_syscohada_odoo18_&lt;version&gt;_&lt;date&gt;.zip</code>, construit par <code>scripts/build_release.sh</code>, contient les cinq modules AITE (<code>addons/</code>), les trois modules OCA aux versions testées (<code>oca/</code>, licence AGPL-3), ce guide et un lisez-moi d'installation (<code>README.md</code>, copie de <code>docs/installation.md</code>). Le fichier <code>VERSIONS.txt</code> donne la version de chaque module et les commits d'origine.</p>
+<ol>
+<li>Copier le contenu de <code>addons/</code> et de <code>oca/</code> dans un dossier d'extensions du serveur et l'ajouter à <code>addons_path</code> (garder les versions OCA déjà présentes s'il y en a).</li>
+<li><code>pip install openupgradelib</code> dans l'environnement Python d'Odoo, puis redémarrer Odoo.</li>
+<li>Mettre à jour la liste des applications et installer <code>aite_syscohada_community</code> (affiché comme application) ; sur Enterprise, <code>aite_syscohada_reports</code> en plus.</li>
+</ol>
+<p>L'installation depuis le zip extrait a été vérifiée sur une base vierge (6 octobre 2026) : module principal en 49 secondes, puis 104 tests sans échec.</p>
+<h3 id="donnees-de-demonstration">Données de démonstration<a class="anchor" href="#donnees-de-demonstration" aria-label="Lien vers cette section">#</a></h3>
+<p>Le module facultatif <code>aite_syscohada_demo</code> crée, à son installation, la société « Bar-Hôtel Démo AITE » (Douala, FCFA, plan « cm ») et environ 700 pièces, de janvier 2025 à septembre 2026. Il est réservé aux bases de test et de formation.</p>
+<pre><code class="language-bash">odoo-bin -c odoo.conf -d &lt;base de test&gt; -i aite_syscohada_demo --stop-after-init
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Opérations générées</th>
+<th>Détail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bar</td>
+<td>Facture de synthèse mensuelle (bières, vins, boissons sans alcool), encaissée à 60 % en espèces, 25 % Orange Money, 15 % MTN Mobile Money ; versements en banque par le compte 585</td>
+</tr>
+<tr>
+<td>Hôtel</td>
+<td>Nuitées et séminaires avec TVA sur encaissements (80 % encaissés dans le mois, le solde le 10) ; séminaire d'une société qui retient l'acompte de 2 %</td>
+</tr>
+<tr>
+<td>Achats et charges</td>
+<td>Brasseries avec précompte de 2 %, vins, électricité, téléphone, loyer avec précompte de 15 %, honoraires avec retenue de 5 %, logiciel étranger avec TVA autoliquidée et TSR, frais bancaires</td>
+</tr>
+<tr>
+<td>Paie</td>
+<td>Écriture globale mensuelle (CNPS, IRPP et CAC, CFC, FNE, RAV, TDL), salaires nets virés, cotisations payées le 15</td>
+</tr>
+<tr>
+<td>Investissement et financement</td>
+<td>Capital de 30 000 000, aménagements et mobilier, chambre froide, dotations mensuelles, emprunt de 12 000 000 remboursé chaque mois</td>
+</tr>
+<tr>
+<td>Clôture et résultat</td>
+<td>Stock et ristourne au 31/12/2025, impôt illustratif, affectation du résultat au 30/06/2026, dividendes avec IRCM (ligne L57)</td>
+</tr>
+<tr>
+<td>Déclarations</td>
+<td>21 déclarations I/TVA-IR : vingt calculées, liquidées, payées le 15 et validées ; septembre 2026 en brouillon</td>
+</tr>
+</tbody>
+</table></div>
+<p>Repères pour explorer, tous calculés à la main dans les tests du module :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Repère</th>
+<th>Montant (FCFA)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Résultat net 2025 (XI)</td>
+<td>1 253 472</td>
+</tr>
+<tr>
+<td>Résultat de janvier à septembre 2026</td>
+<td>2 049 350</td>
+</tr>
+<tr>
+<td>Total du bilan au 30/09/2026 (BZ = DZ)</td>
+<td>44 941 362</td>
+</tr>
+<tr>
+<td>Trésorerie au 30/09/2026 (BT)</td>
+<td>22 922 286</td>
+</tr>
+<tr>
+<td>Déclaration de janvier 2025 : crédit de TVA reporté, total à payer</td>
+<td>2 164 162 ; 496 386</td>
+</tr>
+<tr>
+<td>Déclaration de septembre 2026 (brouillon) : TVA à payer, total à payer</td>
+<td>612 920 ; 1 068 786</td>
+</tr>
+</tbody>
+</table></div>
+<p>La génération dure environ une minute. Depuis l'interface, sur un serveur lancé avec des workers, relever temporairement <code>limit_time_cpu</code> et <code>limit_time_real</code> le temps de l'installation. La paie et l'impôt sur le résultat y sont illustratifs ; les taxes de retenue « taux à valider » ne sont activées que dans cette société.</p>
 <h3 id="sur-une-instance-odoo-18-existante">Sur une instance Odoo 18 existante<a class="anchor" href="#sur-une-instance-odoo-18-existante" aria-label="Lien vers cette section">#</a></h3>
 <ol>
 <li>Copier <code>addons/aite_syscohada_base</code>, <code>aite_syscohada_mis</code> et <code>aite_syscohada_community</code> dans un chemin d'addons, ainsi que <code>mis_builder</code>, <code>date_range</code> et <code>report_xlsx</code> (OCA 18.0).</li>
@@ -2109,6 +2202,12 @@ data_dir = &lt;travail&gt;/odoo-data
 <td>0 échec</td>
 <td>38 s</td>
 </tr>
+<tr>
+<td>Données de démonstration (étiquette <code>aite_<wbr>syscohada_<wbr>demo</code>, base où le module est installé)</td>
+<td>15</td>
+<td>0 échec</td>
+<td>10 s</td>
+</tr>
 </tbody>
 </table></div>
 <h3 id="les-tests-avances-ajoutes">Les tests avancés ajoutés<a class="anchor" href="#les-tests-avances-ajoutes" aria-label="Lien vers cette section">#</a></h3>
@@ -2193,8 +2292,12 @@ scripts/run_tests.sh aite_dev aite_syscohada_community aite_syscohada_advanced
 # volume, sur une base neuve
 createdb -T aite_dev aite_volume
 scripts/run_tests.sh aite_volume aite_syscohada_community aite_syscohada_volume
+# données de démonstration : installation puis tests
+createdb -T aite_dev aite_demo
+../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d aite_demo -i aite_syscohada_demo --stop-after-init
+scripts/run_tests.sh aite_demo aite_syscohada_demo aite_syscohada_demo
 </code></pre>
-<p>L'intégration continue GitHub Actions exécute la suite complète puis le test de volume à chaque push. Sur GitHub, les deux premières exécutions (code initial, puis trois premiers fichiers avancés) sont vertes ; celle du dernier commit était en cours au moment de la rédaction. Les résultats se lisent dans l'onglet Actions du dépôt.</p>
+<p>L'intégration continue GitHub Actions exécute à chaque push la suite complète, le test de volume, l'installation et les tests des données de démonstration, puis construit le zip d'installation (artefact « paquet-odoo18 »). Sur GitHub, les deux premières exécutions (code initial, puis trois premiers fichiers avancés) sont vertes ; celle du dernier commit était en cours au moment de la rédaction. Les résultats se lisent dans l'onglet Actions du dépôt.</p>
 </section><section class="chapter"><h2 id="9-developpement">9. Développement<a class="anchor" href="#9-developpement" aria-label="Lien vers cette section">#</a></h2>
 <h3 id="architecture-et-flux-de-donnees">Architecture et flux de données<a class="anchor" href="#architecture-et-flux-de-donnees" aria-label="Lien vers cette section">#</a></h3>
 <p>Tous les états viennent d'un seul référentiel de 124 rubriques. Chaque rendu le lit, aucun ne le recopie.</p>

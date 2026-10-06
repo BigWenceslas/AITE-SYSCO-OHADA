@@ -21,12 +21,17 @@ scripts/setup_dev.sh [dossier]          # une fois : Odoo 18 Community, OCA, ven
 scripts/run_tests.sh aite_dev aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
 # un seul test
 scripts/run_tests.sh aite_dev aite_syscohada_community "/aite_syscohada_community:TestItvairForm.test_march_full_form"
+# données de démonstration sur une copie de base, puis leurs tests
+createdb -T aite_dev aite_demo && ../venv/bin/python ../odoo18/odoo-bin -c odoo.conf -d aite_demo -i aite_syscohada_demo --stop-after-init
+scripts/run_tests.sh aite_demo aite_syscohada_demo aite_syscohada_demo
+# paquet de livraison dist/aite_syscohada_odoo18_<version>_<date>.zip (modules AITE, OCA figés, guide, lisez-moi)
+scripts/build_release.sh
 # régénérer le référentiel des rubriques puis le XML Enterprise (jamais d'édition à la main)
 python addons/aite_syscohada_base/tools/gen_rubriques.py
 ../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http < addons/aite_syscohada_reports/tools/generate_enterprise_xml.py
 ```
 
-Résultat de référence : 104 tests (62 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`.
+Résultat de référence : 104 tests (62 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`. Données de démonstration : 15 tests (étiquette `aite_syscohada_demo`), sur une base où le module est installé.
 
 ## Architecture
 
@@ -36,6 +41,7 @@ Résultat de référence : 104 tests (62 de base et 42 avancés `test_adv_*.py`)
 | `aite_syscohada_mis` | Bilan actif, bilan passif, compte de résultat et TFT en modèles MIS Builder, générés depuis le référentiel | Community |
 | `aite_syscohada_community` | États en un clic (MIS, N et N-1), déclaration mensuelle I/TVA-IR complète (L0 à L80), écritures de liquidation, impression | Community |
 | `aite_syscohada_reports` | Les quatre états en `account.report`, XML généré depuis le référentiel | Enterprise seulement |
+| `aite_syscohada_demo` | Société « Bar-Hôtel Démo AITE » générée à l'installation : 21 mois de pièces et de déclarations (scénario chiffré dans `models/demo_scenario.py`) | Community, bases de test |
 
 Flux de données : `data/aite.syscohada.rubrique.csv` (124 rubriques, formules de comptes, cellules DSF) → `syscohada_engine.compute(company, date_from, date_to)` (moteur pur Python, référence) → rendus : assistant, MIS, `account.report`, et demain la DSF. Les tests comparent chaque rendu au moteur.
 
@@ -74,13 +80,17 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 - Le lanceur d'Odoo 18 ignore `@unittest.expectedFailure` : les tests avancés redéfinissent `_callTestMethod` (voir `test_adv_declaration_sequence.py`). Un échec attendu qui réussit fait échouer le test : retirer alors le décorateur.
 - Port 8069 occupé par un autre Odoo : `http_enable = False` ne suffit pas pendant les tests ; passer par `ODOO_CONF` une copie d'`odoo.conf` avec un autre `http_port` et `gevent_port`.
 - Le test de volume, lancé après les autres dans le même processus, peut dépasser 10 minutes (statistiques PostgreSQL faussées) : il a son étiquette `aite_syscohada_volume`.
+- Même cause pour la démonstration, générée en une seule transaction : sans `ANALYZE` des tables comptables à chaque mois, elle passe de 1 à plus de 10 minutes sur une base dont les statistiques disent ces tables vides (base copiée après une suite de tests).
+- La liquidation de TVA passe par le premier journal d'opérations diverses (ordre `sequence, type, code`) : un journal général ajouté (paie) prend une séquence plus grande.
+- Sans relevés bancaires, les paiements restent sur les comptes de paiements en attente : la démonstration met le compte du journal dans `payment_account_id` des modes de paiement.
+- Créer des pièces une à une coûte trois à cinq fois plus cher qu'en lot (`create` d'une liste, puis `action_post`, paiements lettrés par `_reconcile_plan`) : c'est ce que fait la démonstration.
 
 ## Façon de travailler
 
 - Avant un lot : lire sa section dans `ROADMAP.md` et lister les questions ouvertes qui le bloquent.
 - Tests d'abord (scénario chiffré à la main), code ensuite, toute la suite avant de conclure.
 - En fin de tâche : cocher `ROADMAP.md`, mettre à jour `README.md` si l'installation change.
-- Livraison : un seul zip de tous les modules avec son README, jamais de livraison partielle.
+- Livraison : un seul zip de tous les modules avec son README (`scripts/build_release.sh`, lisez-moi `docs/installation.md`), jamais de livraison partielle.
 
 ## Contexte métier
 
