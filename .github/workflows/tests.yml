@@ -68,8 +68,16 @@ jobs:
           db_password = odoo
           EOF
 
-      - name: Création de la base
-        run: python odoo18/odoo-bin -c aite/odoo.conf -d aite_ci -i aite_syscohada_community --stop-after-init
+      - name: Création des bases
+        env:
+          PGPASSWORD: odoo
+        # Les copies pour le volume et la démonstration sont faites avant la suite de tests : ses écritures annulées
+        # laissent des statistiques PostgreSQL qui annoncent des tables vides et rendent ces deux étapes dix fois
+        # plus lentes, selon le moment où l'autovacuum passe.
+        run: |
+          python odoo18/odoo-bin -c aite/odoo.conf -d aite_ci -i aite_syscohada_community --stop-after-init
+          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_volume
+          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_demo
 
       - name: Suite de tests
         working-directory: aite
@@ -83,19 +91,14 @@ jobs:
         env:
           ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
           PYTHON: python
-          PGPASSWORD: odoo
-        run: |
-          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_volume
-          scripts/run_tests.sh aite_ci_volume aite_syscohada_community aite_syscohada_volume
+        run: scripts/run_tests.sh aite_ci_volume aite_syscohada_community aite_syscohada_volume
 
-      - name: Données de démonstration (installation puis tests, base copiée)
+      - name: Données de démonstration (installation puis tests, base neuve)
         working-directory: aite
         env:
           ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
           PYTHON: python
-          PGPASSWORD: odoo
         run: |
-          createdb -h 127.0.0.1 -U odoo -T aite_ci aite_ci_demo
           python "$ODOO_BIN" -c odoo.conf -d aite_ci_demo -i aite_syscohada_demo --stop-after-init
           scripts/run_tests.sh aite_ci_demo aite_syscohada_demo aite_syscohada_demo
 
