@@ -11,7 +11,7 @@
 | `ROADMAP.md` | Feuille de route, état d'avancement, questions ouvertes |
 | `.claude/skills/` | Savoirs chargés par Claude Code à la demande : tests, fiscalité camerounaise, classeur DSF |
 | `scripts/` | Installation de l'environnement, lancement des tests, construction du paquet de livraison |
-| `docs/` | Guide complet en HTML (`guide-syscohada-odoo18.html`), lisez-moi d'installation du paquet (`installation.md`), cartographie des flux comptables, relevé du classeur DSF de la DGI |
+| `docs/` | Guide complet en HTML (`guide-syscohada-odoo18.html`), lisez-moi d'installation du paquet (`installation.md`), document de travail (`document-de-travail.md` : audit, correspondances, fiscalité, plan), cartographie des flux comptables, relevé du classeur DSF de la DGI |
 | `dist/` | Paquet de livraison construit par `scripts/build_release.sh` (non versionné) |
 
 ## Travailler avec Claude Code

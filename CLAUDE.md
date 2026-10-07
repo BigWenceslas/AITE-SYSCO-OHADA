@@ -96,6 +96,6 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 
 - Skill `fiscalite-cameroun` : TVA, formulaire I/TVA-IR ligne par ligne, retenues, acomptes, IS, calendrier, comptes.
 - Skill `dsf-classeur` : structure du classeur DSF, anomalies, correspondances rubriques → cellules.
-- `docs/flux-comptables-syscohada.html` : cartographie des flux comptables (lecture humaine).
+- `docs/flux-comptables-syscohada.html` : cartographie des flux comptables, 24 écritures types (lecture humaine).
 - `docs/dsf/Releve_classeur_DSF_Normal_2021.xlsx` : relevé cellule par cellule du classeur DGI.
-- Document de travail (audit, correspondances, plan) : https://claude.ai/code/artifact/829a1e6e-2d6c-415f-9dd6-5793752963b2
+- `docs/document-de-travail.md` : document de travail complet (audit d'Odoo 18, tables de correspondance commentées, fiscalité, relevé du classeur DSF, contrôles, plan par lots, avancement). 49 Ko : le lire par section, selon le besoin (titres `##`). L'original est sur claude.ai, inaccessible depuis Claude Code.
