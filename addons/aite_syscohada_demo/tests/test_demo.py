@@ -11,7 +11,7 @@ COMPTE DE RÉSULTAT 2025 (douze mois, somme des coefficients 13,0)
     + 4 × 300 000 + 12 × 16 000) = −11 632 000 ; RI −(patente 350 000 + 12 × 60 000) = −1 070 000 ; XC (valeur
     ajoutée) = 71 800 000 − 19 668 000 + 2 400 000 − 4 800 000 − 11 632 000 − 1 070 000 = 37 030 000 ;
     RK −12 × (2 400 000 + 310 800) = −32 529 600 ; RL −12 × 140 000 = −1 680 000 ; RM 0 ; XG 2 820 400.
-    Impôt : maximum (33 % × 2 820 400 = 930 732 ; acomptes et précomptes de l'année = 2,2 % × L15 cumulé
+    Impôt : maximum (27,5 % × 2 820 400 = 775 610 ; acomptes et précomptes de l'année = 2,2 % × L15 cumulé
     71 224 000 = 1 566 928) ; RS −1 566 928 ; XI 1 253 472.
     L15 cumulé 2025 = ventes 41 600 000 + nuitées 23 400 000 − solde de décembre encaissé en janvier 2026
     (1 800 000 × 1,6 × 20 % = 576 000) + séminaires 4 800 000 + 2 000 000 = 71 224 000.

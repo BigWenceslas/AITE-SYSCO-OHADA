@@ -57,8 +57,14 @@ Ordre conseillé : recette 1 et 2 → lot 3 (notes exigées) → lot 4 → lot 6
 ## Livraison et démonstration
 
 - [x] Module `aite_syscohada_demo` : société « Bar-Hôtel Démo AITE », 21 mois d'opérations (bar, hôtel, achats, retenues, paie, immobilisations, emprunt, impôt, affectation, dividendes), 20 déclarations liquidées, payées et validées, septembre 2026 en brouillon ; 15 tests chiffrés à la main ; génération en une minute
-- [x] Paquet de livraison `scripts/build_release.sh` : modules AITE, OCA figés avec leur licence, guide, lisez-moi `docs/installation.md` ; installation depuis le zip vérifiée sur une base vierge (104 tests sans échec, démonstration comprise)
+- [x] Paquet de livraison `scripts/build_release.sh` : modules AITE, OCA figés avec leur licence, guide, lisez-moi `docs/installation.md` ; installation depuis le zip vérifiée sur une base vierge (104 tests sans échec, démonstration comprise ; 106 depuis les tests des libellés en français et en anglais)
 - [x] Intégration continue : installation et tests de la démonstration, zip publié en artefact
+- [x] Moteur commun des démonstrations `aite_syscohada_demo_common` (pièces par lots, paiements lettrés, paie, amortissements, inventaires, déclarations, impôt, affectation, dividendes) ; bar-hôtel reconstruit dessus à l'identique (691 pièces, 15 tests)
+- [x] Module `aite_syscohada_demo_services` : société « Services Informatiques Démo AITE », 21 mois (infogérance avec acompte retenu par le client, régie, projets avec retenue sur honoraires, formations, support annuel et produits constatés d'avance, revente de matériel, nuage étranger avec autoliquidation et TSR, sous-traitance, paie, immobilisations, impôt, dividendes) ; 19 tests chiffrés à la main
+- [x] Guide illustré : captures d'écran d'Odoo sur les deux sociétés de démonstration (`scripts/guide/prepare_db.sh`, `scripts/guide/capture.js`) intégrées au guide HTML
+- [x] Corrigé (18.0.1.2.0) : les états MIS ouverts depuis le menu Analyse plantaient (« Invalid ids list ») faute d'`active_id` dans le contexte ; l'onglet « Retenues, acomptes, IRCM, salaires » n'affichait que 40 des 54 lignes, avec une somme de la colonne Total sans signification ; libellés français (société, état, taux, assistant) ; lignes de TVA de `l10n_cm` dans la langue de l'utilisateur, en français si elle est installée
+- [x] Démonstrations, après relecture indépendante : impôt illustratif à 27,5 % (25 % + CAC, chiffre d'affaires sous 3 milliards) au lieu de 33 % ; dotations du progiciel en 6812 et son fournisseur en 4811 ; paramètres de scénario non gérés refusés ; dépendance à `aite_syscohada_community` gardée pour la mise à jour des bases existantes
+- [ ] À valider avec l'expert-comptable : centre des impôts de rattachement des sociétés de démonstration (échéance de la DSF et du solde de l'IS : 15 mars DGE, 15 avril CIME, 15 mai CDI ; la démonstration garde le 15 mars)
 - [ ] Option : choisir le journal de la liquidation (aujourd'hui le premier journal d'opérations diverses dans l'ordre d'affichage)
 
 ## Lot 3 — Notes annexes et tableaux fiscaux

@@ -93,14 +93,14 @@ jobs:
           PYTHON: python
         run: scripts/run_tests.sh aite_ci_volume aite_syscohada_community aite_syscohada_volume
 
-      - name: Données de démonstration (installation puis tests, base neuve)
+      - name: Données de démonstration (bar-hôtel et services informatiques, installation puis tests, base neuve)
         working-directory: aite
         env:
           ODOO_BIN: ${{ github.workspace }}/odoo18/odoo-bin
           PYTHON: python
         run: |
-          python "$ODOO_BIN" -c odoo.conf -d aite_ci_demo -i aite_syscohada_demo --stop-after-init
-          scripts/run_tests.sh aite_ci_demo aite_syscohada_demo aite_syscohada_demo
+          python "$ODOO_BIN" -c odoo.conf -d aite_ci_demo -i aite_syscohada_demo,aite_syscohada_demo_services --stop-after-init
+          scripts/run_tests.sh aite_ci_demo aite_syscohada_demo,aite_syscohada_demo_services aite_syscohada_demo
 
       - name: Paquet de livraison
         working-directory: aite

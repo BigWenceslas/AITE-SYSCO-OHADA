@@ -155,3 +155,26 @@ class TestVatDeclaration(VatDeclarationCommon):
         decl.action_done()
         with self.assertRaises(UserError):
             decl.action_compute()
+
+    def test_line_labels_in_french(self):
+        """Libellés des lignes L10 à L35 : traduction française de l10n_cm, même sans langue dans le contexte
+        (déclarations calculées à l'installation ou par la génération des données de démonstration)."""
+        self.env["res.lang"]._activate_lang("fr_FR")
+        self.env.ref("base.module_l10n_cm")._update_translations(["fr_FR"])
+        decl = self.Decl.with_context(lang=None).create(
+            {"company_id": self.company.id, "date_from": "2026-11-01", "date_to": "2026-11-30"})
+        decl.action_compute()
+        self.assertEqual(self.line(decl, "CM_NORMAL").name, "10. Opérations taxables au taux normal")
+        # un utilisateur anglophone garde les libellés anglais
+        decl.with_context(lang="en_US").action_compute()
+        self.assertEqual(self.line(decl, "CM_NORMAL").name, "10. Taxable operations at normal rate")
+
+    def test_line_labels_english_without_french(self):
+        """Français non installé : le calcul sans langue dans le contexte garde les libellés anglais, sans l'erreur
+        « Invalid language code » qu'Odoo lève pour une langue non installée."""
+        if self.env["res.lang"]._get_data(code="fr_FR"):
+            self.skipTest("français installé sur cette base")
+        decl = self.Decl.with_context(lang=None).create(
+            {"company_id": self.company.id, "date_from": "2026-12-01", "date_to": "2026-12-31"})
+        decl.action_compute()
+        self.assertEqual(self.line(decl, "CM_NORMAL").name, "10. Taxable operations at normal rate")

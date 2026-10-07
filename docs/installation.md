@@ -15,7 +15,9 @@ Versions des modules et commits des sources : fichier `VERSIONS.txt`.
 | `addons/aite_syscohada_mis` | Bilan actif, bilan passif, compte de résultat et TFT dans MIS Builder |
 | `addons/aite_syscohada_community` | Menu Syscohada : états en un clic (N et N-1), déclaration mensuelle I/TVA-IR (L0 à L80), liquidation, impression |
 | `addons/aite_syscohada_reports` | Facultatif, **Odoo Enterprise seulement** : les quatre états dans le moteur de rapports d'Enterprise |
-| `addons/aite_syscohada_demo` | Facultatif, **bases de test seulement** : société de démonstration avec 21 mois d'opérations |
+| `addons/aite_syscohada_demo` | Facultatif, **bases de test seulement** : société de démonstration « Bar-Hôtel Démo AITE », 21 mois d'opérations |
+| `addons/aite_syscohada_demo_services` | Facultatif, **bases de test seulement** : société de démonstration « Services Informatiques Démo AITE », 21 mois d'opérations |
+| `addons/aite_syscohada_demo_common` | Moteur commun des deux démonstrations (installé avec elles, sans données) |
 | `oca/` | Dépendances OCA, branche 18.0, licence AGPL-3 : `mis_builder`, `date_range`, `report_xlsx` |
 | `docs/` | Guide complet (`guide-syscohada-odoo18.html`) et cartographie des flux comptables |
 
@@ -52,11 +54,17 @@ au bilan passif, au compte de résultat, au tableau des flux de trésorerie et a
 
 ## Données de démonstration (facultatif)
 
-À installer uniquement sur une base de test ou de formation, jamais sur une base de production :
+Deux sociétés de démonstration, à installer uniquement sur une base de test ou de formation, jamais sur une base
+de production. Chacune s'installe seule ; les deux peuvent cohabiter dans la même base.
 
 ```bash
-odoo-bin -c odoo.conf -d BASE_DE_TEST -i aite_syscohada_demo --stop-after-init
+odoo-bin -c odoo.conf -d BASE_DE_TEST -i aite_syscohada_demo,aite_syscohada_demo_services --stop-after-init
 ```
+
+Pour des libellés en français partout (lignes de TVA de la localisation comprises), créer la base en français :
+ajouter `--load-language=fr_FR` à la première installation.
+
+### Bar-hôtel (`aite_syscohada_demo`)
 
 Le module crée la société « Bar-Hôtel Démo AITE » (Douala, FCFA, plan « cm ») et génère environ 700 pièces de
 janvier 2025 à septembre 2026 :
@@ -69,20 +77,38 @@ janvier 2025 à septembre 2026 :
 
 Les 21 déclarations I/TVA-IR sont calculées. Les vingt premières sont liquidées, payées le 15 du mois suivant et validées. Celle de septembre 2026 reste en brouillon pour essayer la liquidation. Pour explorer, choisir la société « Bar-Hôtel Démo AITE » dans le sélecteur de sociétés, puis ouvrir le menu Syscohada.
 
+### Services informatiques (`aite_syscohada_demo_services`)
+
+Le module crée la société « Services Informatiques Démo AITE » (Douala, FCFA, plan « cm ») et génère les
+opérations d'une société de services de janvier 2025 à septembre 2026 :
+- infogérance mensuelle d'une banque, avec TVA sur encaissement et acompte de 2 % retenu par le client ;
+- conseil en régie facturé au jour, projets au forfait avec retenue de 5 % sur honoraires, formations ;
+- contrat de support annuel facturé d'avance, avec produits constatés d'avance au 31/12/2025 ;
+- revente de matériel informatique (stock inventorié) ;
+- services en nuage d'un éditeur étranger avec TVA autoliquidée et TSR, sous-traitance d'un développeur
+  indépendant avec retenue, loyer avec précompte ;
+- paie, ordinateurs, serveurs et progiciel amortis, impôt sur le résultat, affectation et dividendes avec IRCM.
+
+Mêmes déclarations que le bar-hôtel : vingt validées, septembre 2026 en brouillon. On y voit en particulier le
+report du crédit d'acompte (lignes L55 puis L53) né des retenues subies.
+
 Durée de la génération : environ une minute. L'installation depuis l'interface fonctionne aussi. Sur un serveur lancé avec des workers, relever temporairement `limit_time_cpu` et `limit_time_real` (par exemple à 600) le temps de l'installation.
 
-La paie et l'impôt sur le résultat de la démonstration sont illustratifs. Les taxes de retenue « taux à valider » y sont activées, dans cette seule société.
+La paie et l'impôt sur le résultat des démonstrations sont illustratifs. Les taxes de retenue « taux à valider » y sont activées, dans ces seules sociétés.
 
 ## Mise à jour
 
-Remplacer les dossiers des modules par ceux du nouveau paquet, redémarrer Odoo, puis mettre à jour :
+Remplacer les dossiers des modules par ceux du nouveau paquet (y compris les nouveaux modules,
+`aite_syscohada_demo_common` notamment), redémarrer Odoo, puis mettre à jour le socle : tous les modules AITE qui en
+dépendent sont mis à jour avec lui, et les nouvelles dépendances s'installent.
 
 ```bash
-odoo-bin -c odoo.conf -d MA_BASE -u aite_syscohada_community --stop-after-init
+odoo-bin -c odoo.conf -d MA_BASE -u aite_syscohada_base --stop-after-init
 ```
 
 Les scripts de migration fournis relancent le paramétrage quand il change. Le paramétrage ne modifie jamais un
-compte ou une taxe déjà utilisé par des écritures comptabilisées.
+compte ou une taxe déjà utilisé par des écritures comptabilisées. Les données de démonstration déjà générées ne
+sont pas recalculées par une mise à jour : pour la dernière version des scénarios, créer une nouvelle base de test.
 
 ## Vérifier l'installation
 
@@ -93,9 +119,10 @@ odoo-bin -c odoo.conf -d BASE_DE_TEST -u aite_syscohada_base,aite_syscohada_mis,
   --test-enable --test-tags aite_syscohada --stop-after-init
 ```
 
-Résultat attendu : 104 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
+Résultat attendu : 106 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
 connus listés ci-dessous. Après installation des données de démonstration,
-`-u aite_syscohada_demo --test-enable --test-tags aite_syscohada_demo` lance leurs 15 tests.
+`-u aite_syscohada_demo,aite_syscohada_demo_services --test-enable --test-tags aite_syscohada_demo` lance leurs
+34 tests (15 pour le bar-hôtel, 19 pour les services informatiques).
 
 ## Limites connues
 

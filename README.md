@@ -11,7 +11,7 @@
 | `ROADMAP.md` | Feuille de route, état d'avancement, questions ouvertes |
 | `.claude/skills/` | Savoirs chargés par Claude Code à la demande : tests, fiscalité camerounaise, classeur DSF |
 | `scripts/` | Installation de l'environnement, lancement des tests, construction du paquet de livraison |
-| `docs/` | Guide complet en HTML (`guide-syscohada-odoo18.html`), lisez-moi d'installation du paquet (`installation.md`), document de travail (`document-de-travail.md` : audit, correspondances, fiscalité, plan), cartographie des flux comptables, relevé du classeur DSF de la DGI |
+| `docs/` | Guide complet en HTML (`guide-syscohada-odoo18.html`, un seul fichier illustré de 27 captures d'écran ; source `guide/guide.md` et captures `guide/captures/`, outils dans `scripts/guide/`), lisez-moi d'installation du paquet (`installation.md`), document de travail (`document-de-travail.md` : audit, correspondances, fiscalité, plan), cartographie des flux comptables, relevé du classeur DSF de la DGI |
 | `dist/` | Paquet de livraison construit par `scripts/build_release.sh` (non versionné) |
 
 ## Travailler avec Claude Code
@@ -22,7 +22,7 @@
 
 ## Modules
 
-Trois modules Community, sans aucune dépendance à Odoo Enterprise, un module facultatif pour Enterprise et un module facultatif de données de démonstration.
+Trois modules Community, sans aucune dépendance à Odoo Enterprise, un module facultatif pour Enterprise et deux modules facultatifs de données de démonstration (avec leur moteur commun).
 
 | Module | Rôle |
 | --- | --- |
@@ -31,6 +31,8 @@ Trois modules Community, sans aucune dépendance à Odoo Enterprise, un module f
 | `aite_syscohada_community` | Menus « Syscohada » ouvrant chaque état en un clic (exercices N et N-1, exports PDF et Excel de MIS), déclaration mensuelle I/TVA-IR complète (lignes L0 à L80), écritures de liquidation de la TVA et de l'acompte, impression PDF |
 | `aite_syscohada_reports` | Les quatre états en rapports `account.report`, pour Odoo Enterprise seulement (facultatif) |
 | `aite_syscohada_demo` | Société de démonstration « Bar-Hôtel Démo AITE » : 21 mois d'opérations (janvier 2025 à septembre 2026) et de déclarations I/TVA-IR, générés à l'installation ; bases de test seulement (facultatif) |
+| `aite_syscohada_demo_services` | Société de démonstration « Services Informatiques Démo AITE » : infogérance, régie, projets, formations, support annuel, revente de matériel, mêmes 21 mois ; bases de test seulement (facultatif) |
+| `aite_syscohada_demo_common` | Moteur commun des démonstrations (pièces par lots, paie, amortissements, déclarations, clôture), sans données |
 
 ## Installation
 
@@ -44,18 +46,28 @@ Le menu Facturation (ou Comptabilité) > Analyse > Syscohada donne accès à : �
 
 ### Paquet de livraison
 
-`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : les cinq modules AITE, les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (avec leur licence AGPL-3), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge : 104 tests sans échec.
+`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : les sept modules AITE, les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (avec leur licence AGPL-3), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge : 106 tests sans échec.
 
 ### Données de démonstration
 
-Sur une base de test seulement : `odoo-bin -c odoo.conf -d <base> -i aite_syscohada_demo --stop-after-init` (environ une minute). Le module crée la société « Bar-Hôtel Démo AITE » et environ 700 pièces :
+Sur une base de test seulement : `odoo-bin -c odoo.conf -d <base> -i aite_syscohada_demo,aite_syscohada_demo_services --stop-after-init` (une à deux minutes ; ajouter `--load-language=fr_FR` à la création de la base pour des libellés de TVA en français). Chaque module s'installe aussi seul.
+
+`aite_syscohada_demo` crée la société « Bar-Hôtel Démo AITE » et environ 700 pièces :
 - ventes du bar encaissées en espèces, Orange Money et MTN Mobile Money ;
 - nuitées et séminaires avec TVA sur encaissements ;
 - achats avec précompte, loyers, honoraires, logiciel étranger (TVA autoliquidée et TSR) ;
 - paie, immobilisations, emprunt, stocks, impôt, affectation du résultat et dividendes ;
 - 20 déclarations I/TVA-IR liquidées, payées et validées, plus celle de septembre 2026 en brouillon.
 
-Le scénario et ses calculs à la main sont dans `addons/aite_syscohada_demo/models/demo_scenario.py`.
+`aite_syscohada_demo_services` crée la société « Services Informatiques Démo AITE » :
+- infogérance d'une banque (TVA sur encaissement, acompte de 2 % retenu par le client), régie au jour, projets au forfait avec retenue sur honoraires, formations ;
+- contrat de support annuel facturé d'avance et produits constatés d'avance au 31/12/2025 ;
+- revente de matériel informatique, stock inventorié ;
+- services en nuage d'un éditeur étranger (TVA autoliquidée et TSR), sous-traitance avec retenue, loyer avec précompte ;
+- paie, ordinateurs, serveurs et progiciel amortis, impôt, affectation et dividendes avec IRCM ;
+- les mêmes 20 déclarations validées et septembre 2026 en brouillon, dont un crédit d'acompte reporté (L55 vers L53).
+
+Les scénarios et leurs calculs à la main sont dans `addons/aite_syscohada_demo/models/demo_scenario.py`, `addons/aite_syscohada_demo_services/models/scenario.py` et les tests de chaque module.
 
 ## Déclaration mensuelle I/TVA-IR (lot 2)
 
@@ -87,7 +99,7 @@ Paramétrage ajouté au socle (version 18.0.1.1.0) : 22 comptes de retenues et d
 scripts/run_tests.sh <base> aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
 ```
 
-Résultat sur Odoo 18 Community, base vierge, 6 octobre 2026 : 104 tests (62 de base et 42 avancés), 0 échec, dont 3 échecs attendus qui documentent des défauts connus listés dans `ROADMAP.md`. Le test de volume se lance à part : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume` (1 test, 38 s). Les données de démonstration ont leurs 15 tests, à lancer sur une base où `aite_syscohada_demo` est installé : `scripts/run_tests.sh <base> aite_syscohada_demo aite_syscohada_demo`. L'intégration continue `.github/workflows/tests.yml` exécute le tout à chaque push et construit le paquet de livraison.
+Résultat sur Odoo 18 Community, base vierge, 7 octobre 2026 : 106 tests (64 de base et 42 avancés), 0 échec, dont 3 échecs attendus qui documentent des défauts connus listés dans `ROADMAP.md`. Le test de volume se lance à part : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume` (1 test, 36 s). Les données de démonstration ont leurs 34 tests (15 pour le bar-hôtel, 19 pour les services informatiques), à lancer sur une base où les deux modules sont installés : `scripts/run_tests.sh <base> aite_syscohada_demo,aite_syscohada_demo_services aite_syscohada_demo`. L'intégration continue `.github/workflows/tests.yml` exécute le tout à chaque push et construit le paquet de livraison.
 
 ## Autres besoins couverts en Community par des modules OCA (branche 18.0)
 

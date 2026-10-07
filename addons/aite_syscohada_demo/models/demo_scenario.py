@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Paramètres du scénario de démonstration : un bar-hôtel de Douala, de janvier 2025 à septembre 2026.
 
-Ce fichier ne contient que des données. Le générateur (``demo_generator.py``) les lit pour créer les pièces ;
+Ce fichier ne contient que des données. Le générateur (``demo_generator.py``, sur le moteur commun
+``aite_syscohada_demo_common``) les lit pour créer les pièces ;
 les tests (``tests/test_demo.py``) recalculent à la main les montants attendus.
 
 Tous les montants sont en FCFA (XAF, sans décimale). Les montants hors taxes soumis à la TVA de 19,25 % sont des
@@ -39,7 +40,7 @@ OPÉRATIONS PONCTUELLES
 
 SIMPLIFICATIONS ASSUMÉES (démonstration, pas conseil fiscal)
     Paie globale illustrative (le module de paie camerounaise n'est pas encore livré) ; impôt sur le résultat
-    illustratif : maximum de 33 % du résultat comptable et des acomptes versés, sans passage au résultat fiscal ;
+    illustratif : maximum de 27,5 % du résultat comptable et des acomptes versés, sans passage au résultat fiscal ;
     dotations dès le mois d'acquisition, sans prorata temporis ; avoir de ristourne hors TVA (la régularisation de
     TVA sur avoir n'est pas illustrée) ; taxes de retenue « taux à valider » activées dans la seule société de
     démonstration.
@@ -65,7 +66,7 @@ EXERCICE 2025, CALCUL À LA MAIN
     Acomptes de l'année : 2 % + 10 % de CAC = 2,2 % du chiffre d'affaires déclaré (ligne L15), avant déduction des
         précomptes subis. L15 cumulé = ventes 41 600 000 + nuitées encaissées 23 400 000 − 576 000 (solde de
         décembre, encaissé en janvier 2026) + séminaires 4 800 000 + 2 000 000 = 71 224 000 ; 2,2 % = 1 566 928
-    RS  impôt illustratif = maximum (33 % × 2 820 400 = 930 732 ; acomptes 1 566 928)     = −1 566 928
+    RS  impôt illustratif = maximum (27,5 % × 2 820 400 = 775 610 ; acomptes 1 566 928)   = −1 566 928
     XI  2 820 400 − 1 566 928                                                             = 1 253 472
 
 AFFECTATION DU RÉSULTAT 2025 (assemblée du 30 juin 2026)
@@ -94,15 +95,6 @@ START = (2025, 1)
 END = (2026, 9)
 COEF_DIXIEMES = [9, 9, 10, 10, 10, 11, 12, 12, 10, 10, 11, 16]  # janvier à décembre
 
-
-def months():
-    """Mois du scénario, de START à END inclus : [(année, mois), ...]."""
-    year, month = START
-    result = []
-    while (year, month) <= END:
-        result.append((year, month))
-        year, month = (year + 1, 1) if month == 12 else (year, month + 1)
-    return result
 
 
 # ------------------------------------------------------------------ société (coordonnées fictives)
@@ -173,8 +165,13 @@ EMPRUNT = {"date": date(2026, 1, 15), "montant": 12_000_000, "capital_mensuel": 
 
 INVENTAIRES = {date(2025, 12, 31): 2_400_000, date(2026, 9, 30): 2_800_000}
 RISTOURNE = {"constatee": date(2025, 12, 31), "montant": 300_000, "imputee": date(2026, 2, 10)}
-TAUX_IS_ILLUSTRATIF = 0.33           # 30 % + 10 % de CAC ; montant illustratif, à établir par l'expert-comptable
-IMPUTATION_IS = date(2026, 3, 15)    # imputation des acomptes sur l'impôt 2025 (date limite de la DSF)
+# Impôt illustratif : 25 % (chiffre d'affaires d'au plus 3 milliards) + 10 % de CAC = 27,5 % (fiche IS de la DGI,
+# skill fiscalite-cameroun), appliqué au résultat comptable ; l'impôt réel, sur le résultat fiscal, est à établir par
+# l'expert-comptable
+TAUX_IS_ILLUSTRATIF = 0.275
+# Imputation des acomptes sur l'impôt 2025. Date de démonstration : l'échéance de la DSF et du solde de l'IS dépend
+# du centre des impôts de rattachement (15 mars DGE, 15 avril CIME, 15 mai CDI)
+IMPUTATION_IS = date(2026, 3, 15)
 AFFECTATION = date(2026, 6, 30)      # assemblée générale ordinaire
 DIVIDENDES = date(2026, 7, 20)       # versement, IRCM déclaré en ligne L57 de la déclaration de juillet 2026
 
@@ -200,9 +197,3 @@ PARTNERS = {
 TAXES_ACTIVEES = ("precompte_achats", "retenue_loyers", "retenue_honoraires", "retenue_tsr",
                   "autoliquidation_services", "subie_acompte_ca")
 
-# Comptes réglés le 15 du mois suivant avec la déclaration I/TVA-IR (soldes créditeurs en fin de mois)
-COMPTES_DECLARATION = ("444100", "441100", "447110", "447120", "447130", "447140", "447150", "447160", "447161",
-                       "447170", "447180", "447210", "447215", "447220", "447230", "447240", "447250", "447260")
-COMPTES_CNPS = ("431100", "431200", "431300")
-# Acomptes et précomptes imputables sur l'impôt sur le résultat
-COMPTES_ACOMPTES_IS = ("449210", "449220", "449230", "449240", "449250")

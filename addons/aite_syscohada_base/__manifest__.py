@@ -3,7 +3,7 @@
     "name": "SYSCOHADA révisé – socle AITE (Cameroun)",
     "summary": "Rubriques des états SYSCOHADA, moteur de calcul indépendant de l'édition, "
                "corrections du plan comptable, taxes camerounaises complémentaires et contrôles.",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "category": "Accounting/Localizations",
     "author": "AITE Consulting",
     "website": "https://aite-consulting.com",

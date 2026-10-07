@@ -32,14 +32,15 @@ class AiteCmVatDeclaration(models.Model):
     _description = "Déclaration mensuelle de TVA (Cameroun)"
     _order = "date_from desc, id desc"
 
-    name = fields.Char(compute="_compute_name", store=True)
-    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
+    name = fields.Char("Déclaration", compute="_compute_name", store=True)
+    company_id = fields.Many2one("res.company", string="Société", required=True, default=lambda self: self.env.company)
     currency_id = fields.Many2one(related="company_id.currency_id")
     date_from = fields.Date("Du", required=True,
                             default=lambda self: fields.Date.today().replace(day=1) - relativedelta(months=1))
     date_to = fields.Date("Au", required=True,
                           default=lambda self: fields.Date.today().replace(day=1) - relativedelta(days=1))
-    state = fields.Selection([("draft", "Brouillon"), ("done", "Validée")], default="draft", required=True)
+    state = fields.Selection([("draft", "Brouillon"), ("done", "Validée")], string="État", default="draft",
+                             required=True)
     line_ids = fields.One2many("aite.cm.vat.declaration.line", "declaration_id", string="Lignes")
     # saisies du déclarant (lignes « external » du rapport l10n_cm)
     excise_base = fields.Monetary("L11 – Droits d'accises (base)")
@@ -99,7 +100,12 @@ class AiteCmVatDeclaration(models.Model):
 
     def _evaluate(self):
         self.ensure_one()
+        # libellés des lignes dans la langue de l'utilisateur ; sans langue dans le contexte (installation,
+        # génération), en français si le français est installé (une langue non installée ferait échouer le calcul)
         report = self.env.ref("l10n_cm.account_tax_report_cm")
+        lang = self.env.lang or ("fr_FR" if self.env["res.lang"]._get_data(code="fr_FR") else None)
+        if lang:
+            report = report.with_context(lang=lang)
         tags = self._tag_amounts()
         lines = {line.code: line for line in report.line_ids if line.code}
         cache = {}

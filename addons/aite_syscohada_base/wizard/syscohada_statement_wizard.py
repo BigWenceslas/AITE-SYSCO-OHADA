@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from ..models.syscohada_rubrique import STATEMENTS
 
 
@@ -9,7 +9,7 @@ class AiteSyscohadaStatementWizard(models.TransientModel):
     _name = "aite.syscohada.statement.wizard"
     _description = "États SYSCOHADA et contrôles"
 
-    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
+    company_id = fields.Many2one("res.company", string="Société", required=True, default=lambda self: self.env.company)
     date_from = fields.Date("Du", required=True, default=lambda self: fields.Date.today().replace(month=1, day=1))
     date_to = fields.Date("Au", required=True, default=lambda self: fields.Date.today().replace(month=12, day=31))
     compare = fields.Boolean("Exercice N-1", default=True)
@@ -20,6 +20,10 @@ class AiteSyscohadaStatementWizard(models.TransientModel):
     flux_line_ids = fields.One2many("aite.syscohada.statement.line", "wizard_id", domain=[("statement", "=", "flux")])
     check_ids = fields.One2many("aite.syscohada.check.line", "wizard_id", string="Contrôles")
     computed = fields.Boolean(readonly=True)
+
+    def _compute_display_name(self):
+        for wizard in self:
+            wizard.display_name = _("États et contrôles")
 
     def action_compute(self):
         self.ensure_one()

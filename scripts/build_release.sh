@@ -6,7 +6,8 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OCA="$(cd "${1:-$ROOT/../oca}" && pwd)"
-MODULES="aite_syscohada_base aite_syscohada_mis aite_syscohada_community aite_syscohada_reports aite_syscohada_demo"
+MODULES="aite_syscohada_base aite_syscohada_mis aite_syscohada_community aite_syscohada_reports
+  aite_syscohada_demo_common aite_syscohada_demo aite_syscohada_demo_services"
 OCA_MODULES="mis-builder/mis_builder server-ux/date_range reporting-engine/report_xlsx"
 
 version() { python3 -c "import ast, sys; print(ast.literal_eval(open(sys.argv[1]).read())['version'])" "$1/__manifest__.py"; }

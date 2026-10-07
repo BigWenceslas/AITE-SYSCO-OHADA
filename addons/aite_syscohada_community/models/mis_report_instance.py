@@ -29,4 +29,8 @@ class MisReportInstance(models.Model):
 
     @api.model
     def _aite_syscohada_open(self, statement):
-        return self._aite_syscohada_instance(statement).preview()
+        """Aperçu de l'état. Le widget de MIS Builder 18 lit l'instance dans ``active_id`` du contexte (le bouton
+        « Aperçu » de la liste l'y met) : une action de menu doit l'y mettre aussi, sinon l'écran plante."""
+        instance = self._aite_syscohada_instance(statement)
+        return instance.with_context(
+            active_model=instance._name, active_id=instance.id, active_ids=instance.ids).preview()
