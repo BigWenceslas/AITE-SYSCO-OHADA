@@ -89,9 +89,26 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
          --find-links /tmp/aite/paquets-python -r /tmp/aite/requirements.txt
      USER odoo
      ```
+   - Odoo pour Windows (installateur officiel, service `odoo-server-18.0`) : ouvrir l'invite de commandes **en
+     tant qu'administrateur** (clic droit sur « Invite de commandes » > Exécuter en tant qu'administrateur), se
+     placer dans le dossier décompressé du paquet, puis lancer le Python livré avec Odoo (adapter le nom du dossier
+     d'installation d'Odoo, par exemple `C:\Program Files\Odoo 18.0` suivi d'une date) :
+
+     ```bat
+     cd /d C:\chemin\vers\aite_syscohada_odoo18
+     "C:\Program Files\Odoo 18.0\python\python.exe" -m pip install --no-index --find-links paquets-python -r requirements.txt
+     net stop odoo-server-18.0
+     net start odoo-server-18.0
+     ```
+
+     Sans les droits d'administrateur, pip annonce « Defaulting to user installation » et installe dans le profil
+     de l'utilisateur, que le service Odoo (compte LOCALSERVICE) ne voit pas : l'erreur demeure. Le service peut
+     aussi se redémarrer dans services.msc (« odoo-server-18.0 », Redémarrer). Sur Windows, `addons_path` se règle
+     dans `C:\Program Files\Odoo 18.0…\server\odoo.conf`, chemins séparés par des virgules.
    - Odoo.sh : rien à faire, `requirements.txt` à la racine de la branche suffit (étape 2).
 
-   Contrôle : `python3 -c "import openupgradelib"`, lancé avec le Python d'Odoo, n'affiche aucune erreur.
+   Contrôle : `python3 -c "import openupgradelib"`, lancé avec le Python d'Odoo (sous Windows :
+   `"C:\Program Files\Odoo 18.0\python\python.exe" -c "import openupgradelib"`), n'affiche aucune erreur.
 4. Redémarrer Odoo. Activer le mode développeur, puis Apps > Mettre à jour la liste des Apps.
    Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module ; sinon, Odoo ne voit pas les
    modules OCA (voir Dépannage).
@@ -225,7 +242,7 @@ connus listés ci-dessous. Après installation des données de démonstration,
 | En ligne de commande, `-i aite_syscohada_community` se termine sans erreur mais rien n'est installé ; le journal contient « invalid module names, ignored: aite_syscohada_community » | `addons_path` désigne la racine du paquet (`aite_syscohada_odoo18`) ou un dossier parent, au lieu du dossier qui contient directement les modules | Corriger `addons_path` (contrôle de l'étape 2), redémarrer Odoo, relancer la commande |
 | « Vous essayez d'installer le module "aite_syscohada_reports" qui dépend du module "account_reports". Mais ce dernier n'est pas disponible sur votre système. » | Module réservé à Odoo Enterprise, activé sur Odoo Community | Rien à faire : sur Community, les états sont dans MIS Builder (Facturation > Analyse > Syscohada) ; ne pas activer ce module |
 | « ModuleNotFoundError: No module named 'odoo_test_helper' » à l'installation (base non créée, modules non installés) | Modules OCA venant d'une autre source (dépôts OCA complets, avec leurs tests), installés avec `--test-enable` ou par un build de développement d'Odoo.sh | Utiliser les modules OCA du paquet, livrés sans tests ; ou installer sans `--test-enable` ; ou `pip install odoo-test-helper` |
-| « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | Paquet Python de `mis_builder` absent de l'environnement d'Odoo | Installer `openupgradelib` selon l'étape 3 (environnement virtuel, paquet .deb, image Docker dérivée, Odoo.sh), puis redémarrer Odoo et relancer l'installation |
+| « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | Paquet Python de `mis_builder` absent de l'environnement d'Odoo | Installer `openupgradelib` selon l'étape 3 (environnement virtuel, paquet .deb, image Docker dérivée, Windows en administrateur avec le Python d'Odoo, Odoo.sh), puis redémarrer Odoo et relancer l'installation |
 | « error: externally-managed-environment » en lançant pip | Python système de Debian 12, d'Ubuntu 24.04 ou de l'image Docker officielle, protégé par la PEP 668 | Ajouter `--break-system-packages` à la commande de l'étape 3 (avec `sudo` pour un Odoo installé par le paquet .deb) ; image Docker : image dérivée de l'étape 3 |
 | « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés dans des langues non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | Les modules AITE n'apparaissent pas dans Apps | Liste des Apps non mise à jour, dossier absent de `addons_path`, ou `addons_path` qui pointe sur la racine du paquet au lieu de son dossier `addons/` | Mode développeur, Apps > Mettre à jour la liste des Apps ; vérifier `addons_path` (contrôle de l'étape 2) et redémarrer Odoo |
