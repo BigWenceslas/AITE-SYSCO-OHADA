@@ -46,7 +46,7 @@ Le menu Facturation (ou Comptabilité) > Analyse > Syscohada donne accès à : �
 
 ### Paquet de livraison
 
-`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : les sept modules AITE, les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (avec leur licence AGPL-3), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge : 106 tests sans échec.
+`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : dans un même dossier `addons/` (un seul chemin à déclarer dans `addons_path`), les sept modules AITE et les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (licences AGPL-3 dans `licences/`) ; `requirements.txt` (`openupgradelib`), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge : 106 tests sans échec.
 
 ### Données de démonstration
 

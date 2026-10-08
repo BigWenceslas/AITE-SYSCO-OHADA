@@ -28,7 +28,7 @@ scripts/run_tests.sh aite_demo aite_syscohada_demo,aite_syscohada_demo_services 
 scripts/guide/prepare_db.sh aite_guide && node scripts/guide/capture.js http://127.0.0.1:8069 <dossier des PNG>
 python scripts/guide/convert_captures.py <dossier des PNG> docs/guide/captures   # WebP (Pillow)
 python scripts/guide/build_guide.py docs/guide/guide.md docs/guide-syscohada-odoo18.html   # guide autonome (markdown)
-# paquet de livraison dist/aite_syscohada_odoo18_<version>_<date>.zip (modules AITE, OCA figés, guide, lisez-moi)
+# paquet de livraison dist/aite_syscohada_odoo18_<version>_<date>.zip (modules AITE et OCA figés dans un seul addons/, guide, lisez-moi)
 scripts/build_release.sh
 # régénérer le référentiel des rubriques puis le XML Enterprise (jamais d'édition à la main)
 python addons/aite_syscohada_base/tools/gen_rubriques.py
@@ -92,6 +92,7 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 - Créer des pièces une à une coûte trois à cinq fois plus cher qu'en lot (`create` d'une liste, puis `action_post`, paiements lettrés par `_reconcile_plan`) : c'est ce que fait la démonstration.
 - Le widget de MIS Builder 18 retrouve l'instance par `active_id` du contexte, pas par `res_id` : une action qui ouvre l'aperçu d'un état doit l'y mettre (`_aite_syscohada_open`), sinon l'écran affiche « Invalid ids list ».
 - Les libellés des lignes L10 à L35 viennent de `l10n_cm`, dans la langue du contexte (français par défaut) : une base créée sans `--load-language=fr_FR` n'a pas leur traduction et les déclarations générées à l'installation restent en anglais.
+- Paquet : les modules OCA vont dans le même dossier `addons/` que les modules AITE. Rangés à part (`oca/`), ils n'ont pas été déclarés dans `addons_path` sur une recette : « … dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » `build_release.sh` vérifie que chaque dépendance est livrée ou fournie par Odoo.
 - Captures d'écran avec Playwright : Odoo n'atteint jamais l'état `networkidle` (bus de notifications) ; attendre un sélecteur de la vue (`scripts/guide/capture.js`).
 
 ## Façon de travailler

@@ -46,15 +46,17 @@ data_dir = <travail>/odoo-data
 
 ### Depuis le paquet de livraison
 
-Le paquet `aite_syscohada_odoo18_<version>_<date>.zip`, construit par `scripts/build_release.sh`, contient les sept modules AITE (`addons/`), les trois modules OCA aux versions testées (`oca/`, licence AGPL-3), ce guide et un lisez-moi d'installation (`README.md`, copie de `docs/installation.md`). Le fichier `VERSIONS.txt` donne la version de chaque module et les commits d'origine.
+Le paquet `aite_syscohada_odoo18_<version>_<date>.zip`, construit par `scripts/build_release.sh`, contient dans un même dossier `addons/` les sept modules AITE et les trois modules OCA dont ils dépendent (`mis_builder`, `date_range`, `report_xlsx`, aux versions testées), le fichier `requirements.txt` (`openupgradelib`), les licences OCA (`licences/`), ce guide et un lisez-moi d'installation (`README.md`, copie de `docs/installation.md`). Le fichier `VERSIONS.txt` donne la version de chaque module et les commits d'origine.
 
-1. Copier le contenu de `addons/` et de `oca/` dans un dossier d'extensions du serveur et l'ajouter à `addons_path` (garder les versions OCA déjà présentes s'il y en a).
-2. `pip install openupgradelib` dans l'environnement Python d'Odoo, puis redémarrer Odoo.
+1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur et l'ajouter à `addons_path`. Garder les versions OCA déjà présentes sur le serveur s'il y en a.
+2. `pip install -r requirements.txt` dans l'environnement Python d'Odoo, puis redémarrer Odoo.
 3. Mettre à jour la liste des applications et installer `aite_syscohada_community` (affiché comme application) ; sur Enterprise, `aite_syscohada_reports` en plus.
+
+Si Odoo répond « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. », il ne voit pas les modules OCA : ils manquent dans le dossier copié (les paquets antérieurs au 8 octobre 2026 les rangeaient à part, dans `oca/`). Les copier à côté des modules AITE, redémarrer Odoo, mettre à jour la liste des applications, puis relancer l'installation.
 
 ![Applications filtrées sur « SYSCOHADA » : les modules AITE installés (socle, adaptation Community, états MIS, moteur et données de démonstration), le module Enterprise facultatif, non installé (bouton « Activer »), et la localisation OHADA d'Odoo.](captures/01-applications.webp)
 
-L'installation depuis le zip extrait a été vérifiée sur une base vierge (7 octobre 2026, version 18.0.1.2.0) : module principal en 37 secondes, puis 106 tests sans échec ; sur une copie de cette base, les deux sociétés de démonstration s'installent en 103 secondes et passent leurs 34 tests.
+L'installation depuis le zip extrait a été vérifiée sur une base vierge en français (8 octobre 2026, version 18.0.1.2.0, seul le dossier `addons/` du paquet déclaré dans `addons_path`), comme le fait le bouton « Activer » : module principal et modules OCA en 35 secondes, puis 106 tests sans échec ; sur une copie de cette base, les deux sociétés de démonstration s'installent en 103 secondes et passent leurs 34 tests.
 
 ### Données de démonstration
 
@@ -1072,7 +1074,8 @@ Quatre fonctions sont à adapter : `_aite_tax_tags` et `_aite_repartition` dans 
 | --- | --- | --- |
 | Le menu Syscohada est absent de Facturation > Analyse | Le menu exige le groupe `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes » ; vérifier que `aite_syscohada_community` est installé |
 | Le plan comptable et les écritures sont invisibles | Même droit technique manquant | Même remède ; créer et valider une déclaration exige en plus le profil Administrateur |
-| `External dependency openupgradelib not installed` | `mis_builder` déclare `openupgradelib` comme dépendance Python | `../venv/bin/pip install openupgradelib`, puis relancer l'installation |
+| « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Applications > Mettre à jour la liste des applications, puis relancer l'installation. Contrôle : sans le filtre « Applications », une recherche de `mis_builder` doit trouver « MIS Builder » |
+| « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | `mis_builder` déclare `openupgradelib` comme dépendance Python | `pip install -r requirements.txt` (paquet de livraison) ou `../venv/bin/pip install openupgradelib`, puis redémarrer Odoo et relancer l'installation |
 | « Oups ! Un problème est survenu », détail « Invalid ids list », en ouvrant Bilan actif, Bilan passif, Compte de résultat ou TFT depuis le menu Analyse | Versions 18.0.1.1.0 et antérieures : le widget de MIS Builder 18 cherche l'instance dans le contexte, que l'action du menu ne renseignait pas | Mettre à jour `aite_syscohada_community` en 18.0.1.2.0 ; en attendant, ouvrir l'état par Analyse > MIS Reporting > MIS Reports, bouton « Aperçu » |
 | Lignes L10 à L35 en anglais (« 10. Taxable operations at normal rate ») | Français installé après le calcul de la déclaration, ou utilisateur en anglais | Installer le français, puis « Calculer » sur les déclarations en brouillon ; les libellés suivent la langue de l'utilisateur |
 
