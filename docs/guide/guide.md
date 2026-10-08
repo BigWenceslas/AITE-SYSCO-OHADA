@@ -56,7 +56,7 @@ Si Odoo répond « Vous essayez d'installer le module "aite_syscohada_mis" qui d
 
 ![Applications filtrées sur « SYSCOHADA » : les modules AITE installés (socle, adaptation Community, états MIS, moteur et données de démonstration), le module Enterprise facultatif, non installé (bouton « Activer »), et la localisation OHADA d'Odoo.](captures/01-applications.webp)
 
-L'installation depuis le zip extrait a été vérifiée sur une base vierge en français (8 octobre 2026, version 18.0.1.2.0, seul le dossier `addons/` du paquet déclaré dans `addons_path`), comme le fait le bouton « Activer » : module principal et modules OCA en 35 secondes, puis 106 tests sans échec ; sur une copie de cette base, les deux sociétés de démonstration s'installent en 103 secondes et passent leurs 34 tests.
+L'installation depuis le zip extrait a été vérifiée sur une base vierge en français (8 octobre 2026, version 18.0.1.3.0, seul le dossier `addons/` du paquet déclaré dans `addons_path`), comme le fait le bouton « Activer » : module principal et modules OCA en 37 secondes, passage d'une nouvelle société au plan « cm » par la Localisation fiscale (langues fr_BE, fr_CA et fr_CH présentes mais inactives), puis 107 tests sans échec ; sur une copie de cette base, les deux sociétés de démonstration s'installent en 114 secondes et passent leurs 34 tests.
 
 ### Données de démonstration
 
