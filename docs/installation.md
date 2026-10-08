@@ -101,6 +101,14 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
      net start odoo-server-18.0
      ```
 
+     `C:\chemin\vers\aite_syscohada_odoo18` est à remplacer par le dossier où le zip a été décompressé (avec
+     « Extraire tout » de Windows, en général
+     `C:\Users\<nom>\Downloads\aite_syscohada_odoo18_<version>_<date>\aite_syscohada_odoo18`). Astuce : taper
+     `cd /d ` puis glisser ce dossier depuis l'Explorateur dans la fenêtre, et valider. Pour retrouver le dossier :
+     `where /r "%USERPROFILE%\Downloads" requirements.txt`. Avec un accès à Internet, une seule commande suffit,
+     depuis n'importe quel dossier :
+     `"C:\Program Files\Odoo 18.0\python\python.exe" -m pip install openupgradelib`.
+
      Sans les droits d'administrateur, pip annonce « Defaulting to user installation » et installe dans le profil
      de l'utilisateur, que le service Odoo (compte LOCALSERVICE) ne voit pas : l'erreur demeure. Le service peut
      aussi se redémarrer dans services.msc (« odoo-server-18.0 », Redémarrer). Sur Windows, `addons_path` se règle
