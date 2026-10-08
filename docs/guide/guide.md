@@ -221,7 +221,7 @@ Les journaux de banque et d'espèces créés ensuite reçoivent 758800 en « Com
 
 ### Droits des utilisateurs
 
-Les menus Syscohada demandent le groupe technique `account.group_account_readonly`. Le profil « Administrateur » de la comptabilité ne le donne pas en Community : il faut l'ajouter en mode développeur.
+Les menus Syscohada demandent le groupe technique `account.group_account_readonly`. Le profil « Administrateur » de la comptabilité ne le donne pas en Community : il faut l'ajouter en mode développeur. Sans lui, Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : les menus Tableau de bord (groupe `account.group_account_basic`) et Comptabilité (groupe `account.group_account_readonly`) d'Odoo manquent aussi. Le droit « Montrer les fonctions de comptabilité complètes » (`account.group_account_user`) donne ces deux groupes.
 
 | Menu | Chemin | Groupe requis |
 | --- | --- | --- |
@@ -233,7 +233,7 @@ Les menus Syscohada demandent le groupe technique `account.group_account_readonl
 1. Activer le mode développeur.
 2. Ouvrir Paramètres > Utilisateurs & Sociétés > Utilisateurs, puis l'utilisateur.
 3. Onglet Droits d'accès, champ Comptabilité : « Administrateur » pour un comptable qui crée et valide les déclarations, « Facturation » pour un utilisateur qui consulte seulement les états et les déclarations.
-4. Section Technique : cocher « Montrer les fonctions de comptabilité complètes ». Le menu Syscohada, les pièces comptables et le plan comptable deviennent visibles.
+4. Section Technique : cocher « Montrer les fonctions de comptabilité complètes », enregistrer, puis recharger la page. Les menus Tableau de bord et Comptabilité, le menu Syscohada, les pièces comptables et le plan comptable deviennent visibles.
 
 | Modèle | `account.group_account_readonly` | `account.group_account_manager` |
 | --- | --- | --- |
@@ -1072,7 +1072,7 @@ Quatre fonctions sont à adapter : `_aite_tax_tags` et `_aite_repartition` dans 
 
 | Symptôme | Cause | Remède |
 | --- | --- | --- |
-| Le menu Syscohada est absent de Facturation > Analyse | Le menu exige le groupe `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes » ; vérifier que `aite_syscohada_community` est installé |
+| Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : pas de Tableau de bord, de Comptabilité ni de menu Syscohada sous Analyse | Ces menus exigent les groupes `account.group_account_basic` et `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes », enregistrer, recharger la page (F5) ; vérifier que `aite_syscohada_community` est installé |
 | Le plan comptable et les écritures sont invisibles | Même droit technique manquant | Même remède ; créer et valider une déclaration exige en plus le profil Administrateur |
 | « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation. Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module |
 | Après Apps > Importer un module : retour à l'accueil sans erreur et aucun module AITE, ou « Erreur lors de l'importation du module 'aite_syscohada_…' » | Ce menu n'importe que des modules de données et ignore le code Python | Décompresser le paquet sur le serveur et suivre l'installation (impossible sur Odoo Online) |

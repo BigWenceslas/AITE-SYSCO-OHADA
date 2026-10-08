@@ -126,9 +126,11 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
    « Activer » dans Apps, l'activer. Sur Odoo Community, ne pas l'activer : il dépend d'un module d'Enterprise et
    son installation échoue (on peut aussi ne pas copier son dossier). Ne pas installer les modules de
    démonstration sur une base de recette ou de production (voir plus bas).
-6. Pour voir le menu Facturation > Analyse > Syscohada et le plan comptable, cocher sur la fiche de chaque
-   utilisateur concerné (comptables, et aussi l'administrateur qui installe), en mode développeur, section
-   Technique, le droit « Montrer les fonctions de comptabilité complètes ».
+6. Pour voir les menus Tableau de bord et Comptabilité de Facturation, le menu Facturation > Analyse >
+   Syscohada et le plan comptable, cocher sur la fiche de chaque utilisateur concerné (comptables, et aussi
+   l'administrateur qui installe), en mode développeur, section Technique, le droit « Montrer les fonctions de
+   comptabilité complètes », puis recharger la page. Odoo Community ne donne ce droit à personne d'office : sans
+   lui, Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration.
 7. Le paramétrage (libellés et types de comptes, sous-comptes, taxes) s'applique tout seul aux sociétés au
    plan « cm ». Pour une société passée au plan « cm » plus tard : Facturation > Configuration > SYSCOHADA >
    Appliquer le paramétrage. Contrôle (droit de l'étape 6 coché) : Facturation > Configuration > Plan comptable,
@@ -254,7 +256,7 @@ connus listés ci-dessous. Après installation des données de démonstration,
 | « error: externally-managed-environment » en lançant pip | Python système de Debian 12, d'Ubuntu 24.04 ou de l'image Docker officielle, protégé par la PEP 668 | Ajouter `--break-system-packages` à la commande de l'étape 3 (avec `sudo` pour un Odoo installé par le paquet .deb) ; image Docker : image dérivée de l'étape 3 |
 | « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés dans des langues non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | Les modules AITE n'apparaissent pas dans Apps | Liste des Apps non mise à jour, dossier absent de `addons_path`, ou `addons_path` qui pointe sur la racine du paquet au lieu de son dossier `addons/` | Mode développeur, Apps > Mettre à jour la liste des Apps ; vérifier `addons_path` (contrôle de l'étape 2) et redémarrer Odoo |
-| Le menu Syscohada n'apparaît pas après l'installation | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur | Étape 6 de l'installation |
+| Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : pas de Tableau de bord, de Comptabilité ni de menu Syscohada sous Analyse | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur, administrateur compris : Odoo Community ne le donne à personne d'office | Étape 6 de l'installation, puis recharger la page (F5) |
 | États Syscohada faux (par exemple une vente rangée en report à nouveau et en fournisseurs), contrôle « Comptes non rattachés » en alerte ; ou « La société … n'est pas à un plan comptable SYSCOHADA » au menu Appliquer le paramétrage | Société hors plan « cm » (plan générique, autre pays) : le paramétrage ne s'applique pas | Tant que la société n'a pas d'écritures : Pack « SYSCOHADA pour Sociétés » (Prérequis), puis Facturation > Configuration > SYSCOHADA > Appliquer le paramétrage ; sinon, reprise dans une société au plan « cm » avec l'expert-comptable |
 
 ## Limites connues
