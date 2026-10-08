@@ -50,7 +50,9 @@ Le paquet `aite_syscohada_odoo18_<version>_<date>.zip`, construit par `scripts/b
 
 1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur et l'ajouter à `addons_path`, ou déclarer directement ce dossier : un seul chemin pour les dix modules. Si l'un des modules OCA est déjà présent sur le serveur (branche 18.0, version au moins égale à celle de `VERSIONS.txt`), ne pas copier ce dossier-là : Odoo prend sans prévenir la première copie trouvée dans `addons_path`.
 2. Depuis le dossier décompressé, `pip install -r requirements.txt` avec le pip de l'environnement qui lance Odoo (option `--break-system-packages` si le Python du système refuse : paquet .deb, image Docker officielle), puis redémarrer Odoo.
-3. Activer le mode développeur, Apps > Mettre à jour la liste des Apps, puis installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) » (`aite_syscohada_community`) ; sur Enterprise, `aite_syscohada_reports` en plus. Le lisez-moi du paquet détaille aussi les prérequis (plan « cm », français), Odoo.sh et Docker.
+3. Activer le mode développeur, Apps > Mettre à jour la liste des Apps, puis installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) » (`aite_syscohada_community`). Sur Enterprise, `aite_syscohada_reports` s'installe de lui-même avec les rapports d'Enterprise ; sur Community, ne pas l'activer (bouton « Activer » de la capture ci-dessous) : il échoue faute d'`account_reports`. Le lisez-moi du paquet détaille aussi les prérequis (plan « cm », français), Odoo.sh et Docker.
+
+Le chemin déclaré dans `addons_path` doit contenir directement les dossiers des modules (`…/aite_syscohada_odoo18/addons`), jamais la racine du paquet : Odoo l'accepte sans erreur mais n'y trouve aucun module. Apps > Importer un module ne convient pas : ce menu ne charge que des modules de données, sans leur code Python ; il faut un serveur où l'on peut ajouter des modules (pas Odoo Online).
 
 Si Odoo répond « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. », il ne voit pas les modules OCA : ils manquent dans le dossier copié (les paquets antérieurs au 8 octobre 2026 les rangeaient à part, dans `oca/`). Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation.
 
@@ -186,7 +188,7 @@ Le menu Facturation > Configuration > SYSCOHADA > Appliquer le paramétrage rela
 
 1. Sélectionner la société à paramétrer dans le sélecteur de sociétés : l'action ne traite que cette société.
 2. Cliquer sur Appliquer le paramétrage.
-3. Lire la notification « SYSCOHADA », message « Paramétrage appliqué. ». Elle s'affiche aussi pour une société non SYSCOHADA, pour laquelle rien n'est modifié.
+3. Lire la notification « SYSCOHADA », message « Paramétrage appliqué. ». Pour une société qui n'est pas à un plan SYSCOHADA, le menu affiche à la place un message d'erreur qui donne son plan actuel et la marche à suivre, et ne modifie rien (versions antérieures à 18.0.1.3.1 : notification de succès trompeuse).
 
 Le menu SYSCOHADA n'est visible que par le groupe `account.group_account_manager`. Il contient aussi « Rubriques des états », la liste des 124 rubriques du référentiel. Relancez le paramétrage après l'installation du français, ou après la création manuelle d'un compte attendu par le paramétrage. Le bouton « Recharger » des paramètres de comptabilité relance aussi le paramétrage ; Odoo ne l'affiche que si la société a déjà des écritures.
 
@@ -906,15 +908,15 @@ Ces échéances et le taux d'IS (30 %, ou 25 % si le chiffre d'affaires ne dépa
 
 ## 8. Tests
 
-La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.0, base neuve) : 107 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 36 secondes.
+La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.1, base neuve) : 108 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 39 secondes.
 
 | Ensemble | Tests | Résultat | Durée |
 | --- | --- | --- | --- |
-| Suite de référence (modules base, mis, community) | 65 | 0 échec | incluse ci-dessous |
+| Suite de référence (modules base, mis, community) | 66 | 0 échec | incluse ci-dessous |
 | Tests avancés `test_adv_*.py` hors volume | 42 | 0 échec, 3 échecs attendus | inclus ci-dessous |
-| Suite complète (référence et avancés) | 107 | 0 échec | 239 s |
-| Volume (étiquette `aite_syscohada_volume`) | 1 | 0 échec | 36 s |
-| Données de démonstration (étiquette `aite_syscohada_demo`, base où les deux modules sont installés) : 15 pour le bar-hôtel, 19 pour les services informatiques | 34 | 0 échec | 6 s, après 104 s d'installation |
+| Suite complète (référence et avancés) | 108 | 0 échec | 250 s |
+| Volume (étiquette `aite_syscohada_volume`) | 1 | 0 échec | 39 s |
+| Données de démonstration (étiquette `aite_syscohada_demo`, base où les deux modules sont installés) : 15 pour le bar-hôtel, 19 pour les services informatiques | 34 | 0 échec | 7 s, après 110 s d'installation |
 
 ### Les tests avancés ajoutés
 
@@ -1073,6 +1075,11 @@ Quatre fonctions sont à adapter : `_aite_tax_tags` et `_aite_repartition` dans 
 | Le menu Syscohada est absent de Facturation > Analyse | Le menu exige le groupe `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes » ; vérifier que `aite_syscohada_community` est installé |
 | Le plan comptable et les écritures sont invisibles | Même droit technique manquant | Même remède ; créer et valider une déclaration exige en plus le profil Administrateur |
 | « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation. Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module |
+| Après Apps > Importer un module : retour à l'accueil sans erreur et aucun module AITE, ou « Erreur lors de l'importation du module 'aite_syscohada_…' » | Ce menu n'importe que des modules de données et ignore le code Python | Décompresser le paquet sur le serveur et suivre l'installation (impossible sur Odoo Online) |
+| `-i aite_syscohada_community` se termine sans erreur mais rien n'est installé ; journal : « invalid module names, ignored » | `addons_path` désigne la racine du paquet ou un dossier parent, au lieu du dossier qui contient directement les modules | Déclarer `…/aite_syscohada_odoo18/addons`, redémarrer Odoo, relancer |
+| « Vous essayez d'installer le module "aite_syscohada_reports" qui dépend du module "account_reports"… » | Module réservé à Odoo Enterprise, activé sur Community | Ne pas l'activer : sur Community, les états sont dans MIS Builder |
+| « ModuleNotFoundError: No module named 'odoo_test_helper' » à l'installation | Modules OCA pris dans les dépôts complets (avec leurs tests) et installés avec `--test-enable` ou par un build de développement d'Odoo.sh | Utiliser les modules OCA du paquet, livrés sans tests, ou installer sans `--test-enable` |
+| « La société … n'est pas à un plan comptable SYSCOHADA » au menu Appliquer le paramétrage | Société hors plan « cm » ; avant la version 18.0.1.3.1, le menu affichait « Paramétrage appliqué. » sans rien modifier | Pack « SYSCOHADA pour Sociétés » tant que la société n'a pas d'écritures ; sinon reprise dans une société au plan « cm » |
 | « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale Cameroun | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés des comptes dans des langues françaises non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | `mis_builder` déclare `openupgradelib` comme dépendance Python | `pip install -r requirements.txt` (paquet de livraison) ou `../venv/bin/pip install openupgradelib`, puis redémarrer Odoo et relancer l'installation |
 | « Oups ! Un problème est survenu », détail « Invalid ids list », en ouvrant Bilan actif, Bilan passif, Compte de résultat ou TFT depuis le menu Analyse | Versions 18.0.1.1.0 et antérieures : le widget de MIS Builder 18 cherche l'instance dans le contexte, que l'action du menu ne renseignait pas | Mettre à jour `aite_syscohada_community` en 18.0.1.2.0 ; en attendant, ouvrir l'état par Analyse > MIS Reporting > MIS Reports, bouton « Aperçu » |

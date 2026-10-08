@@ -35,7 +35,7 @@ python addons/aite_syscohada_base/tools/gen_rubriques.py
 ../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http < addons/aite_syscohada_reports/tools/generate_enterprise_xml.py
 ```
 
-Résultat de référence : 107 tests (65 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`. Données de démonstration : 34 tests (15 bar-hôtel, 19 services informatiques, étiquette `aite_syscohada_demo`), sur une base où les deux modules sont installés.
+Résultat de référence : 108 tests (66 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`. Données de démonstration : 34 tests (15 bar-hôtel, 19 services informatiques, étiquette `aite_syscohada_demo`), sur une base où les deux modules sont installés.
 
 ## Architecture
 

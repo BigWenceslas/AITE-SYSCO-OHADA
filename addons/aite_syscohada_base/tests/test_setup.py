@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 
 from .common import SyscohadaCommon
@@ -138,3 +139,13 @@ class TestSetup(SyscohadaCommon):
         self.assertEqual(company.chart_template, "cm")
         self.assertTrue(company.aite_syscohada_setup_date)
         self.assertEqual(company._aite_account("131").name, "Résultat net : bénéfice")
+
+    def test_setup_action_refuses_non_syscohada_company(self):
+        """Menu « Appliquer le paramétrage » sur une société hors plan SYSCOHADA : message d'erreur explicite, au lieu
+        d'une notification « Paramétrage appliqué. » alors que rien n'est modifié."""
+        other = self.env["res.company"].create({"name": "Société non OHADA", "country_id": self.env.ref("base.be").id})
+        with self.assertRaisesRegex(UserError, r"Société non OHADA.*plan actuel : -"):
+            other.action_aite_syscohada_setup()
+        self.assertFalse(other.aite_syscohada_setup_date)
+        params = self.company.action_aite_syscohada_setup()["params"]
+        self.assertEqual((params["type"], params["message"]), ("success", "Paramétrage appliqué."))

@@ -29,8 +29,10 @@ trap 'rm -rf "$BUILD"' EXIT
 DEST="$BUILD/aite_syscohada_odoo18"
 mkdir -p "$DEST/addons" "$DEST/licences" "$DEST/docs" "$ROOT/dist"
 
-copy_module() {  # sources sans fichiers compilés ni caches
-  (cd "$(dirname "$1")" && tar --exclude='__pycache__' --exclude='*.pyc' -cf - "$(basename "$1")") | tar -xf - -C "$2"
+copy_module() {  # sources sans fichiers compilés ni caches ; options de tar supplémentaires après les deux arguments
+  local src="$1" dest="$2"; shift 2
+  (cd "$(dirname "$src")" && tar --exclude='__pycache__' --exclude='*.pyc' "$@" -cf - "$(basename "$src")") \
+    | tar -xf - -C "$dest"
 }
 
 {
@@ -46,12 +48,14 @@ copy_module() {  # sources sans fichiers compilés ni caches
     echo "  $module $(manifest "$ROOT/addons/$module" version), $(manifest "$ROOT/addons/$module" license)"
   done
   echo
-  echo "Modules OCA, branche 18.0 (version, licence, origine) :"
+  # sans leurs tests : ils importent odoo_test_helper (dépendance de test des dépôts OCA, absente du paquet) et
+  # feraient échouer toute installation avec --test-enable, dont les builds de développement d'Odoo.sh
+  echo "Modules OCA, branche 18.0, sans leur dossier tests (version, licence, origine) :"
   for path in $OCA_MODULES; do
     repo="${path%%/*}"
     module="${path##*/}"
     [ -f "$OCA/$path/__manifest__.py" ] || { echo "Module OCA introuvable : $OCA/$path" >&2; exit 1; }
-    copy_module "$OCA/$path" "$DEST/addons"
+    copy_module "$OCA/$path" "$DEST/addons" --exclude="$module/tests"
     echo "  $module $(manifest "$OCA/$path" version), $(manifest "$OCA/$path" license)" \
       "— github.com/OCA/$repo, commit $(git -C "$OCA/$repo" rev-parse --short HEAD)"
   done
@@ -78,6 +82,9 @@ odoo_modules = {"account", "account_reports", "base", "board", "l10n_cm", "l10n_
 # OEEL-1 : licence d'Odoo Enterprise (aite_syscohada_reports, qui dépend d'account_reports), texte fourni par Odoo
 texts = {"AGPL-3": ["AGPL-3"], "LGPL-3": ["LGPL-3", "GPL-3"], "OEEL-1": []}
 packaged, python_deps = set(os.listdir(addons)), set()
+for name in sorted(packaged):
+    if not name.startswith("aite_") and os.path.isdir(os.path.join(addons, name, "tests")):
+        sys.exit(f"Tests OCA livrés (ils exigent odoo_test_helper) : {name}")
 for name in sorted(packaged):
     info = ast.literal_eval(open(os.path.join(addons, name, "__manifest__.py"), encoding="utf-8").read())
     for dep in info.get("depends", []):

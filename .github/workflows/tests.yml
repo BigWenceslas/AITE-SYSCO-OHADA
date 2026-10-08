@@ -116,7 +116,7 @@ jobs:
           sed "s#^addons_path = .*#addons_path = $GITHUB_WORKSPACE/odoo18/odoo/addons,$GITHUB_WORKSPACE/odoo18/addons,/tmp/paquet/aite_syscohada_odoo18/addons#" \
             odoo.conf > /tmp/paquet/odoo.conf
           python "$GITHUB_WORKSPACE/odoo18/odoo-bin" -c /tmp/paquet/odoo.conf -d aite_ci_zip -i aite_syscohada_community \
-            --load-language=fr_FR --stop-after-init
+            --load-language=fr_FR --test-enable --test-tags aite_syscohada --stop-after-init
           installed=$(psql -h 127.0.0.1 -U odoo -d aite_ci_zip -Atc "select count(*) from ir_module_module where state = 'installed' and name in ('aite_syscohada_community', 'mis_builder', 'date_range', 'report_xlsx')")
           [ "$installed" = 4 ] || { echo "Installation depuis le zip incomplète : $installed module(s) sur 4"; exit 1; }
 

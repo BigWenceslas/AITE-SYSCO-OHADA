@@ -2,6 +2,7 @@
 import logging
 
 from odoo import Command, _, api, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -162,6 +163,16 @@ class ResCompany(models.Model):
         return True
 
     def action_aite_syscohada_setup(self):
+        """Menu « Appliquer le paramétrage ». Une société hors plan SYSCOHADA est refusée par un message : à
+        l'installation et au chargement du plan, _aite_syscohada_setup la laisse de côté sans bruit."""
+        self.ensure_one()
+        if not self._aite_is_syscohada():
+            raise UserError(_(
+                "La société %(company)s n'est pas à un plan comptable SYSCOHADA (plan actuel : %(chart)s) : le "
+                "paramétrage AITE ne s'applique pas et rien n'a été modifié. Tant que la société n'a pas d'écritures : "
+                "Facturation > Configuration > Paramètres, Localisation fiscale, Pack « SYSCOHADA pour Sociétés », "
+                "puis relancer. Si elle en a déjà, Odoo interdit de changer de plan : reprise dans une société au plan "
+                "« cm », avec l'expert-comptable.", company=self.name, chart=self.chart_template or "-"))
         self._aite_syscohada_setup()
         return {"type": "ir.actions.client", "tag": "display_notification",
                 "params": {"title": _("SYSCOHADA"), "message": _("Paramétrage appliqué."), "type": "success"}}
