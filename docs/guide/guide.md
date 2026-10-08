@@ -235,6 +235,8 @@ Les menus Syscohada demandent le groupe technique `account.group_account_readonl
 3. Onglet Droits d'accès, champ Comptabilité : « Administrateur » pour un comptable qui crée et valide les déclarations, « Facturation » pour un utilisateur qui consulte seulement les états et les déclarations.
 4. Section Technique : cocher « Montrer les fonctions de comptabilité complètes », enregistrer, puis recharger la page. Les menus Tableau de bord et Comptabilité, le menu Syscohada, les pièces comptables et le plan comptable deviennent visibles.
 
+Odoo 18 Community masque cette case de la fiche utilisateur ; le socle AITE la remet depuis la version 18.0.1.3.2. Autre voie, valable avec toute version et pour plusieurs utilisateurs à la fois : Paramètres > Utilisateurs & Sociétés > Groupes (mode développeur), rechercher « comptabilité complètes », ouvrir « Technique / Montrer les fonctions de comptabilité complètes », onglet Utilisateurs, Ajouter une ligne, cocher les utilisateurs, Sélectionner, enregistrer.
+
 | Modèle | `account.group_account_readonly` | `account.group_account_manager` |
 | --- | --- | --- |
 | Rubriques des états (`aite.syscohada.rubrique`) | lecture | tous droits |
@@ -908,13 +910,13 @@ Ces échéances et le taux d'IS (30 %, ou 25 % si le chiffre d'affaires ne dépa
 
 ## 8. Tests
 
-La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.1, base neuve) : 108 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 39 secondes.
+La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.2, base neuve) : 110 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 39 secondes.
 
 | Ensemble | Tests | Résultat | Durée |
 | --- | --- | --- | --- |
 | Suite de référence (modules base, mis, community) | 66 | 0 échec | incluse ci-dessous |
 | Tests avancés `test_adv_*.py` hors volume | 42 | 0 échec, 3 échecs attendus | inclus ci-dessous |
-| Suite complète (référence et avancés) | 108 | 0 échec | 250 s |
+| Suite complète (référence et avancés) | 110 | 0 échec | 231 s |
 | Volume (étiquette `aite_syscohada_volume`) | 1 | 0 échec | 39 s |
 | Données de démonstration (étiquette `aite_syscohada_demo`, base où les deux modules sont installés) : 15 pour le bar-hôtel, 19 pour les services informatiques | 34 | 0 échec | 7 s, après 110 s d'installation |
 
@@ -1073,6 +1075,7 @@ Quatre fonctions sont à adapter : `_aite_tax_tags` et `_aite_repartition` dans 
 | Symptôme | Cause | Remède |
 | --- | --- | --- |
 | Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : pas de Tableau de bord, de Comptabilité ni de menu Syscohada sous Analyse | Ces menus exigent les groupes `account.group_account_basic` et `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes », enregistrer, recharger la page (F5) ; vérifier que `aite_syscohada_community` est installé |
+| La case « Montrer les fonctions de comptabilité complètes » manque dans la section Technique | Odoo 18 Community la masque ; le socle AITE la remet depuis la version 18.0.1.3.2 | Paramètres > Utilisateurs & Sociétés > Groupes, groupe « Technique / Montrer les fonctions de comptabilité complètes », onglet Utilisateurs ; ou mettre à jour le socle |
 | Le plan comptable et les écritures sont invisibles | Même droit technique manquant | Même remède ; créer et valider une déclaration exige en plus le profil Administrateur |
 | « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation. Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module |
 | Après Apps > Importer un module : retour à l'accueil sans erreur et aucun module AITE, ou « Erreur lors de l'importation du module 'aite_syscohada_…' » | Ce menu n'importe que des modules de données et ignore le code Python | Décompresser le paquet sur le serveur et suivre l'installation (impossible sur Odoo Online) |

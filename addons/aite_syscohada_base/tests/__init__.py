@@ -6,3 +6,4 @@ from . import test_invoices
 from . import test_statements
 from . import test_tft_properties
 from . import test_enterprise_xml
+from . import test_user_rights

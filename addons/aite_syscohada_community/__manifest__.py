@@ -3,7 +3,7 @@
     "name": "SYSCOHADA révisé – adaptation Odoo Community (Cameroun)",
     "summary": "États SYSCOHADA en un clic (MIS Builder, exercices N et N-1), déclaration mensuelle "
                "I/TVA-IR complète (TVA, retenues, acomptes, IRCM, salaires) et écritures de liquidation, sans Odoo Enterprise.",
-    "version": "18.0.1.3.1",
+    "version": "18.0.1.3.2",
     "category": "Accounting/Localizations",
     "author": "AITE Consulting",
     "website": "https://aite-consulting.com",

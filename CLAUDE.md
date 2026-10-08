@@ -35,7 +35,7 @@ python addons/aite_syscohada_base/tools/gen_rubriques.py
 ../venv/bin/python ../odoo18/odoo-bin shell -c odoo.conf -d aite_dev --no-http < addons/aite_syscohada_reports/tools/generate_enterprise_xml.py
 ```
 
-Résultat de référence : 108 tests (66 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`. Données de démonstration : 34 tests (15 bar-hôtel, 19 services informatiques, étiquette `aite_syscohada_demo`), sur une base où les deux modules sont installés.
+Résultat de référence : 110 tests (68 de base et 42 avancés `test_adv_*.py`), 0 échec, dont 3 échecs attendus qui documentent des défauts connus (un test ignoré si `aite_syscohada_reports` est absent). Test de volume à part, sur une base neuve : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume`. Données de démonstration : 34 tests (15 bar-hôtel, 19 services informatiques, étiquette `aite_syscohada_demo`), sur une base où les deux modules sont installés.
 
 ## Architecture
 
@@ -93,6 +93,7 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 - Le widget de MIS Builder 18 retrouve l'instance par `active_id` du contexte, pas par `res_id` : une action qui ouvre l'aperçu d'un état doit l'y mettre (`_aite_syscohada_open`), sinon l'écran affiche « Invalid ids list ».
 - Les libellés des lignes L10 à L35 viennent de `l10n_cm`, dans la langue du contexte (français par défaut) : une base créée sans `--load-language=fr_FR` n'a pas leur traduction et les déclarations générées à l'installation restent en anglais.
 - Paquet : les modules OCA vont dans le même dossier `addons/` que les modules AITE. Rangés à part (`oca/`), ils n'ont pas été déclarés dans `addons_path` sur une recette : « … dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » `build_release.sh` vérifie que chaque dépendance est livrée ou fournie par Odoo.
+- Odoo 18 Community masque la case « Montrer les fonctions de comptabilité complètes » (`account.group_account_user`) de la fiche utilisateur (`get_application_groups` du module account) : le socle la remet (`models/res_groups.py`) ; autre voie, Paramètres > Utilisateurs & Sociétés > Groupes.
 - Captures d'écran avec Playwright : Odoo n'atteint jamais l'état `networkidle` (bus de notifications) ; attendre un sélecteur de la vue (`scripts/guide/capture.js`).
 
 ## Façon de travailler

@@ -14,7 +14,7 @@ import markdown
 
 src, out = sys.argv[1], sys.argv[2]
 text = open(src, encoding="utf-8").read()
-VERSION = "18.0.1.3.1"
+VERSION = "18.0.1.3.2"
 DATE = "8 octobre 2026"
 
 

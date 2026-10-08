@@ -156,7 +156,7 @@ footer { margin:40px 0 0; font-family:var(--font-ui); font-size:12.5px; color:va
       <h1>Guide complet — SYSCOHADA révisé pour Odoo 18 (AITE)</h1>
       <p>Installation, paramétrage, saisie, états financiers, déclaration mensuelle I/TVA-IR, clôture, tests et développement des modules AITE pour Odoo 18 Community, illustrés sur deux sociétés de démonstration : un bar-hôtel et une société de services informatiques.</p>
       <div class="meta">
-        <span>8 octobre 2026</span><span>Modules 18.0.1.3.1</span><span>AITE Consulting, Douala</span><span>Odoo 18.0 Community</span><span>Dépôt BigWenceslas/AITE-SYSCO-OHADA</span><span>27 captures d'écran</span><span>17 654 mots</span>
+        <span>8 octobre 2026</span><span>Modules 18.0.1.3.2</span><span>AITE Consulting, Douala</span><span>Odoo 18.0 Community</span><span>Dépôt BigWenceslas/AITE-SYSCO-OHADA</span><span>27 captures d'écran</span><span>17 780 mots</span>
       </div>
     </div>
 <section class="chapter"><h2 id="1-presentation">1. Présentation<a class="anchor" href="#1-presentation" aria-label="Lien vers cette section">#</a></h2>
@@ -578,6 +578,7 @@ data_dir = &lt;travail&gt;/odoo-data
 <li>Onglet Droits d'accès, champ Comptabilité : « Administrateur » pour un comptable qui crée et valide les déclarations, « Facturation » pour un utilisateur qui consulte seulement les états et les déclarations.</li>
 <li>Section Technique : cocher « Montrer les fonctions de comptabilité complètes », enregistrer, puis recharger la page. Les menus Tableau de bord et Comptabilité, le menu Syscohada, les pièces comptables et le plan comptable deviennent visibles.</li>
 </ol>
+<p>Odoo 18 Community masque cette case de la fiche utilisateur ; le socle AITE la remet depuis la version 18.0.1.3.2. Autre voie, valable avec toute version et pour plusieurs utilisateurs à la fois : Paramètres &gt; Utilisateurs &amp; Sociétés &gt; Groupes (mode développeur), rechercher « comptabilité complètes », ouvrir « Technique / Montrer les fonctions de comptabilité complètes », onglet Utilisateurs, Ajouter une ligne, cocher les utilisateurs, Sélectionner, enregistrer.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -2301,7 +2302,7 @@ data_dir = &lt;travail&gt;/odoo-data
 </table></div>
 <p>Ces échéances et le taux d'IS (30 %, ou 25 % si le chiffre d'affaires ne dépasse pas 3 milliards, plus 10 % de CAC) viennent du skill <code>fiscalite-cameroun</code> du dépôt. La loi de finances peut les changer : les vérifier sur impots.cm en début d'exercice.</p>
 </section><section class="chapter"><h2 id="8-tests">8. Tests<a class="anchor" href="#8-tests" aria-label="Lien vers cette section">#</a></h2>
-<p>La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.1, base neuve) : 108 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 39 secondes.</p>
+<p>La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.2, base neuve) : 110 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 39 secondes.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -2326,9 +2327,9 @@ data_dir = &lt;travail&gt;/odoo-data
 </tr>
 <tr>
 <td>Suite complète (référence et avancés)</td>
-<td>108</td>
+<td>110</td>
 <td>0 échec</td>
-<td>250 s</td>
+<td>231 s</td>
 </tr>
 <tr>
 <td>Volume (étiquette <code>aite_<wbr>syscohada_<wbr>volume</code>)</td>
@@ -2715,6 +2716,11 @@ python scripts/guide/build_guide.py docs/guide/guide.md docs/guide-syscohada-odo
 <td>Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : pas de Tableau de bord, de Comptabilité ni de menu Syscohada sous Analyse</td>
 <td>Ces menus exigent les groupes <code>account.<wbr>group_<wbr>account_<wbr>basic</code> et <code>account.<wbr>group_<wbr>account_<wbr>readonly</code>, qu'un administrateur Community n'a pas d'office</td>
 <td>En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes », enregistrer, recharger la page (F5) ; vérifier que <code>aite_<wbr>syscohada_<wbr>community</code> est installé</td>
+</tr>
+<tr>
+<td>La case « Montrer les fonctions de comptabilité complètes » manque dans la section Technique</td>
+<td>Odoo 18 Community la masque ; le socle AITE la remet depuis la version 18.0.1.3.2</td>
+<td>Paramètres &gt; Utilisateurs &amp; Sociétés &gt; Groupes, groupe « Technique / Montrer les fonctions de comptabilité complètes », onglet Utilisateurs ; ou mettre à jour le socle</td>
 </tr>
 <tr>
 <td>Le plan comptable et les écritures sont invisibles</td>
