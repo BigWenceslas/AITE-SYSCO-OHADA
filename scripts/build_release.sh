@@ -13,6 +13,10 @@ MODULES="aite_syscohada_base aite_syscohada_mis aite_syscohada_community aite_sy
 OCA_MODULES="mis-builder/mis_builder server-ux/date_range reporting-engine/report_xlsx"
 # textes des licences GNU (paquet base-files de Debian et d'Ubuntu) : AGPL-3 vient du dépôt mis-builder
 COMMON_LICENSES="/usr/share/common-licenses"
+# bibliothèques Python livrées en roues universelles (paquets-python/), pour une installation sans Internet :
+# celles de requirements.txt et leurs dépendances absentes d'Odoo (openupgradelib tire cssselect ; lxml est fourni)
+PYTHON_WHEELS="openupgradelib cssselect"
+PIP="${PIP:-python3 -m pip}"
 
 manifest() { python3 -c "import ast, sys; print(ast.literal_eval(open(sys.argv[1]).read()).get(sys.argv[2], ''))" \
   "$1/__manifest__.py" "$2"; }
@@ -27,7 +31,7 @@ NAME="aite_syscohada_odoo18_${VERSION}_$(date +%Y%m%d)${DIRTY}"
 BUILD="$(mktemp -d)"
 trap 'rm -rf "$BUILD"' EXIT
 DEST="$BUILD/aite_syscohada_odoo18"
-mkdir -p "$DEST/addons" "$DEST/licences" "$DEST/docs" "$ROOT/dist"
+mkdir -p "$DEST/addons" "$DEST/licences" "$DEST/docs" "$DEST/paquets-python" "$ROOT/dist"
 
 copy_module() {  # sources sans fichiers compilés ni caches ; options de tar supplémentaires après les deux arguments
   local src="$1" dest="$2"; shift 2
@@ -60,8 +64,8 @@ copy_module() {  # sources sans fichiers compilés ni caches ; options de tar su
       "— github.com/OCA/$repo, commit $(git -C "$OCA/$repo" rev-parse --short HEAD)"
   done
   echo
-  echo "Textes des licences : licences/ (AGPL-3 ; LGPL-3 complétée par GPL-3). OEEL-1 : licence d'Odoo Enterprise,"
-  echo "dont le texte est fourni avec Odoo Enterprise."
+  echo "Textes des licences : licences/ (AGPL-3 ; LGPL-3 complétée par GPL-3 ; BSD-3-Clause de cssselect). OEEL-1 :"
+  echo "licence d'Odoo Enterprise, dont le texte est fourni avec Odoo Enterprise."
 } > "$DEST/VERSIONS.txt"
 
 cp "$OCA/mis-builder/LICENSE" "$DEST/licences/AGPL-3"
@@ -69,6 +73,9 @@ for license in LGPL-3 GPL-3; do
   [ -f "$COMMON_LICENSES/$license" ] || { echo "Texte de licence introuvable : $COMMON_LICENSES/$license" >&2; exit 1; }
   cp "$COMMON_LICENSES/$license" "$DEST/licences/$license"
 done
+$PIP download --quiet --no-deps --only-binary=:all: --python-version 3.10 -d "$DEST/paquets-python" $PYTHON_WHEELS
+unzip -p "$DEST"/paquets-python/cssselect-*.whl '*.dist-info/*LICENSE*' > "$DEST/licences/BSD-3-Clause-cssselect"
+[ -s "$DEST/licences/BSD-3-Clause-cssselect" ] || { echo "Licence de cssselect introuvable dans sa roue" >&2; exit 1; }
 cp "$ROOT/docs/installation.md" "$DEST/README.md"
 cp "$ROOT/docs/guide-syscohada-odoo18.html" "$ROOT/docs/flux-comptables-syscohada.html" "$DEST/docs/"
 
@@ -96,6 +103,10 @@ for name in sorted(packaged):
     python_deps |= set(info.get("external_dependencies", {}).get("python", []))
 with open(os.path.join(dest, "requirements.txt"), "w", encoding="utf-8") as requirements:
     requirements.write("".join(f"{dep}\n" for dep in sorted(python_deps)))
+wheels = {f.split("-")[0].lower() for f in os.listdir(os.path.join(dest, "paquets-python"))}
+missing = {dep.lower() for dep in python_deps} - wheels
+if missing:
+    sys.exit(f"Roue absente de paquets-python/ : {', '.join(sorted(missing))}")
 PY
 
 rm -f "$ROOT/dist/$NAME.zip"
@@ -103,3 +114,4 @@ rm -f "$ROOT/dist/$NAME.zip"
 echo "Paquet : dist/$NAME.zip ($(du -h "$ROOT/dist/$NAME.zip" | cut -f1))"
 cat "$DEST/VERSIONS.txt"
 echo "requirements.txt : $(tr '\n' ' ' < "$DEST/requirements.txt")"
+echo "paquets-python : $(ls "$DEST/paquets-python" | tr '\n' ' ')"

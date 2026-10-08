@@ -20,7 +20,8 @@ Versions des modules et commits des sources : fichier `VERSIONS.txt`.
 | `addons/aite_syscohada_demo_common` | Moteur commun des deux démonstrations (installé avec elles, sans données) |
 | `addons/mis_builder`, `addons/date_range`, `addons/report_xlsx` | Dépendances OCA (branche 18.0, livrées sans leurs tests), indispensables : `aite_syscohada_mis` et `aite_syscohada_community` ne s'installent pas sans elles |
 | `requirements.txt` | Dépendance Python de `mis_builder` : `openupgradelib` |
-| `licences/` | Textes des licences (AGPL-3 ; LGPL-3 et GPL-3) ; la licence de chaque module est dans `VERSIONS.txt` |
+| `paquets-python/` | `openupgradelib` et sa dépendance `cssselect`, en roues universelles : installation sans accès à Internet (étape 3) |
+| `licences/` | Textes des licences (AGPL-3 ; LGPL-3 et GPL-3 ; BSD-3-Clause de `cssselect`) ; la licence de chaque module est dans `VERSIONS.txt` |
 | `docs/` | Guide complet (`guide-syscohada-odoo18.html`) et cartographie des flux comptables |
 
 Les dix modules (AITE et OCA) sont dans le même dossier `addons/`. Soit on déclare directement ce dossier dans
@@ -33,7 +34,7 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
   ou Odoo.sh. Odoo Online (l'offre SaaS d'Odoo) ne convient pas. Ne pas passer par Apps > Importer un module :
   ce menu ne charge que des modules de données, jamais le code Python (Odoo le signale dans sa fenêtre).
 - Odoo 18, Community ou Enterprise, avec la localisation camerounaise `l10n_cm` (fournie avec Odoo).
-- Le paquet Python `openupgradelib`, exigé par `mis_builder` (étape 3).
+- Le paquet Python `openupgradelib`, exigé par `mis_builder`, livré dans `paquets-python/` (étape 3).
 - Le français installé dans la base (langue Français à la création de la base, `--load-language=fr_FR` à la
   première installation, ou Paramètres > Traductions > Langues) : les libellés des lignes de TVA de la
   déclaration viennent de la localisation `l10n_cm` et suivent la langue de l'utilisateur.
@@ -50,25 +51,47 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
 
 1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur, par exemple
    `/opt/odoo/extra-addons`, ou déclarer directement le dossier `addons/` du paquet. Si l'un des modules OCA
-   (`mis_builder`, `date_range`, `report_xlsx`) est déjà présent sur le serveur, en branche 18.0 et dans une
-   version au moins égale à celle de `VERSIONS.txt`, garder cette copie et ne pas copier ce dossier-là.
+   (`mis_builder`, `date_range`, `report_xlsx`) est déjà présent dans un dossier de `addons_path`, en branche 18.0
+   et dans une version au moins égale à celle de `VERSIONS.txt`, n'en garder qu'une copie : ne pas copier ce
+   module, ou, si l'on déclare directement le dossier `addons/` du paquet, le supprimer de ce dossier. Avec deux
+   copies, Odoo charge sans avertissement celle du premier dossier listé dans `addons_path`.
 2. Ajouter ce dossier à `addons_path` dans le fichier de configuration d'Odoo, s'il n'y est pas déjà.
    Le chemin déclaré doit contenir directement les dossiers des modules : `…/aite_syscohada_odoo18/addons` (ou le
    dossier d'extensions où l'on a copié son contenu), jamais la racine `…/aite_syscohada_odoo18` ni un dossier qui
    contient `addons/`. Odoo accepte un tel chemin sans erreur mais n'y trouve aucun module ; même piège si l'on
    copie le dossier `addons/` lui-même au lieu de son contenu. Contrôle :
    `ls <dossier>/aite_syscohada_base/__manifest__.py <dossier>/mis_builder/__manifest__.py` répond sans erreur.
-   Odoo.sh : placer les dix dossiers de modules à la racine du dépôt de la branche, et `requirements.txt` à la
-   racine de la branche (la plateforme installe les bibliothèques qu'il liste). Les builds de développement
-   installent par défaut tous les modules de la branche, démonstrations comprises : pour l'éviter, réglages de la
-   branche, installation des modules, liste limitée à `aite_syscohada_community`. Image Docker officielle :
-   monter les dix dossiers dans `/mnt/extra-addons`.
-3. Installer la dépendance Python avec le pip de l'environnement qui lance Odoo, depuis le dossier décompressé du
-   paquet : par exemple `/opt/odoo/venv/bin/pip install -r requirements.txt`. Si pip refuse avec
-   « externally-managed-environment » (Python du système : Odoo installé par le paquet .deb, image Docker
-   officielle), ajouter l'option `--break-system-packages`, ou faire installer le paquet par l'administrateur du
-   serveur ; dans une image Docker, le faire dans une image dérivée. Contrôle :
-   `python3 -c "import openupgradelib"` (avec le Python d'Odoo) n'affiche aucune erreur.
+   - Odoo.sh : placer les dix dossiers de modules à la racine du dépôt de la branche, et `requirements.txt` à la
+     racine de la branche (la plateforme installe les bibliothèques qu'il liste). Les builds de développement
+     installent par défaut tous les modules de la branche, démonstrations comprises : pour l'éviter, réglages de
+     la branche, installation des modules, liste limitée à `aite_syscohada_community`.
+   - Image Docker officielle (`odoo:18.0`) : monter le dossier `addons/` du paquet, pas sa racine, sur
+     `/mnt/extra-addons` : `-v <chemin>/aite_syscohada_odoo18/addons:/mnt/extra-addons`.
+3. Installer la dépendance Python de `mis_builder` (`openupgradelib`, avec `cssselect`) avec le Python qui exécute
+   Odoo, depuis le dossier décompressé du paquet. Les deux bibliothèques sont livrées dans `paquets-python/` : la
+   commande marche aussi sans accès à Internet (la troisième dépendance, `lxml`, est déjà fournie avec Odoo).
+   - Odoo dans un environnement virtuel :
+     `<venv>/bin/pip install --no-index --find-links paquets-python -r requirements.txt`.
+   - Odoo installé par le paquet .deb : la même commande avec `sudo pip3` (sans `sudo`, pip installe dans le
+     dossier personnel de l'utilisateur, invisible pour le service Odoo ; si `pip3` manque :
+     `sudo apt install python3-pip`). Si pip refuse avec « error: externally-managed-environment » (Debian 12,
+     Ubuntu 24.04), ajouter `--break-system-packages`.
+   - Image Docker officielle : construire une image dérivée, avec ce `Dockerfile` placé dans le dossier décompressé
+     du paquet, puis `docker build -t odoo18-aite .` et lancer le conteneur sur l'image `odoo18-aite` (en gardant
+     le montage de l'étape 2) :
+
+     ```dockerfile
+     FROM odoo:18.0
+     USER root
+     COPY requirements.txt /tmp/aite/requirements.txt
+     COPY paquets-python /tmp/aite/paquets-python
+     RUN pip3 install --no-cache-dir --break-system-packages --no-index \
+         --find-links /tmp/aite/paquets-python -r /tmp/aite/requirements.txt
+     USER odoo
+     ```
+   - Odoo.sh : rien à faire, `requirements.txt` à la racine de la branche suffit (étape 2).
+
+   Contrôle : `python3 -c "import openupgradelib"`, lancé avec le Python d'Odoo, n'affiche aucune erreur.
 4. Redémarrer Odoo. Activer le mode développeur, puis Apps > Mettre à jour la liste des Apps.
    Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module ; sinon, Odoo ne voit pas les
    modules OCA (voir Dépannage).
@@ -76,21 +99,28 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
    le socle, les états MIS et les modules OCA s'installent avec lui. Sur Odoo Enterprise,
    `aite_syscohada_reports` s'installe de lui-même avec les rapports d'Enterprise (`account_reports`) ; s'il reste
    « Activer » dans Apps, l'activer. Sur Odoo Community, ne pas l'activer : il dépend d'un module d'Enterprise et
-   son installation échoue (on peut aussi ne pas copier son dossier). Ne pas installer les modules de démonstration sur une base de recette ou de
-   production (voir plus bas).
-6. Le paramétrage (libellés et types de comptes, sous-comptes, taxes) s'applique tout seul aux sociétés au
+   son installation échoue (on peut aussi ne pas copier son dossier). Ne pas installer les modules de
+   démonstration sur une base de recette ou de production (voir plus bas).
+6. Pour voir le menu Facturation > Analyse > Syscohada et le plan comptable, cocher sur la fiche de chaque
+   utilisateur concerné (comptables, et aussi l'administrateur qui installe), en mode développeur, section
+   Technique, le droit « Montrer les fonctions de comptabilité complètes ».
+7. Le paramétrage (libellés et types de comptes, sous-comptes, taxes) s'applique tout seul aux sociétés au
    plan « cm ». Pour une société passée au plan « cm » plus tard : Facturation > Configuration > SYSCOHADA >
-   Appliquer le paramétrage. Contrôle : Facturation > Configuration > Plan comptable, le compte 447210 « État,
-   IRPP retenu sur salaires » existe.
-7. Pour voir le menu Facturation > Analyse > Syscohada, cocher sur la fiche de chaque utilisateur concerné
-   (comptables, et aussi l'administrateur qui installe), en mode développeur, section Technique, le droit
-   « Montrer les fonctions de comptabilité complètes ».
+   Appliquer le paramétrage. Contrôle (droit de l'étape 6 coché) : Facturation > Configuration > Plan comptable,
+   le compte 447210 « État, IRPP retenu sur salaires » existe.
 
 En ligne de commande :
 
 ```bash
-odoo-bin -c odoo.conf -d MA_BASE -i aite_syscohada_community --stop-after-init
+sudo -u odoo odoo-bin -c /etc/odoo/odoo.conf -d MA_BASE -i aite_syscohada_community --stop-after-init
 ```
+
+Lancer `odoo-bin` (commande `odoo` avec le paquet .deb) sous l'utilisateur du service Odoo, souvent `odoo`, et avec
+le fichier de configuration du service, jamais sous root ; même règle pour toutes les commandes de ce document
+(mise à jour, données de démonstration, tests). Ces commandes écrivent dans le dossier de données d'Odoo
+(`<data_dir>/filestore/MA_BASE`, par exemple les logos des sociétés de démonstration) : lancées sous root, elles y
+créent des sous-dossiers que le service ne peut plus modifier. Si c'est déjà fait :
+`chown -R odoo: <data_dir>/filestore/MA_BASE`.
 
 Une sortie sans erreur ne prouve pas que l'installation a eu lieu : si le journal contient « invalid module names,
 ignored: aite_syscohada_community », Odoo n'a pas trouvé le module (voir Dépannage).
@@ -102,7 +132,13 @@ au bilan passif, au compte de résultat, au tableau des flux de trésorerie et a
 
 Deux sociétés de démonstration, à installer uniquement sur une base de test ou de formation, jamais sur une base
 de production ni sur une base de recette qui sert à autre chose : chaque module crée une société et plusieurs
-centaines de pièces comptabilisées. Chacune s'installe seule ; les deux peuvent cohabiter dans la même base.
+centaines de pièces comptabilisées. Cette installation n'est pas réversible : la désinstallation du module semble
+réussir, mais laisse la société de démonstration et ses pièces (Odoo ne peut pas supprimer une société qui porte
+des données comptables ; seul le journal du serveur le signale). Pour l'effacer, restaurer une sauvegarde prise
+avant l'installation ; à défaut, archiver la société (Paramètres > Utilisateurs & Sociétés > Sociétés) : elle
+disparaît du sélecteur, ses pièces restent dans la base. Pour essayer les démonstrations sur des données proches
+de la recette, travailler sur une copie de la base (gestionnaire de bases de données d'Odoo, bouton Dupliquer, ou
+`createdb -T BASE_DE_RECETTE BASE_DE_TEST`). Chacune s'installe seule ; les deux peuvent cohabiter dans la même base.
 
 ```bash
 odoo-bin -c odoo.conf -d BASE_DE_TEST -i aite_syscohada_demo,aite_syscohada_demo_services --stop-after-init
@@ -146,7 +182,7 @@ La paie et l'impôt sur le résultat des démonstrations sont illustratifs. Les 
 ## Mise à jour
 
 Remplacer les dossiers des modules par ceux du nouveau paquet (y compris les nouveaux modules,
-`aite_syscohada_demo_common` notamment), relancer `pip install -r requirements.txt`, redémarrer Odoo, puis mettre à
+`aite_syscohada_demo_common` notamment), refaire l'étape 3 de l'installation (dépendances Python), redémarrer Odoo, puis mettre à
 jour le socle : tous les modules AITE qui en dépendent sont mis à jour avec lui, et les nouvelles dépendances
 s'installent.
 
@@ -189,10 +225,11 @@ connus listés ci-dessous. Après installation des données de démonstration,
 | En ligne de commande, `-i aite_syscohada_community` se termine sans erreur mais rien n'est installé ; le journal contient « invalid module names, ignored: aite_syscohada_community » | `addons_path` désigne la racine du paquet (`aite_syscohada_odoo18`) ou un dossier parent, au lieu du dossier qui contient directement les modules | Corriger `addons_path` (contrôle de l'étape 2), redémarrer Odoo, relancer la commande |
 | « Vous essayez d'installer le module "aite_syscohada_reports" qui dépend du module "account_reports". Mais ce dernier n'est pas disponible sur votre système. » | Module réservé à Odoo Enterprise, activé sur Odoo Community | Rien à faire : sur Community, les états sont dans MIS Builder (Facturation > Analyse > Syscohada) ; ne pas activer ce module |
 | « ModuleNotFoundError: No module named 'odoo_test_helper' » à l'installation (base non créée, modules non installés) | Modules OCA venant d'une autre source (dépôts OCA complets, avec leurs tests), installés avec `--test-enable` ou par un build de développement d'Odoo.sh | Utiliser les modules OCA du paquet, livrés sans tests ; ou installer sans `--test-enable` ; ou `pip install odoo-test-helper` |
-| « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | Paquet Python de `mis_builder` absent de l'environnement d'Odoo | `pip install -r requirements.txt` dans l'environnement Python d'Odoo (image Docker : l'ajouter à l'image ; Odoo.sh : `requirements.txt` à la racine du dépôt), puis redémarrer Odoo |
+| « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | Paquet Python de `mis_builder` absent de l'environnement d'Odoo | Installer `openupgradelib` selon l'étape 3 (environnement virtuel, paquet .deb, image Docker dérivée, Odoo.sh), puis redémarrer Odoo et relancer l'installation |
+| « error: externally-managed-environment » en lançant pip | Python système de Debian 12, d'Ubuntu 24.04 ou de l'image Docker officielle, protégé par la PEP 668 | Ajouter `--break-system-packages` à la commande de l'étape 3 (avec `sudo` pour un Odoo installé par le paquet .deb) ; image Docker : image dérivée de l'étape 3 |
 | « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés dans des langues non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | Les modules AITE n'apparaissent pas dans Apps | Liste des Apps non mise à jour, dossier absent de `addons_path`, ou `addons_path` qui pointe sur la racine du paquet au lieu de son dossier `addons/` | Mode développeur, Apps > Mettre à jour la liste des Apps ; vérifier `addons_path` (contrôle de l'étape 2) et redémarrer Odoo |
-| Le menu Syscohada n'apparaît pas après l'installation | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur | Étape 7 de l'installation |
+| Le menu Syscohada n'apparaît pas après l'installation | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur | Étape 6 de l'installation |
 | États Syscohada faux (par exemple une vente rangée en report à nouveau et en fournisseurs), contrôle « Comptes non rattachés » en alerte ; ou « La société … n'est pas à un plan comptable SYSCOHADA » au menu Appliquer le paramétrage | Société hors plan « cm » (plan générique, autre pays) : le paramétrage ne s'applique pas | Tant que la société n'a pas d'écritures : Pack « SYSCOHADA pour Sociétés » (Prérequis), puis Facturation > Configuration > SYSCOHADA > Appliquer le paramétrage ; sinon, reprise dans une société au plan « cm » avec l'expert-comptable |
 
 ## Limites connues
