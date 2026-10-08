@@ -120,3 +120,21 @@ class TestSetup(SyscohadaCommon):
         lines = self.tax_line(auto)
         self.assertEqual(sorted((l.account_id.with_company(self.company).code, l.factor_percent) for l in lines),
                          [("445400", 100.0), ("447161", -100.0)])
+
+    def test_setup_from_accounting_settings(self):
+        """Société passée au plan « cm » par Facturation > Configuration > Paramètres (Localisation fiscale) : les
+        paramètres travaillent sans filtre « actif » (active_test=False) ; le paramétrage ne doit écrire les libellés
+        que dans les langues installées, sinon Odoo refuse tout (« Invalid language code: fr_BE »)."""
+        xaf = self.env.ref("base.XAF")
+        company = self.env["res.company"].with_context(chart_template_load=True).create(
+            {"name": "Société passée au plan cm par les paramètres", "currency_id": xaf.id})
+        self.env.user.company_ids |= company
+        env = self.env(context=dict(self.env.context, allowed_company_ids=[company.id]))
+        self.assertTrue(env["res.lang"].with_context(active_test=False).search(
+            [("code", "=like", "fr_%"), ("active", "=", False)]), "langues françaises non installées dans la base")
+        settings = env["res.config.settings"].create({"chart_template": "cm"})
+        settings.execute()
+        company = env["res.company"].browse(company.id)
+        self.assertEqual(company.chart_template, "cm")
+        self.assertTrue(company.aite_syscohada_setup_date)
+        self.assertEqual(company._aite_account("131").name, "Résultat net : bénéfice")

@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
 # Construit le paquet de livraison : un seul zip avec tous les modules AITE et leurs dépendances OCA dans un même
-# dossier addons/ (un seul chemin à déclarer dans addons_path), le guide et le lisez-moi d'installation
-# (docs/installation.md, copié en README.md).
+# dossier addons/ (un seul chemin à déclarer dans addons_path), requirements.txt, les licences, le guide et le
+# lisez-moi d'installation (docs/installation.md, copié en README.md).
 # Usage : scripts/build_release.sh [dossier des dépôts OCA, défaut : ../oca, celui de scripts/setup_dev.sh]
-# Résultat : dist/aite_syscohada_odoo18_<version>_<date>.zip
+# Résultat : dist/aite_syscohada_odoo18_<version>_<date>.zip, suffixé « _brouillon » s'il est construit avec des
+# modifications non validées dans git (un tel zip ne se livre pas : on ne pourrait pas le reconstruire).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OCA="$(cd "${1:-$ROOT/../oca}" && pwd)"
 MODULES="aite_syscohada_base aite_syscohada_mis aite_syscohada_community aite_syscohada_reports
   aite_syscohada_demo_common aite_syscohada_demo aite_syscohada_demo_services"
 OCA_MODULES="mis-builder/mis_builder server-ux/date_range reporting-engine/report_xlsx"
+# textes des licences GNU (paquet base-files de Debian et d'Ubuntu) : AGPL-3 vient du dépôt mis-builder
+COMMON_LICENSES="/usr/share/common-licenses"
 
-version() { python3 -c "import ast, sys; print(ast.literal_eval(open(sys.argv[1]).read())['version'])" "$1/__manifest__.py"; }
-VERSION="$(version "$ROOT/addons/aite_syscohada_community")"
-NAME="aite_syscohada_odoo18_${VERSION}_$(date +%Y%m%d)"
+manifest() { python3 -c "import ast, sys; print(ast.literal_eval(open(sys.argv[1]).read()).get(sys.argv[2], ''))" \
+  "$1/__manifest__.py" "$2"; }
+VERSION="$(manifest "$ROOT/addons/aite_syscohada_community" version)"
+COMMIT="$(git -C "$ROOT" rev-parse --short HEAD)"
+DIRTY=""
+if [ -n "$(git -C "$ROOT" status --porcelain -- addons docs scripts)" ]; then
+  DIRTY="_brouillon"
+  echo "Attention : modifications non validées dans addons/, docs/ ou scripts/ : paquet « brouillon », à ne pas livrer." >&2
+fi
+NAME="aite_syscohada_odoo18_${VERSION}_$(date +%Y%m%d)${DIRTY}"
 BUILD="$(mktemp -d)"
 trap 'rm -rf "$BUILD"' EXIT
 DEST="$BUILD/aite_syscohada_odoo18"
@@ -26,43 +36,63 @@ copy_module() {  # sources sans fichiers compilés ni caches
 {
   echo "SYSCOHADA révisé pour Odoo 18 — AITE Consulting"
   echo "Paquet construit le $(date '+%d/%m/%Y à %H:%M')"
-  echo "Dépôt AITE : commit $(git -C "$ROOT" rev-parse --short HEAD)$(git -C "$ROOT" diff --quiet HEAD -- addons docs || echo ' (avec modifications non validées)')"
+  echo "Dépôt AITE : commit $COMMIT${DIRTY:+ (brouillon : modifications non validées)}"
   echo
-  echo "Modules AITE :"
+  echo "Tous les modules sont dans addons/ : un seul chemin à déclarer dans addons_path."
+  echo
+  echo "Modules AITE (version, licence) :"
   for module in $MODULES; do
     copy_module "$ROOT/addons/$module" "$DEST/addons"
-    echo "  $module $(version "$ROOT/addons/$module")"
+    echo "  $module $(manifest "$ROOT/addons/$module" version), $(manifest "$ROOT/addons/$module" license)"
   done
   echo
-  echo "Modules OCA, dans addons/ avec les modules AITE (branche 18.0, licence AGPL-3, licences/LICENSE-<dépôt>) :"
+  echo "Modules OCA, branche 18.0 (version, licence, origine) :"
   for path in $OCA_MODULES; do
     repo="${path%%/*}"
     module="${path##*/}"
     [ -f "$OCA/$path/__manifest__.py" ] || { echo "Module OCA introuvable : $OCA/$path" >&2; exit 1; }
     copy_module "$OCA/$path" "$DEST/addons"
-    cp "$OCA/$repo/LICENSE" "$DEST/licences/LICENSE-$repo"
-    echo "  $module $(version "$OCA/$path") — github.com/OCA/$repo, commit $(git -C "$OCA/$repo" rev-parse --short HEAD)"
+    echo "  $module $(manifest "$OCA/$path" version), $(manifest "$OCA/$path" license)" \
+      "— github.com/OCA/$repo, commit $(git -C "$OCA/$repo" rev-parse --short HEAD)"
   done
+  echo
+  echo "Textes des licences : licences/ (AGPL-3 ; LGPL-3 complétée par GPL-3). OEEL-1 : licence d'Odoo Enterprise,"
+  echo "dont le texte est fourni avec Odoo Enterprise."
 } > "$DEST/VERSIONS.txt"
 
+cp "$OCA/mis-builder/LICENSE" "$DEST/licences/AGPL-3"
+for license in LGPL-3 GPL-3; do
+  [ -f "$COMMON_LICENSES/$license" ] || { echo "Texte de licence introuvable : $COMMON_LICENSES/$license" >&2; exit 1; }
+  cp "$COMMON_LICENSES/$license" "$DEST/licences/$license"
+done
 cp "$ROOT/docs/installation.md" "$DEST/README.md"
-# dépendance Python de mis_builder (external_dependencies), pour pip ou le requirements.txt d'Odoo.sh
-echo "openupgradelib" > "$DEST/requirements.txt"
-# contrôle : chaque dépendance d'un module AITE est un module d'Odoo ou un module du paquet
-python3 - "$DEST/addons" <<'PY'
+cp "$ROOT/docs/guide-syscohada-odoo18.html" "$ROOT/docs/flux-comptables-syscohada.html" "$DEST/docs/"
+
+# Contrôles du paquet, et requirements.txt tiré des dépendances Python déclarées par les manifestes :
+# chaque dépendance d'un module est un module d'Odoo ou un module livré ; chaque licence a son texte.
+python3 - "$DEST" <<'PY'
 import ast, os, sys
-addons = sys.argv[1]
-packaged = set(os.listdir(addons))
-odoo_modules = {"account", "base", "board", "l10n_cm", "l10n_syscohada", "web", "account_reports"}
+dest = sys.argv[1]
+addons = os.path.join(dest, "addons")
+odoo_modules = {"account", "account_reports", "base", "board", "l10n_cm", "l10n_syscohada", "web"}
+# OEEL-1 : licence d'Odoo Enterprise (aite_syscohada_reports, qui dépend d'account_reports), texte fourni par Odoo
+texts = {"AGPL-3": ["AGPL-3"], "LGPL-3": ["LGPL-3", "GPL-3"], "OEEL-1": []}
+packaged, python_deps = set(os.listdir(addons)), set()
 for name in sorted(packaged):
-    manifest = os.path.join(addons, name, "__manifest__.py")
-    for dep in ast.literal_eval(open(manifest, encoding="utf-8").read()).get("depends", []):
+    info = ast.literal_eval(open(os.path.join(addons, name, "__manifest__.py"), encoding="utf-8").read())
+    for dep in info.get("depends", []):
         if dep not in packaged and dep not in odoo_modules:
             sys.exit(f"Dépendance absente du paquet : {name} → {dep}")
+    for text in texts.get(info.get("license"), [None]):
+        if not text or not os.path.exists(os.path.join(dest, "licences", text)):
+            sys.exit(f"Texte de licence absent du paquet : {name} ({info.get('license')})")
+    python_deps |= set(info.get("external_dependencies", {}).get("python", []))
+with open(os.path.join(dest, "requirements.txt"), "w", encoding="utf-8") as requirements:
+    requirements.write("".join(f"{dep}\n" for dep in sorted(python_deps)))
 PY
-cp "$ROOT/docs/guide-syscohada-odoo18.html" "$ROOT/docs/flux-comptables-syscohada.html" "$DEST/docs/"
 
 rm -f "$ROOT/dist/$NAME.zip"
 (cd "$BUILD" && zip -qr -X "$ROOT/dist/$NAME.zip" aite_syscohada_odoo18)
 echo "Paquet : dist/$NAME.zip ($(du -h "$ROOT/dist/$NAME.zip" | cut -f1))"
 cat "$DEST/VERSIONS.txt"
+echo "requirements.txt : $(tr '\n' ' ' < "$DEST/requirements.txt")"

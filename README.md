@@ -36,17 +36,19 @@ Trois modules Community, sans aucune dépendance à Odoo Enterprise, un module f
 
 ## Installation
 
+Chez un client, installer depuis le paquet de livraison (zip, voir plus bas) : ses dix modules, AITE et OCA, sont dans un seul dossier `addons/` ; suivre son lisez-moi (`docs/installation.md`). Les étapes ci-dessous valent pour un environnement monté à la main.
+
 1. Odoo 18 Community avec la localisation `l10n_cm`.
 2. Modules OCA, branche 18.0 : `mis_builder` (dépôt mis-builder), `date_range` (server-ux), `report_xlsx` (reporting-engine).
 3. `pip install openupgradelib` (dépendance Python de mis_builder).
 4. Installer `aite_syscohada_community` : les deux autres modules suivent.
-5. Pour les comptables : en mode développeur, cocher sur leur utilisateur le droit technique « Afficher toutes les fonctionnalités comptables » (Show Full Accounting Features), pour voir les écritures et le plan comptable.
+5. Pour les comptables : en mode développeur, cocher sur leur utilisateur (et sur l'administrateur), section Technique, le droit « Montrer les fonctions de comptabilité complètes » (Show Full Accounting Features), pour voir les écritures et le plan comptable.
 
 Le menu Facturation (ou Comptabilité) > Analyse > Syscohada donne accès à : États et contrôles (AITE), Bilan actif, Bilan passif, Compte de résultat, Tableau des flux de trésorerie, Déclarations de TVA (Cameroun).
 
 ### Paquet de livraison
 
-`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : dans un même dossier `addons/` (un seul chemin à déclarer dans `addons_path`), les sept modules AITE et les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (licences AGPL-3 dans `licences/`) ; `requirements.txt` (`openupgradelib`), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge : 106 tests sans échec.
+`scripts/build_release.sh` construit `dist/aite_syscohada_odoo18_<version>_<date>.zip` : dans un même dossier `addons/` (un seul chemin à déclarer dans `addons_path`), les sept modules AITE et les modules OCA `mis_builder`, `date_range` et `report_xlsx` aux versions testées (textes des licences dans `licences/`, licence de chaque module dans `VERSIONS.txt`) ; `requirements.txt` (`openupgradelib`), le guide HTML, un lisez-moi d'installation (copie de `docs/installation.md`) et `VERSIONS.txt` (versions et commits d'origine). L'intégration continue le publie en artefact « paquet-odoo18 ». Installation depuis le zip vérifiée sur une base vierge, avec le seul dossier `addons/` du paquet dans `addons_path` : 107 tests sans échec ; l'intégration continue refait cette installation à chaque push.
 
 ### Données de démonstration
 
@@ -99,7 +101,7 @@ Paramétrage ajouté au socle (version 18.0.1.1.0) : 22 comptes de retenues et d
 scripts/run_tests.sh <base> aite_syscohada_base,aite_syscohada_mis,aite_syscohada_community
 ```
 
-Résultat sur Odoo 18 Community, base vierge, 7 octobre 2026 : 106 tests (64 de base et 42 avancés), 0 échec, dont 3 échecs attendus qui documentent des défauts connus listés dans `ROADMAP.md`. Le test de volume se lance à part : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume` (1 test, 36 s). Les données de démonstration ont leurs 34 tests (15 pour le bar-hôtel, 19 pour les services informatiques), à lancer sur une base où les deux modules sont installés : `scripts/run_tests.sh <base> aite_syscohada_demo,aite_syscohada_demo_services aite_syscohada_demo`. L'intégration continue `.github/workflows/tests.yml` exécute le tout à chaque push et construit le paquet de livraison.
+Résultat sur Odoo 18 Community, base vierge, 8 octobre 2026 : 107 tests (65 de base et 42 avancés), 0 échec, dont 3 échecs attendus qui documentent des défauts connus listés dans `ROADMAP.md`. Le test de volume se lance à part : `scripts/run_tests.sh <base> aite_syscohada_community aite_syscohada_volume` (1 test, 36 s). Les données de démonstration ont leurs 34 tests (15 pour le bar-hôtel, 19 pour les services informatiques), à lancer sur une base où les deux modules sont installés : `scripts/run_tests.sh <base> aite_syscohada_demo,aite_syscohada_demo_services aite_syscohada_demo`. L'intégration continue `.github/workflows/tests.yml` exécute le tout à chaque push et construit le paquet de livraison.
 
 ## Autres besoins couverts en Community par des modules OCA (branche 18.0)
 

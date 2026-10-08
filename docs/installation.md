@@ -18,38 +18,60 @@ Versions des modules et commits des sources : fichier `VERSIONS.txt`.
 | `addons/aite_syscohada_demo` | Facultatif, **bases de test seulement** : société de démonstration « Bar-Hôtel Démo AITE », 21 mois d'opérations |
 | `addons/aite_syscohada_demo_services` | Facultatif, **bases de test seulement** : société de démonstration « Services Informatiques Démo AITE », 21 mois d'opérations |
 | `addons/aite_syscohada_demo_common` | Moteur commun des deux démonstrations (installé avec elles, sans données) |
-| `addons/mis_builder`, `addons/date_range`, `addons/report_xlsx` | Dépendances OCA (branche 18.0, licence AGPL-3), indispensables : `aite_syscohada_mis` et `aite_syscohada_community` ne s'installent pas sans elles |
+| `addons/mis_builder`, `addons/date_range`, `addons/report_xlsx` | Dépendances OCA (branche 18.0), indispensables : `aite_syscohada_mis` et `aite_syscohada_community` ne s'installent pas sans elles |
 | `requirements.txt` | Dépendance Python de `mis_builder` : `openupgradelib` |
-| `licences/` | Licences AGPL-3 des dépôts OCA |
+| `licences/` | Textes des licences (AGPL-3 ; LGPL-3 et GPL-3) ; la licence de chaque module est dans `VERSIONS.txt` |
 | `docs/` | Guide complet (`guide-syscohada-odoo18.html`) et cartographie des flux comptables |
 
-Le dossier `addons/` contient les dix modules : c'est le seul chemin à déclarer dans `addons_path`.
+Les dix modules (AITE et OCA) sont dans le même dossier `addons/`. Soit on déclare directement ce dossier dans
+`addons_path`, soit on copie son contenu dans un dossier d'extensions déjà déclaré : dans les deux cas, un seul
+chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend sans prévenir la première trouvée).
 
 ## Prérequis
 
 - Odoo 18, Community ou Enterprise, avec la localisation camerounaise `l10n_cm` (fournie avec Odoo).
-- Le paquet Python `openupgradelib`, exigé par mis_builder, installé dans l'environnement Python d'Odoo :
-  `pip install -r requirements.txt` (ou `pip install openupgradelib`).
-- Des sociétés en FCFA (XAF) avec le plan comptable camerounais « cm » (SYSCOHADA révisé).
+- Le paquet Python `openupgradelib`, exigé par `mis_builder` (étape 3).
+- Le français installé dans la base (langue Français à la création de la base, `--load-language=fr_FR` à la
+  première installation, ou Paramètres > Traductions > Langues) : les libellés des lignes de TVA de la
+  déclaration viennent de la localisation `l10n_cm` et suivent la langue de l'utilisateur.
+- Des sociétés en FCFA (XAF) au plan comptable camerounais « cm » (SYSCOHADA révisé). Le paramétrage AITE ne
+  s'applique qu'à elles, sans avertissement pour les autres. Une société dont le pays est le Cameroun reçoit ce
+  plan avec la Facturation. Pour une société qui n'a pas encore d'écritures : Facturation > Configuration >
+  Paramètres, Localisation fiscale, Pack « SYSCOHADA pour Sociétés » (version 18.0.1.3.0 au moins : les versions
+  antérieures échouaient sur « Invalid language code: fr_BE »). Dès que la société a des écritures, Odoo met le
+  champ Pack en lecture seule : une société déjà en exploitation sur un autre plan se traite avec
+  l'expert-comptable (reprise dans une société au plan « cm »).
 
 ## Installation
 
-1. Copier **tout le contenu** de `addons/` (les dix modules, AITE et OCA) dans un dossier d'extensions du
-   serveur, par exemple `/opt/odoo/extra-addons`. Si `mis_builder`, `date_range` ou `report_xlsx` sont déjà
-   installés sur le serveur depuis les dépôts OCA, garder ces versions et ne pas copier ces trois dossiers.
-2. Ajouter ce dossier à `addons_path` dans le fichier de configuration d'Odoo (s'il n'y est pas déjà).
-3. Installer la dépendance Python dans l'environnement d'Odoo : `pip install -r requirements.txt`.
-4. Redémarrer Odoo. Activer le mode développeur, puis Applications > Mettre à jour la liste des applications.
-   Contrôle : en retirant le filtre « Applications » et en cherchant `mis_builder`, le module « MIS Builder »
-   doit apparaître ; sinon, Odoo ne voit pas les modules OCA (voir Dépannage).
+1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur, par exemple
+   `/opt/odoo/extra-addons`, ou déclarer directement le dossier `addons/` du paquet. Si l'un des modules OCA
+   (`mis_builder`, `date_range`, `report_xlsx`) est déjà présent sur le serveur, en branche 18.0 et dans une
+   version au moins égale à celle de `VERSIONS.txt`, garder cette copie et ne pas copier ce dossier-là.
+2. Ajouter ce dossier à `addons_path` dans le fichier de configuration d'Odoo, s'il n'y est pas déjà.
+   Odoo.sh : placer les dix dossiers de modules à la racine du dépôt de la branche, et `requirements.txt` à la
+   racine de la branche (la plateforme installe les bibliothèques qu'il liste). Image Docker officielle : monter
+   les dix dossiers dans `/mnt/extra-addons`.
+3. Installer la dépendance Python avec le pip de l'environnement qui lance Odoo, depuis le dossier décompressé du
+   paquet : par exemple `/opt/odoo/venv/bin/pip install -r requirements.txt`. Si pip refuse avec
+   « externally-managed-environment » (Python du système : Odoo installé par le paquet .deb, image Docker
+   officielle), ajouter l'option `--break-system-packages`, ou faire installer le paquet par l'administrateur du
+   serveur ; dans une image Docker, le faire dans une image dérivée. Contrôle :
+   `python3 -c "import openupgradelib"` (avec le Python d'Odoo) n'affiche aucune erreur.
+4. Redémarrer Odoo. Activer le mode développeur, puis Apps > Mettre à jour la liste des Apps.
+   Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module ; sinon, Odoo ne voit pas les
+   modules OCA (voir Dépannage).
 5. Installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) » (`aite_syscohada_community`) :
    le socle, les états MIS et les modules OCA s'installent avec lui. Sur Odoo Enterprise, installer aussi
    `aite_syscohada_reports`. Ne pas installer les modules de démonstration sur une base de recette ou de
    production (voir plus bas).
 6. Le paramétrage (libellés et types de comptes, sous-comptes, taxes) s'applique tout seul aux sociétés au
-   plan « cm ». Pour une société créée plus tard : Configuration > SYSCOHADA > Appliquer le paramétrage.
-7. Pour les comptables, cocher sur leur fiche utilisateur (mode développeur) le droit technique
-   « Afficher toutes les fonctionnalités comptables ».
+   plan « cm ». Pour une société passée au plan « cm » plus tard : Facturation > Configuration > SYSCOHADA >
+   Appliquer le paramétrage. Contrôle : Facturation > Configuration > Plan comptable, le compte 447210 « État,
+   IRPP retenu sur salaires » existe.
+7. Pour voir le menu Facturation > Analyse > Syscohada, cocher sur la fiche de chaque utilisateur concerné
+   (comptables, et aussi l'administrateur qui installe), en mode développeur, section Technique, le droit
+   « Montrer les fonctions de comptabilité complètes ».
 
 En ligne de commande :
 
@@ -70,8 +92,8 @@ centaines de pièces comptabilisées. Chacune s'installe seule ; les deux peuven
 odoo-bin -c odoo.conf -d BASE_DE_TEST -i aite_syscohada_demo,aite_syscohada_demo_services --stop-after-init
 ```
 
-Pour des libellés en français partout (lignes de TVA de la localisation comprises), créer la base en français :
-ajouter `--load-language=fr_FR` à la première installation.
+Pour des libellés en français partout (lignes de TVA de la localisation comprises), créer la base en français
+(voir Prérequis) : ajouter `--load-language=fr_FR` à la première installation.
 
 ### Bar-hôtel (`aite_syscohada_demo`)
 
@@ -108,12 +130,18 @@ La paie et l'impôt sur le résultat des démonstrations sont illustratifs. Les 
 ## Mise à jour
 
 Remplacer les dossiers des modules par ceux du nouveau paquet (y compris les nouveaux modules,
-`aite_syscohada_demo_common` notamment), redémarrer Odoo, puis mettre à jour le socle : tous les modules AITE qui en
-dépendent sont mis à jour avec lui, et les nouvelles dépendances s'installent.
+`aite_syscohada_demo_common` notamment), relancer `pip install -r requirements.txt`, redémarrer Odoo, puis mettre à
+jour le socle : tous les modules AITE qui en dépendent sont mis à jour avec lui, et les nouvelles dépendances
+s'installent.
 
 ```bash
 odoo-bin -c odoo.conf -d MA_BASE -u aite_syscohada_base --stop-after-init
 ```
+
+Depuis un paquet antérieur au 8 octobre 2026 (modules OCA dans un dossier `oca/` séparé) : retirer ce dossier de
+`addons_path`, ou ne pas copier les trois modules OCA du nouveau paquet, pour ne jamais en avoir deux copies. Si
+`VERSIONS.txt` annonce une nouvelle version de `mis_builder`, `date_range` ou `report_xlsx`, les ajouter à la
+mise à jour : `-u aite_syscohada_base,mis_builder,date_range,report_xlsx`.
 
 Les scripts de migration fournis relancent le paramétrage quand il change. Le paramétrage ne modifie jamais un
 compte ou une taxe déjà utilisé par des écritures comptabilisées. Les données de démonstration déjà générées ne
@@ -128,7 +156,7 @@ odoo-bin -c odoo.conf -d BASE_DE_TEST -u aite_syscohada_base,aite_syscohada_mis,
   --test-enable --test-tags aite_syscohada --stop-after-init
 ```
 
-Résultat attendu : 106 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
+Résultat attendu : 107 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
 connus listés ci-dessous. Après installation des données de démonstration,
 `-u aite_syscohada_demo,aite_syscohada_demo_services --test-enable --test-tags aite_syscohada_demo` lance leurs
 34 tests (15 pour le bar-hôtel, 19 pour les services informatiques).
@@ -137,10 +165,12 @@ connus listés ci-dessous. Après installation des données de démonstration,
 
 | Message ou symptôme | Cause | Remède |
 | --- | --- | --- |
-| « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Odoo ne voit pas les modules OCA : ils n'ont pas été copiés avec les modules AITE, ou leur dossier n'est pas dans `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé) | Copier `mis_builder`, `date_range` et `report_xlsx` dans le même dossier que les modules AITE (ou ajouter leur dossier à `addons_path`), redémarrer Odoo, puis Applications > Mettre à jour la liste des applications, et relancer l'installation |
+| « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Odoo ne voit pas les modules OCA : ils n'ont pas été copiés avec les modules AITE, ou leur dossier n'est pas dans `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé) | Copier `mis_builder`, `date_range` et `report_xlsx` dans le même dossier que les modules AITE (ou ajouter leur dossier à `addons_path`), redémarrer Odoo, puis Apps > Mettre à jour la liste des Apps (mode développeur), et relancer l'installation |
 | « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | Paquet Python de `mis_builder` absent de l'environnement d'Odoo | `pip install -r requirements.txt` dans l'environnement Python d'Odoo (image Docker : l'ajouter à l'image ; Odoo.sh : `requirements.txt` à la racine du dépôt), puis redémarrer Odoo |
-| Les modules AITE n'apparaissent pas dans Applications | Liste des applications non mise à jour, ou dossier absent de `addons_path` | Mode développeur, Applications > Mettre à jour la liste des applications ; vérifier `addons_path` et redémarrer Odoo |
-| Le menu Syscohada n'apparaît pas après l'installation | Droit « Afficher toutes les fonctionnalités comptables » non coché | Étape 7 de l'installation |
+| « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés dans des langues non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
+| Les modules AITE n'apparaissent pas dans Apps | Liste des Apps non mise à jour, ou dossier absent de `addons_path` | Mode développeur, Apps > Mettre à jour la liste des Apps ; vérifier `addons_path` et redémarrer Odoo |
+| Le menu Syscohada n'apparaît pas après l'installation | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur | Étape 7 de l'installation |
+| Menus Syscohada présents mais états vides, déclaration sans TVA | Société hors plan « cm » (plan générique, autre pays) : le paramétrage ne s'est pas appliqué | Prérequis : passer la société au plan « cm » tant qu'elle n'a pas d'écritures, puis Facturation > Configuration > SYSCOHADA > Appliquer le paramétrage |
 
 ## Limites connues
 

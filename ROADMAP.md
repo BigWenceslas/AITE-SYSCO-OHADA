@@ -1,6 +1,6 @@
 # Feuille de route — SYSCOHADA révisé pour Odoo 18
 
-État au 6 octobre 2026. Cible : Odoo 18 Community. Claude Code met ce fichier à jour à la fin de chaque tâche (cases, statuts, date).
+État au 8 octobre 2026. Cible : Odoo 18 Community. Claude Code met ce fichier à jour à la fin de chaque tâche (cases, statuts, date).
 
 ## Où en est le projet
 
@@ -57,7 +57,7 @@ Ordre conseillé : recette 1 et 2 → lot 3 (notes exigées) → lot 4 → lot 6
 ## Livraison et démonstration
 
 - [x] Module `aite_syscohada_demo` : société « Bar-Hôtel Démo AITE », 21 mois d'opérations (bar, hôtel, achats, retenues, paie, immobilisations, emprunt, impôt, affectation, dividendes), 20 déclarations liquidées, payées et validées, septembre 2026 en brouillon ; 15 tests chiffrés à la main ; génération en une minute
-- [x] Paquet de livraison `scripts/build_release.sh` : modules AITE, OCA figés avec leur licence, guide, lisez-moi `docs/installation.md` ; installation depuis le zip vérifiée sur une base vierge (104 tests sans échec, démonstration comprise ; 106 depuis les tests des libellés en français et en anglais)
+- [x] Paquet de livraison `scripts/build_release.sh` : modules AITE, OCA figés avec leur licence, guide, lisez-moi `docs/installation.md` ; installation depuis le zip vérifiée sur une base vierge (104 tests sans échec, démonstration comprise ; 107 depuis les tests des libellés et du passage au plan « cm » par les paramètres)
 - [x] Intégration continue : installation et tests de la démonstration, zip publié en artefact
 - [x] Moteur commun des démonstrations `aite_syscohada_demo_common` (pièces par lots, paiements lettrés, paie, amortissements, inventaires, déclarations, impôt, affectation, dividendes) ; bar-hôtel reconstruit dessus à l'identique (691 pièces, 15 tests)
 - [x] Module `aite_syscohada_demo_services` : société « Services Informatiques Démo AITE », 21 mois (infogérance avec acompte retenu par le client, régie, projets avec retenue sur honoraires, formations, support annuel et produits constatés d'avance, revente de matériel, nuage étranger avec autoliquidation et TSR, sous-traitance, paie, immobilisations, impôt, dividendes) ; 19 tests chiffrés à la main
@@ -66,6 +66,8 @@ Ordre conseillé : recette 1 et 2 → lot 3 (notes exigées) → lot 4 → lot 6
 - [x] Démonstrations, après relecture indépendante : impôt illustratif à 27,5 % (25 % + CAC, chiffre d'affaires sous 3 milliards) au lieu de 33 % ; dotations du progiciel en 6812 et son fournisseur en 4811 ; paramètres de scénario non gérés refusés ; dépendance à `aite_syscohada_community` gardée pour la mise à jour des bases existantes
 - [ ] À valider avec l'expert-comptable : centre des impôts de rattachement des sociétés de démonstration (échéance de la DSF et du solde de l'IS : 15 mars DGE, 15 avril CIME, 15 mai CDI ; la démonstration garde le 15 mars)
 - [x] Paquet en un seul dossier `addons/` (7 modules AITE et 3 modules OCA), `requirements.txt` et `licences/` : sur une recette, l'ancien dossier `oca/` séparé n'avait pas été déclaré et l'installation échouait (« mis_builder … n'est pas disponible sur votre système ») ; contrôle des dépendances à la construction, dépannage documenté
+- [x] Corrigé (18.0.1.3.0) : passer une société au plan « cm » par Facturation > Configuration > Paramètres (Localisation fiscale) échouait dès l'installation du socle (« Invalid language code: fr_BE ») : le paramétrage écrivait les libellés dans des langues non installées ; test par le chemin des paramètres
+- [x] Intégration continue : installation depuis le zip avec le seul dossier `addons/` du paquet, comme chez un client
 - [ ] Option : choisir le journal de la liquidation (aujourd'hui le premier journal d'opérations diverses dans l'ordre d'affichage)
 
 ## Lot 3 — Notes annexes et tableaux fiscaux

@@ -168,7 +168,9 @@ class ResCompany(models.Model):
 
     def _aite_fix_account_labels(self):
         self.ensure_one()
-        langs = ["en_US"] + [code for code in self.env["res.lang"].search([]).mapped("code") if code.startswith("fr")]
+        # langues installées seulement : les paramètres de la comptabilité appellent le paramétrage avec
+        # active_test=False, et Odoo refuse d'écrire dans une langue non installée (« Invalid language code »)
+        langs = ["en_US"] + [code for code, _name in self.env["res.lang"].get_installed() if code.startswith("fr")]
         for code, label in ACCOUNT_LABELS.items():
             account = self._aite_account(code)
             if not account:

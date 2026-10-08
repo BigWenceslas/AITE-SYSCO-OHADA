@@ -48,11 +48,11 @@ data_dir = <travail>/odoo-data
 
 Le paquet `aite_syscohada_odoo18_<version>_<date>.zip`, construit par `scripts/build_release.sh`, contient dans un même dossier `addons/` les sept modules AITE et les trois modules OCA dont ils dépendent (`mis_builder`, `date_range`, `report_xlsx`, aux versions testées), le fichier `requirements.txt` (`openupgradelib`), les licences OCA (`licences/`), ce guide et un lisez-moi d'installation (`README.md`, copie de `docs/installation.md`). Le fichier `VERSIONS.txt` donne la version de chaque module et les commits d'origine.
 
-1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur et l'ajouter à `addons_path`. Garder les versions OCA déjà présentes sur le serveur s'il y en a.
-2. `pip install -r requirements.txt` dans l'environnement Python d'Odoo, puis redémarrer Odoo.
-3. Mettre à jour la liste des applications et installer `aite_syscohada_community` (affiché comme application) ; sur Enterprise, `aite_syscohada_reports` en plus.
+1. Copier tout le contenu de `addons/` (les dix modules) dans un dossier d'extensions du serveur et l'ajouter à `addons_path`, ou déclarer directement ce dossier : un seul chemin pour les dix modules. Si l'un des modules OCA est déjà présent sur le serveur (branche 18.0, version au moins égale à celle de `VERSIONS.txt`), ne pas copier ce dossier-là : Odoo prend sans prévenir la première copie trouvée dans `addons_path`.
+2. Depuis le dossier décompressé, `pip install -r requirements.txt` avec le pip de l'environnement qui lance Odoo (option `--break-system-packages` si le Python du système refuse : paquet .deb, image Docker officielle), puis redémarrer Odoo.
+3. Activer le mode développeur, Apps > Mettre à jour la liste des Apps, puis installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) » (`aite_syscohada_community`) ; sur Enterprise, `aite_syscohada_reports` en plus. Le lisez-moi du paquet détaille aussi les prérequis (plan « cm », français), Odoo.sh et Docker.
 
-Si Odoo répond « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. », il ne voit pas les modules OCA : ils manquent dans le dossier copié (les paquets antérieurs au 8 octobre 2026 les rangeaient à part, dans `oca/`). Les copier à côté des modules AITE, redémarrer Odoo, mettre à jour la liste des applications, puis relancer l'installation.
+Si Odoo répond « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. », il ne voit pas les modules OCA : ils manquent dans le dossier copié (les paquets antérieurs au 8 octobre 2026 les rangeaient à part, dans `oca/`). Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation.
 
 ![Applications filtrées sur « SYSCOHADA » : les modules AITE installés (socle, adaptation Community, états MIS, moteur et données de démonstration), le module Enterprise facultatif, non installé (bouton « Activer »), et la localisation OHADA d'Odoo.](captures/01-applications.webp)
 
@@ -125,10 +125,8 @@ La génération des deux sociétés dure environ deux minutes. Depuis l'interfac
 
 ### Sur une instance Odoo 18 existante
 
-1. Copier `addons/aite_syscohada_base`, `aite_syscohada_mis` et `aite_syscohada_community` dans un chemin d'addons, ainsi que `mis_builder`, `date_range` et `report_xlsx` (OCA 18.0).
-2. `pip install openupgradelib` dans l'environnement d'Odoo (dépendance Python de `mis_builder`).
-3. Redémarrer Odoo, mettre à jour la liste des applications, installer « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) ».
-4. Si la société avait déjà le plan « cm » avant l'installation, le `post_init_hook` applique le paramétrage SYSCOHADA à toutes les sociétés concernées ; sinon il s'applique au chargement du plan.
+1. Suivre « Depuis le paquet de livraison » ci-dessus : les dix modules de `addons/`, `requirements.txt`, redémarrage, mise à jour de la liste des Apps, installation de « SYSCOHADA révisé – adaptation Odoo Community (Cameroun) ». Ne pas installer les données de démonstration sur une base de recette ou de production : chacune crée une société et plusieurs centaines de pièces comptabilisées.
+2. Si la société avait déjà le plan « cm » avant l'installation, le `post_init_hook` applique le paramétrage SYSCOHADA à toutes les sociétés concernées ; sinon il s'applique au chargement du plan.
 
 ### Enterprise
 
@@ -908,15 +906,15 @@ Ces échéances et le taux d'IS (30 %, ou 25 % si le chiffre d'affaires ne dépa
 
 ## 8. Tests
 
-La suite complète passe sur Odoo 18 Community (7 octobre 2026, version 18.0.1.2.0, base neuve) : 106 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 36 secondes.
+La suite complète passe sur Odoo 18 Community (8 octobre 2026, version 18.0.1.3.0, base neuve) : 107 tests, 0 échec, 0 erreur, dont 3 échecs attendus qui décrivent des défauts connus du module. Le test de volume, lancé à part sur une base neuve, passe en 36 secondes.
 
 | Ensemble | Tests | Résultat | Durée |
 | --- | --- | --- | --- |
-| Suite de référence (modules base, mis, community) | 64 | 0 échec | incluse ci-dessous |
+| Suite de référence (modules base, mis, community) | 65 | 0 échec | incluse ci-dessous |
 | Tests avancés `test_adv_*.py` hors volume | 42 | 0 échec, 3 échecs attendus | inclus ci-dessous |
-| Suite complète (référence et avancés) | 106 | 0 échec | 233 s |
+| Suite complète (référence et avancés) | 107 | 0 échec | 239 s |
 | Volume (étiquette `aite_syscohada_volume`) | 1 | 0 échec | 36 s |
-| Données de démonstration (étiquette `aite_syscohada_demo`, base où les deux modules sont installés) : 15 pour le bar-hôtel, 19 pour les services informatiques | 34 | 0 échec | 7 s, après 96 s d'installation |
+| Données de démonstration (étiquette `aite_syscohada_demo`, base où les deux modules sont installés) : 15 pour le bar-hôtel, 19 pour les services informatiques | 34 | 0 échec | 6 s, après 104 s d'installation |
 
 ### Les tests avancés ajoutés
 
@@ -960,7 +958,7 @@ python scripts/guide/convert_captures.py <dossier des PNG> docs/guide/captures
 python scripts/guide/build_guide.py docs/guide/guide.md docs/guide-syscohada-odoo18.html
 ```
 
-L'intégration continue GitHub Actions exécute à chaque push la suite complète, le test de volume, l'installation et les tests des données de démonstration, puis construit le zip d'installation (artefact « paquet-odoo18 »). Sur GitHub, les deux premières exécutions (code initial, puis trois premiers fichiers avancés) sont vertes ; celle du dernier commit était en cours au moment de la rédaction. Les résultats se lisent dans l'onglet Actions du dépôt.
+L'intégration continue GitHub Actions exécute à chaque push la suite complète, le test de volume, l'installation et les tests des données de démonstration, construit le zip d'installation (artefact « paquet-odoo18 », que GitHub enveloppe dans son propre zip), puis l'installe sur une base neuve avec le seul dossier `addons/` du paquet dans `addons_path`, comme chez un client. Les résultats se lisent dans l'onglet Actions du dépôt.
 
 ## 9. Développement
 
@@ -1050,7 +1048,7 @@ Un seul test : `scripts/run_tests.sh <base> aite_syscohada_community "/aite_sysc
 
 **Port 8069 occupé.** Un serveur Odoo déjà lancé bloque les tests (`Port 8069 is in use by another program`). `http_enable = False` ne suffit pas : Odoo 18 ouvre le port pendant les tests. Copier `odoo.conf` avec un autre `http_port` et un autre `gevent_port`, puis passer la copie par `ODOO_CONF`.
 
-**Intégration continue.** `.github/workflows/tests.yml` s'exécute à chaque push et pull request : Ubuntu 24.04, PostgreSQL 16, Python 3.12, Odoo 18.0 et OCA 18.0 clonés, création de la base, suite complète, puis test de volume sur une copie neuve de la base, journaux en artefact. Odoo 18.0 étant recloné à chaque exécution, une mise à jour d'Odoo peut casser un test sans changement de notre code.
+**Intégration continue.** `.github/workflows/tests.yml` s'exécute à chaque push et pull request : Ubuntu 24.04, PostgreSQL 16, Python 3.12, Odoo 18.0 et OCA 18.0 clonés, création de la base et de deux copies neuves, suite complète, test de volume, installation et tests des données de démonstration, construction du zip puis installation depuis le zip, journaux et zip en artefacts. Odoo 18.0 étant recloné à chaque exécution, une mise à jour d'Odoo peut casser un test sans changement de notre code.
 
 ### Portage vers Odoo 19
 
@@ -1074,7 +1072,8 @@ Quatre fonctions sont à adapter : `_aite_tax_tags` et `_aite_repartition` dans 
 | --- | --- | --- |
 | Le menu Syscohada est absent de Facturation > Analyse | Le menu exige le groupe `account.group_account_readonly`, qu'un administrateur Community n'a pas d'office | En mode développeur, cocher sur l'utilisateur « Montrer les fonctions de comptabilité complètes » ; vérifier que `aite_syscohada_community` est installé |
 | Le plan comptable et les écritures sont invisibles | Même droit technique manquant | Même remède ; créer et valider une déclaration exige en plus le profil Administrateur |
-| « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Applications > Mettre à jour la liste des applications, puis relancer l'installation. Contrôle : sans le filtre « Applications », une recherche de `mis_builder` doit trouver « MIS Builder » |
+| « Vous essayez d'installer le module "aite_syscohada_mis" qui dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » | Les modules OCA `mis_builder`, `date_range` et `report_xlsx` ne sont pas dans un dossier de `addons_path` (paquets antérieurs au 8 octobre 2026 : dossier `oca/` séparé, facile à oublier) | Les copier à côté des modules AITE, redémarrer Odoo, Apps > Mettre à jour la liste des Apps (mode développeur), puis relancer l'installation. Contrôle : une recherche de « MIS Builder » dans Apps doit trouver le module |
+| « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale Cameroun | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés des comptes dans des langues françaises non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | « Impossible d'installer le module "mis_builder" à cause d'une dépendance externe non trouvée : External dependency openupgradelib not installed… » | `mis_builder` déclare `openupgradelib` comme dépendance Python | `pip install -r requirements.txt` (paquet de livraison) ou `../venv/bin/pip install openupgradelib`, puis redémarrer Odoo et relancer l'installation |
 | « Oups ! Un problème est survenu », détail « Invalid ids list », en ouvrant Bilan actif, Bilan passif, Compte de résultat ou TFT depuis le menu Analyse | Versions 18.0.1.1.0 et antérieures : le widget de MIS Builder 18 cherche l'instance dans le contexte, que l'action du menu ne renseignait pas | Mettre à jour `aite_syscohada_community` en 18.0.1.2.0 ; en attendant, ouvrir l'état par Analyse > MIS Reporting > MIS Reports, bouton « Aperçu » |
 | Lignes L10 à L35 en anglais (« 10. Taxable operations at normal rate ») | Français installé après le calcul de la déclaration, ou utilisateur en anglais | Installer le français, puis « Calculer » sur les déclarations en brouillon ; les libellés suivent la langue de l'utilisateur |
