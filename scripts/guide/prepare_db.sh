@@ -18,5 +18,8 @@ start=$(date +%s)
 # déclarations que calculent les données de démonstration
 "$PYTHON" "$ODOO_BIN" -c "$ODOO_CONF" -d "$DB" -i aite_syscohada_demo,aite_syscohada_demo_services \
   --load-language=fr_FR --without-demo=all --stop-after-init --log-level=warn
+# second chargement du français sur la base existante : la fiche utilisateur (vue générée après l'import des
+# traductions de base) garderait sinon ses titres de section en anglais (TECHNICAL), contrairement aux bases des clients
+"$PYTHON" "$ODOO_BIN" -c "$ODOO_CONF" -d "$DB" --load-language=fr_FR --stop-after-init --log-level=warn
 "$PYTHON" "$ODOO_BIN" shell -c "$ODOO_CONF" -d "$DB" --no-http --log-level=warn < "$ROOT/scripts/guide/prepare_db.py"
 echo "Base $DB prête en $(( $(date +%s) - start )) s : démarrer Odoo sur cette base, puis scripts/guide/capture.js."

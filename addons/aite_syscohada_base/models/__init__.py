@@ -5,3 +5,4 @@ from . import res_company
 from . import account_chart_template
 from . import syscohada_enterprise
 from . import res_groups
+from . import res_users

@@ -135,6 +135,10 @@ chemin pour les dix modules, et jamais deux copies d'un même module (Odoo prend
    plusieurs utilisateurs à la fois : Paramètres > Utilisateurs & Sociétés > Groupes (mode développeur),
    rechercher « comptabilité complètes », ouvrir « Technique / Montrer les fonctions de comptabilité complètes »,
    onglet Utilisateurs, Ajouter une ligne, cocher les utilisateurs, Sélectionner, enregistrer.
+   Décocher la case retire aussi (version 18.0.1.3.2) les deux droits qu'elle a donnés, sauf si un autre groupe
+   de l'utilisateur les implique encore ; par la voie des groupes, ou avec une version antérieure, retirer
+   l'utilisateur des trois groupes « Technique / Montrer les fonctions de comptabilité complètes »,
+   « Technique / Afficher les fonctionnalités de comptabilité - Lecture seule » et « Technique / Basique ».
 7. Le paramétrage (libellés et types de comptes, sous-comptes, taxes) s'applique tout seul aux sociétés au
    plan « cm ». Pour une société passée au plan « cm » plus tard : Facturation > Configuration > SYSCOHADA >
    Appliquer le paramétrage. Contrôle (droit de l'étape 6 coché) : Facturation > Configuration > Plan comptable,
@@ -221,6 +225,21 @@ s'installent.
 odoo-bin -c odoo.conf -d MA_BASE -u aite_syscohada_base --stop-after-init
 ```
 
+Sans ligne de commande, Odoo redémarré : mode développeur, Apps, retirer le filtre « Apps » de la recherche, chercher
+« socle AITE », menu ⋮ de la carte du module > Mettre à niveau (réservé à l'administrateur d'Odoo). Sous Windows,
+invite de commandes en tant qu'administrateur (dossier d'installation d'Odoo à adapter, comme à l'étape 3) :
+
+```bat
+net stop odoo-server-18.0
+"C:\Program Files\Odoo 18.0\python\python.exe" "C:\Program Files\Odoo 18.0\server\odoo-bin" -c "C:\Program Files\Odoo 18.0\server\odoo.conf" -d MA_BASE -u aite_syscohada_base --stop-after-init
+net start odoo-server-18.0
+```
+
+Redémarrer Odoo ne suffit pas, et mettre à niveau avant le redémarrage tourne avec l'ancien code : la fiche
+utilisateur (case « Montrer les fonctions de comptabilité complètes », version 18.0.1.3.2) n'est régénérée qu'à la
+mise à jour d'un module. Contrôle : dans Apps, la fiche du socle affiche la version de `VERSIONS.txt`, et la case
+est dans la section Technique de la fiche utilisateur (mode développeur).
+
 Depuis un paquet antérieur au 8 octobre 2026 (modules OCA dans un dossier `oca/` séparé) : retirer ce dossier de
 `addons_path`, ou ne pas copier les trois modules OCA du nouveau paquet, pour ne jamais en avoir deux copies. Si
 `VERSIONS.txt` annonce une nouvelle version de `mis_builder`, `date_range` ou `report_xlsx`, les ajouter à la
@@ -242,7 +261,7 @@ odoo-bin -c odoo.conf -d BASE_DE_TEST -u aite_syscohada_base,aite_syscohada_mis,
 Les modules OCA du paquet étant livrés sans leurs tests, une base de test peut aussi s'installer et se vérifier
 en une seule commande : `-i aite_syscohada_community --test-enable --test-tags aite_syscohada`.
 
-Résultat attendu : 110 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
+Résultat attendu : 112 tests, 0 échec. Trois d'entre eux sont des « échecs attendus » : ils documentent les défauts
 connus listés ci-dessous. Après installation des données de démonstration,
 `-u aite_syscohada_demo,aite_syscohada_demo_services --test-enable --test-tags aite_syscohada_demo` lance leurs
 34 tests (15 pour le bar-hôtel, 19 pour les services informatiques).
@@ -261,7 +280,7 @@ connus listés ci-dessous. Après installation des données de démonstration,
 | « Invalid language code: fr_BE » (ou un autre code fr_…) en enregistrant la Localisation fiscale | Versions 18.0.1.2.0 et antérieures : le paramétrage écrivait les libellés dans des langues non installées | Mettre à jour en 18.0.1.3.0 au moins, puis enregistrer de nouveau |
 | Les modules AITE n'apparaissent pas dans Apps | Liste des Apps non mise à jour, dossier absent de `addons_path`, ou `addons_path` qui pointe sur la racine du paquet au lieu de son dossier `addons/` | Mode développeur, Apps > Mettre à jour la liste des Apps ; vérifier `addons_path` (contrôle de l'étape 2) et redémarrer Odoo |
 | Facturation n'affiche que Clients, Fournisseurs, Analyse et Configuration : pas de Tableau de bord, de Comptabilité ni de menu Syscohada sous Analyse | Droit « Montrer les fonctions de comptabilité complètes » non coché sur l'utilisateur, administrateur compris : Odoo Community ne le donne à personne d'office | Étape 6 de l'installation, puis recharger la page (F5) |
-| La case « Montrer les fonctions de comptabilité complètes » manque dans la section Technique de la fiche utilisateur | Odoo 18 Community la masque ; le socle AITE la remet depuis la version 18.0.1.3.2 (version antérieure, ou socle pas encore mis à jour) | Paramètres > Utilisateurs & Sociétés > Groupes (étape 6) ; ou mettre à jour le socle (voir Mise à jour) |
+| La case « Montrer les fonctions de comptabilité complètes » manque dans la section Technique de la fiche utilisateur | Odoo 18 Community la masque ; le socle AITE la remet depuis la version 18.0.1.3.2 (version antérieure, ou socle pas encore mis à jour) | Paramètres > Utilisateurs & Sociétés > Groupes (étape 6) ; ou mettre à jour le socle : Odoo redémarré avec les nouveaux fichiers, puis Apps > Mettre à niveau ou `-u aite_syscohada_base` (voir Mise à jour) |
 | États Syscohada faux (par exemple une vente rangée en report à nouveau et en fournisseurs), contrôle « Comptes non rattachés » en alerte ; ou « La société … n'est pas à un plan comptable SYSCOHADA » au menu Appliquer le paramétrage | Société hors plan « cm » (plan générique, autre pays) : le paramétrage ne s'applique pas | Tant que la société n'a pas d'écritures : Pack « SYSCOHADA pour Sociétés » (Prérequis), puis Facturation > Configuration > SYSCOHADA > Appliquer le paramétrage ; sinon, reprise dans une société au plan « cm » avec l'expert-comptable |
 
 ## Limites connues

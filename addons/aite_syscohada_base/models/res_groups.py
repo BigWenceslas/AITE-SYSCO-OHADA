@@ -13,8 +13,9 @@ class ResGroups(models.Model):
         En Community, le module account retire cette case de la fiche : sans elle, seul le menu Paramètres >
         Utilisateurs & Sociétés > Groupes donne ce droit, que demandent les menus Tableau de bord, Comptabilité et
         Syscohada de Facturation. Les droits « lecture seule » et « Basique » restent masqués : la case les donne
-        (groupes impliqués). Avec Enterprise (account_accountant), le groupe quitte la catégorie technique et Odoo
-        l'affiche déjà : rien n'est ajouté.
+        (groupes impliqués) ; décochée, elle les retire aussi (``res.users._remove_reified_groups``). Avec
+        l'application Comptabilité d'Odoo Enterprise, le groupe quitte la catégorie technique et Odoo l'affiche
+        déjà : rien n'est ajouté.
         """
         # copie : la surcharge d'account ajoute ses exclusions à la liste reçue
         groups = super().get_application_groups(list(domain))
