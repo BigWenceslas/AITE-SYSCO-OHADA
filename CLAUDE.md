@@ -28,6 +28,8 @@ scripts/run_tests.sh aite_demo aite_syscohada_demo,aite_syscohada_demo_services 
 scripts/guide/prepare_db.sh aite_guide && node scripts/guide/capture.js http://127.0.0.1:8069 <dossier des PNG>
 python scripts/guide/convert_captures.py <dossier des PNG> docs/guide/captures   # WebP (Pillow)
 python scripts/guide/build_guide.py docs/guide/guide.md docs/guide-syscohada-odoo18.html   # guide autonome (markdown)
+# vidéo de présentation (voix féminine Kokoro, HyperFrames) : voix + contrôle, planche, puis rendu dans docs/videos/livrees
+python3 docs/videos/produire.py presentation --planche && python3 docs/videos/produire.py presentation --rendu
 # paquet de livraison dist/aite_syscohada_odoo18_<version>_<date>.zip (modules AITE et OCA figés dans un seul addons/, guide, lisez-moi)
 scripts/build_release.sh
 # régénérer le référentiel des rubriques puis le XML Enterprise (jamais d'édition à la main)
@@ -94,6 +96,7 @@ Syntaxe des formules du référentiel (celle du moteur `account_codes` d'Enterpr
 - Les libellés des lignes L10 à L35 viennent de `l10n_cm`, dans la langue du contexte (français par défaut) : une base créée sans `--load-language=fr_FR` n'a pas leur traduction et les déclarations générées à l'installation restent en anglais.
 - Paquet : les modules OCA vont dans le même dossier `addons/` que les modules AITE. Rangés à part (`oca/`), ils n'ont pas été déclarés dans `addons_path` sur une recette : « … dépend du module "mis_builder". Mais ce dernier n'est pas disponible sur votre système. » `build_release.sh` vérifie que chaque dépendance est livrée ou fournie par Odoo.
 - Odoo 18 Community masque la case « Montrer les fonctions de comptabilité complètes » (`account.group_account_user`) de la fiche utilisateur (`get_application_groups` du module account) : le socle la remet (`models/res_groups.py`) et, décochée, elle retire aussi les groupes impliqués (`models/res_users.py`, Odoo ne retire que le groupe décoché) ; autre voie, Paramètres > Utilisateurs & Sociétés > Groupes. La fiche (`base.user_groups_view`) n'est régénérée qu'à la mise à jour d'un module ; ses titres de section restent en anglais (TECHNICAL) sur une base créée avec `--load-language` tant que les traductions de `base` ne sont pas rechargées (second `--load-language=fr_FR` dans `prepare_db.sh`).
+- Vidéo (`docs/videos`) : espeak-ng, utilisé par la voix Kokoro, refuse un dossier de données au chemin trop long (« Error processing file …/phontab ») ; garder le dossier de travail à chemin court (`../aite-videos`). L'interface y est rejouée en HTML : un écran d'Odoo qui change doit être reporté dans `docs/videos/scenarios/presentation.py`.
 - Captures d'écran avec Playwright : Odoo n'atteint jamais l'état `networkidle` (bus de notifications) ; attendre un sélecteur de la vue (`scripts/guide/capture.js`).
 
 ## Façon de travailler

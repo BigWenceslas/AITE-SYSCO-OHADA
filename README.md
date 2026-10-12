@@ -12,6 +12,7 @@
 | `.claude/skills/` | Savoirs chargés par Claude Code à la demande : tests, fiscalité camerounaise, classeur DSF |
 | `scripts/` | Installation de l'environnement, lancement des tests, construction du paquet de livraison |
 | `docs/` | Guide complet en HTML (`guide-syscohada-odoo18.html`, un seul fichier illustré de 27 captures d'écran ; source `guide/guide.md` et captures `guide/captures/`, outils dans `scripts/guide/`), lisez-moi d'installation du paquet (`installation.md`), document de travail (`document-de-travail.md` : audit, correspondances, fiscalité, plan), cartographie des flux comptables, relevé du classeur DSF de la DGI |
+| `docs/videos/` | Vidéo de présentation de la solution (`livrees/aite-fiscalite-ohada-presentation.mp4`, environ cinq minutes, voix féminine) et son moteur : interface d'Odoo rejouée en HTML, rendu HyperFrames (`docs/videos/README.md`) |
 | `dist/` | Paquet de livraison construit par `scripts/build_release.sh` (non versionné) |
 
 ## Travailler avec Claude Code
