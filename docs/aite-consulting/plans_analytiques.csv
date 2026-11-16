@@ -1,0 +1,6 @@
+id,name,description,default_applicability,applicability_ids/business_domain,applicability_ids/applicability,applicability_ids/account_prefix
+__import__.aite_plan_metier,Ligne de métier,"Famille d'offre d'AITE : marge par métier. À rendre obligatoire seulement après la mise en place des modèles de distribution.",optional,invoice,optional,70
+,,,,bill,optional,6
+,,,,sale_order,optional,
+,,,,purchase_order,optional,
+__import__.aite_plan_centre,Centre de coûts,"Service interne qui porte la charge (frais de structure, personnel).",optional,,,

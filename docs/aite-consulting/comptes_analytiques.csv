@@ -1,0 +1,17 @@
+id,name,code,plan_id/id
+__import__.aite_ana_lm_int,Intégration ERP Odoo,LM-INT,__import__.aite_plan_metier
+__import__.aite_ana_lm_dev,Développement web et logiciel sur mesure,LM-DEV,__import__.aite_plan_metier
+__import__.aite_ana_lm_prd,Produits packagés AITE,LM-PRD,__import__.aite_plan_metier
+__import__.aite_ana_lm_inf,"Infogérance, cloud et services managés",LM-INF,__import__.aite_plan_metier
+__import__.aite_ana_lm_sec,"Audit, conseil et cybersécurité",LM-SEC,__import__.aite_plan_metier
+__import__.aite_ana_lm_res,"Réseaux, contrôle d'accès et sécurité électronique",LM-RES,__import__.aite_plan_metier
+__import__.aite_ana_lm_lic,Licences et abonnements revendus,LM-LIC,__import__.aite_plan_metier
+__import__.aite_ana_lm_mat,Matériel revendu,LM-MAT,__import__.aite_plan_metier
+__import__.aite_ana_lm_for,Formation,LM-FOR,__import__.aite_plan_metier
+__import__.aite_ana_lm_dat,Reporting et intelligence artificielle,LM-DAT,__import__.aite_plan_metier
+__import__.aite_ana_lm_str,Structure (frais communs non répartis),LM-STR,__import__.aite_plan_metier
+__import__.aite_ana_cc_dir,Direction générale,CC-DIR,__import__.aite_plan_centre
+__import__.aite_ana_cc_com,Commercial et marketing,CC-COM,__import__.aite_plan_centre
+__import__.aite_ana_cc_tec,Production technique,CC-TEC,__import__.aite_plan_centre
+__import__.aite_ana_cc_sup,Support et assistance,CC-SUP,__import__.aite_plan_centre
+__import__.aite_ana_cc_adm,Administration et finances,CC-ADM,__import__.aite_plan_centre

@@ -1,0 +1,8 @@
+id,name,code,type,currency_id,default_account_id,profit_account_id,loss_account_id
+__import__.aite_jrn_bq1_xaf,Banque 1 XAF (à renommer),BQ1,bank,,521100,758800,658800
+__import__.aite_jrn_bq1_eur,Banque 1 EUR (à renommer),BQ1E,bank,EUR,521110,758800,658800
+__import__.aite_jrn_bq2_xaf,Banque 2 XAF (à renommer),BQ2,bank,,521200,758800,658800
+__import__.aite_jrn_bq2_usd,Banque 2 USD (à renommer),BQ2U,bank,USD,521210,758800,658800
+__import__.aite_jrn_om,Orange Money,OM,bank,,552100,758800,658800
+__import__.aite_jrn_momo,MTN Mobile Money,MOMO,bank,,552200,758800,658800
+__import__.aite_jrn_caisse,Caisse du siège,CAI,cash,,571110,758800,658800

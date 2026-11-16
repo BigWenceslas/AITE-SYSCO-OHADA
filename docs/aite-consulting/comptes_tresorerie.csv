@@ -1,0 +1,8 @@
+id,code,name,account_type,reconcile,currency_id
+__import__.aite_cpt_521100,521100,Banque 1 - compte courant XAF (à renommer),asset_cash,False,
+__import__.aite_cpt_521110,521110,Banque 1 - compte en euros (à renommer),asset_cash,False,EUR
+__import__.aite_cpt_521200,521200,Banque 2 - compte courant XAF (à renommer),asset_cash,False,
+__import__.aite_cpt_521210,521210,Banque 2 - compte en dollars (à renommer),asset_cash,False,USD
+__import__.aite_cpt_552100,552100,"Monnaie électronique, Orange Money",asset_cash,False,
+__import__.aite_cpt_552200,552200,"Monnaie électronique, MTN Mobile Money",asset_cash,False,
+__import__.aite_cpt_571110,571110,Caisse du siège (Makepe),asset_cash,False,
